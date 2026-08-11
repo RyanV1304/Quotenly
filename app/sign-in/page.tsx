@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signIn } from "@/app/actions/auth";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 export default async function SignInPage({
   searchParams,
@@ -16,7 +17,15 @@ export default async function SignInPage({
           {error}
         </p>
       )}
-      <form action={signIn} className="mt-6 flex flex-col gap-4">
+      <div className="mt-6">
+        <GoogleSignInButton />
+      </div>
+      <div className="my-4 flex items-center gap-3 text-xs text-black/40 dark:text-white/40">
+        <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
+        or
+        <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
+      </div>
+      <form action={signIn} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1 text-sm">
           Email
           <input

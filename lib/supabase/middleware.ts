@@ -34,7 +34,9 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/invite") ||
     path.startsWith("/quote/") ||
     path.startsWith("/invoice/") ||
-    path.startsWith("/api/");
+    path.startsWith("/api/") ||
+    path.startsWith("/auth/callback") ||
+    path.startsWith("/onboarding");
 
   if (!user && !isPublicPath && path !== "/") {
     const url = request.nextUrl.clone();
