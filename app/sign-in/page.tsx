@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { signIn } from "@/app/actions/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
+import AuthShell from "@/components/AuthShell";
+
+const fieldClass =
+  "rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm text-black outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/15";
 
 export default async function SignInPage({
   searchParams,
@@ -10,53 +14,46 @@ export default async function SignInPage({
   const { error } = await searchParams;
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col justify-center px-4">
-      <h1 className="text-2xl font-semibold">Sign in</h1>
+    <AuthShell
+      title="Welcome back"
+      subtitle="Sign in to get back to your quotes and invoices."
+      footer={
+        <>
+          Need a workspace?{" "}
+          <Link href="/sign-up" className="font-semibold text-brand-blue hover:text-brand-blue-deep">
+            Create one
+          </Link>
+        </>
+      }
+    >
       {error && (
-        <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-          {error}
-        </p>
+        <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
-      <div className="mt-6">
-        <GoogleSignInButton />
-      </div>
-      <div className="my-4 flex items-center gap-3 text-xs text-black/40 dark:text-white/40">
-        <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
+
+      <GoogleSignInButton />
+
+      <div className="my-5 flex items-center gap-3 text-xs font-medium text-black/30">
+        <div className="h-px flex-1 bg-black/10" />
         or
-        <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
+        <div className="h-px flex-1 bg-black/10" />
       </div>
-      <form action={signIn} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm">
+
+      <form action={signIn} className="flex flex-col gap-3.5">
+        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
           Email
-          <input
-            name="email"
-            type="email"
-            required
-            className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
-          />
+          <input name="email" type="email" required className={fieldClass} />
         </label>
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
           Password
-          <input
-            name="password"
-            type="password"
-            required
-            className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
-          />
+          <input name="password" type="password" required className={fieldClass} />
         </label>
         <button
           type="submit"
-          className="mt-2 rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black"
+          className="mt-2 rounded-full bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:-translate-y-0.5 hover:bg-brand-blue-deep active:translate-y-0"
         >
           Sign in
         </button>
       </form>
-      <p className="mt-4 text-sm text-black/60 dark:text-white/60">
-        Need a workspace?{" "}
-        <Link href="/sign-up" className="underline">
-          Create one
-        </Link>
-      </p>
-    </div>
+    </AuthShell>
   );
 }
