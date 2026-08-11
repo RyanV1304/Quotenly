@@ -4,18 +4,23 @@
   --background: #ffffff;
   --foreground: #171717;
   --brand-blue: #2a5cdb;
+  --brand-blue-deep: #1c3f9c;
   --brand-amber: #f2a93b;
   --brand-dark: #0b0f19;
+  --brand-cream: #f6f7fb;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-deep: var(--brand-blue-deep);
   --color-brand-amber: var(--brand-amber);
   --color-brand-dark: var(--brand-dark);
+  --color-brand-cream: var(--brand-cream);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -81,4 +86,16 @@ body {
   .animate-float-c {
     animation: none;
   }
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(42, 92, 219, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.bg-wash {
+  background-image:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(42, 92, 219, 0.12), transparent 60%),
+    radial-gradient(ellipse 50% 45% at 100% 20%, rgba(242, 169, 59, 0.14), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 50% 100%, rgba(42, 92, 219, 0.08), transparent 60%);
 }
