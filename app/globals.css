@@ -1,39 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --brand-blue: #2a5cdb;
-  --brand-blue-deep: #1c3f9c;
-  --brand-blue-pale: #eef3fd;
-  --brand-blue-tint: #dbe6fb;
-  --brand-dark: #0b0f19;
+  --bg-white: #ffffff;
+  --bg-dark: #0b0f19;
+  --bg-dark-alt: #131826;
+  --ink: #0b0f19;
+  --ink-soft: #5c6472;
+  --ink-faint: #8a909c;
+  --paper-ink: #ffffff;
+  --paper-soft: #a8aebc;
+  --line: #e6e8ec;
+  --line-dark: #232838;
+  --brand: #2a5cdb;
+  --brand-dark: #1e46b0;
+  --brand-tint: #eaf0fd;
+  --amber: #f2a93b;
+  --success: #1fab6b;
+  --success-tint: #e6f7ef;
+  --warning: #e0a429;
+  --warning-tint: #fdf3e2;
+  --danger: #e0483d;
+  --danger-tint: #fbeae8;
+
+  --background: var(--bg-white);
+  --foreground: var(--ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-brand-blue: var(--brand-blue);
-  --color-brand-blue-deep: var(--brand-blue-deep);
-  --color-brand-blue-pale: var(--brand-blue-pale);
-  --color-brand-blue-tint: var(--brand-blue-tint);
+  --color-bg-white: var(--bg-white);
+  --color-bg-dark: var(--bg-dark);
+  --color-bg-dark-alt: var(--bg-dark-alt);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-paper-ink: var(--paper-ink);
+  --color-paper-soft: var(--paper-soft);
+  --color-line: var(--line);
+  --color-line-dark: var(--line-dark);
+  --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument-serif);
-}
+  --color-brand-tint: var(--brand-tint);
+  --color-amber: var(--amber);
+  --color-success: var(--success);
+  --color-success-tint: var(--success-tint);
+  --color-warning: var(--warning);
+  --color-warning-tint: var(--warning-tint);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-space-grotesk), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 @keyframes float-a {
@@ -67,16 +91,16 @@ body {
 }
 
 .animate-float-a {
-  animation: float-a 6s ease-in-out infinite;
+  animation: float-a 5s ease-in-out infinite;
 }
 
 .animate-float-b {
-  animation: float-b 7s ease-in-out infinite;
+  animation: float-b 6s ease-in-out infinite;
   animation-delay: 0.6s;
 }
 
 .animate-float-c {
-  animation: float-c 5.5s ease-in-out infinite;
+  animation: float-c 4.5s ease-in-out infinite;
   animation-delay: 1.2s;
 }
 
@@ -88,22 +112,10 @@ body {
   }
 }
 
-.bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(42, 92, 219, 0.16) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-.bg-wash {
-  background-image:
-    radial-gradient(ellipse 60% 50% at 12% 0%, rgba(42, 92, 219, 0.14), transparent 60%),
-    radial-gradient(ellipse 55% 50% at 100% 15%, rgba(42, 92, 219, 0.1), transparent 60%),
-    radial-gradient(ellipse 55% 45% at 50% 100%, rgba(42, 92, 219, 0.06), transparent 60%);
-}
-
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -111,46 +123,12 @@ body {
   }
 }
 
-@keyframes blob-drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(12px, -16px) scale(1.05);
-  }
-}
-
-@keyframes pop-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.03);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .animate-fade-in-up {
-  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-blob-drift {
-  animation: blob-drift 9s ease-in-out infinite;
-}
-
-.animate-pop-in {
-  animation: pop-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-in-up 0.3s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up,
-  .animate-blob-drift,
-  .animate-pop-in {
+  .animate-fade-in-up {
     animation: none;
   }
 }
