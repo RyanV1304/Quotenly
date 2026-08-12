@@ -4,6 +4,10 @@
   --bg-white: #ffffff;
   --bg-dark: #0b0f19;
   --bg-dark-alt: #131826;
+  --navy-950: #060a14;
+  --navy-900: #0a1128;
+  --navy-800: #121b3a;
+  --navy-700: #1a2650;
   --ink: #0b0f19;
   --ink-soft: #5c6472;
   --ink-faint: #8a909c;
@@ -14,6 +18,9 @@
   --brand: #2a5cdb;
   --brand-dark: #1e46b0;
   --brand-tint: #eaf0fd;
+  --brand-light: #4d7dff;
+  --cta-start: #ff7a3d;
+  --cta-end: #ff3d71;
   --amber: #f2a93b;
   --success: #1fab6b;
   --success-tint: #e6f7ef;
@@ -21,6 +28,12 @@
   --warning-tint: #fdf3e2;
   --danger: #e0483d;
   --danger-tint: #fbeae8;
+
+  --gradient-cta: linear-gradient(135deg, var(--cta-start), var(--cta-end));
+  --gradient-cta-hover: linear-gradient(135deg, #ff6a28, #ff2461);
+  --gradient-hero: radial-gradient(120% 140% at 15% 0%, #1a2f6e 0%, var(--navy-900) 45%, var(--navy-950) 100%);
+  --gradient-navy: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-950) 100%);
+  --gradient-brand: linear-gradient(135deg, var(--brand-light), var(--brand-dark));
 
   --background: var(--bg-white);
   --foreground: var(--ink);
@@ -32,6 +45,10 @@
   --color-bg-white: var(--bg-white);
   --color-bg-dark: var(--bg-dark);
   --color-bg-dark-alt: var(--bg-dark-alt);
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
@@ -41,7 +58,10 @@
   --color-line-dark: var(--line-dark);
   --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
   --color-brand-tint: var(--brand-tint);
+  --color-cta-start: var(--cta-start);
+  --color-cta-end: var(--cta-end);
   --color-amber: var(--amber);
   --color-success: var(--success);
   --color-success-tint: var(--success-tint);
@@ -157,34 +177,84 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
-    background: var(--brand);
+    border-radius: 0.625rem;
+    background: var(--gradient-cta);
     color: #fff;
     font-size: 0.875rem;
     font-weight: 600;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.15s ease;
+    padding: 0.5rem 1.125rem;
+    box-shadow: 0 6px 16px rgba(255, 61, 113, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   }
 
   .btn-primary:hover {
-    background: var(--brand-dark);
+    background: var(--gradient-cta-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(255, 61, 113, 0.34);
   }
 
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
+    border-radius: 0.625rem;
     border: 1px solid var(--line);
     color: var(--ink);
     font-size: 0.875rem;
     font-weight: 600;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.15s ease;
+    padding: 0.5rem 1.125rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
   }
 
   .btn-secondary:hover {
     background: var(--brand-tint);
+    border-color: var(--brand-light);
+  }
+
+  .btn-secondary-inverse {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.625rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1.125rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn-secondary-inverse:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .bg-navy-gradient {
+    background: var(--gradient-navy);
+  }
+
+  .bg-brand-gradient {
+    background: var(--gradient-brand);
+  }
+
+  .text-gradient-cta {
+    background: var(--gradient-cta);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glow-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    pointer-events: none;
   }
 
   .btn-link {

@@ -16,6 +16,7 @@ export default async function Home() {
     <div className="flex min-h-screen flex-col bg-bg-white">
       <Nav />
       <Hero />
+      <StatBar />
       <ProductShowcase />
       <Wedge />
       <ThreeSteps />
@@ -30,7 +31,8 @@ export default async function Home() {
 
 function EyebrowBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-block rounded-full bg-brand-tint px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+      <span className="h-1.5 w-1.5 rounded-full bg-cta-end" />
       {children}
     </span>
   );
@@ -38,30 +40,27 @@ function EyebrowBadge({ children }: { children: React.ReactNode }) {
 
 function Nav() {
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-bg-white/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-display text-lg font-bold tracking-tight text-ink">
+    <header className="absolute inset-x-0 top-0 z-20">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <Link href="/" className="font-display text-lg font-bold tracking-tight text-white">
           Quotenly
         </Link>
-        <nav className="hidden items-center gap-8 text-sm font-medium text-ink-soft sm:flex">
-          <a href="#product" className="transition-colors hover:text-ink">
+        <nav className="hidden items-center gap-8 text-sm font-medium text-white/75 sm:flex">
+          <a href="#product" className="transition-colors hover:text-white">
             Product
           </a>
-          <a href="#pricing" className="transition-colors hover:text-ink">
+          <a href="#pricing" className="transition-colors hover:text-white">
             Pricing
           </a>
-          <a href="#faq" className="transition-colors hover:text-ink">
+          <a href="#faq" className="transition-colors hover:text-white">
             FAQ
           </a>
         </nav>
         <div className="flex items-center gap-5 text-sm">
-          <Link href="/login" className="hidden font-medium text-ink-soft transition-colors hover:text-ink sm:block">
+          <Link href="/login" className="hidden font-medium text-white/75 transition-colors hover:text-white sm:block">
             Log in
           </Link>
-          <Link
-            href="/signup"
-            className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
-          >
+          <Link href="/signup" className="btn-primary">
             Start free
           </Link>
         </div>
@@ -72,75 +71,62 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-bg-white">
-      <div className="relative mx-auto max-w-4xl px-6 pb-44 pt-20 text-center sm:pb-60 sm:pt-28">
-        <EyebrowBadge>Free during launch</EyebrowBadge>
-        <h1 className="font-display mx-auto mt-5 max-w-3xl text-4xl font-bold leading-[1.1] tracking-[-0.02em] text-ink sm:text-6xl">
-          Quote it. Send it. Get paid. Nothing else to learn.
-        </h1>
-        <p className="mx-auto mt-6 max-w-[50ch] text-lg leading-relaxed text-ink-soft">
-          Quotenly is quoting and invoicing for small trade crews &mdash; one flat price, no
-          per-seat billing, no bloat.
-        </p>
-        <div className="mt-9 flex items-center justify-center gap-3">
-          <Link
-            href="/signup"
-            className="rounded-lg bg-brand px-7 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
-          >
-            Start free
-          </Link>
-          <a
-            href="#product"
-            className="rounded-lg border border-line px-7 py-3 text-base font-semibold text-ink transition-colors hover:bg-brand-tint"
-          >
-            See how it works
-          </a>
-        </div>
-      </div>
+    <section className="relative overflow-hidden bg-navy-950">
+      <div className="glow-blob left-[-10%] top-[-20%] h-[32rem] w-[32rem] bg-brand/40" />
+      <div className="glow-blob right-[-15%] top-[10%] h-[26rem] w-[26rem] bg-cta-end/25" />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-64 sm:block">
-        <div className="mx-auto h-full max-w-4xl">
-          <NotificationCard
-            className="animate-float-a absolute left-2 top-2 sm:left-6"
-            title="Quote Approved"
-            detail="Jane Homeowner"
-          />
-          <NotificationCard
-            className="animate-float-b absolute right-4 top-16 sm:right-10"
-            title="Invoice Paid"
-            detail="$420.00"
-          />
-          <NotificationCard
-            className="animate-float-c absolute left-1/2 top-36 -translate-x-1/2"
-            title="Job Assigned"
-            detail="to Sam"
-          />
+      <div className="relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/hero-technician.webp"
+          alt="Trade technician working on-site"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-hero-gradient" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/20" />
+
+        <div className="relative mx-auto flex min-h-[38rem] max-w-4xl flex-col items-center justify-center px-6 pb-20 pt-32 text-center sm:min-h-[44rem]">
+          <EyebrowBadge>Free during launch</EyebrowBadge>
+          <h1 className="font-display mx-auto mt-6 max-w-3xl text-4xl font-bold leading-[1.08] tracking-[-0.02em] text-white sm:text-6xl">
+            Quote it. Send it. Get paid.{" "}
+            <span className="text-gradient-cta">Nothing else to learn.</span>
+          </h1>
+          <p className="mx-auto mt-6 max-w-[52ch] text-lg leading-relaxed text-white/70">
+            Quotenly is quoting and invoicing built for small trade crews &mdash; one flat price, no
+            per-seat billing, no bloat.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/signup" className="btn-primary px-7 py-3 text-base">
+              Start free
+            </Link>
+            <a href="#product" className="btn-secondary-inverse px-7 py-3 text-base">
+              See how it works
+            </a>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function NotificationCard({
-  className,
-  title,
-  detail,
-}: {
-  className?: string;
-  title: string;
-  detail: string;
-}) {
+function StatBar() {
+  const stats = [
+    { value: "$0", label: "Per-seat fees, ever" },
+    { value: "100%", label: "Free during launch" },
+    { value: "5 min", label: "To send your first quote" },
+    { value: "0", label: "Dispatch boards you'll never touch" },
+  ];
   return (
-    <div
-      className={`w-56 rounded-lg border border-line bg-white p-3.5 text-left ${className ?? ""}`}
-      style={{ boxShadow: "0 8px 24px rgba(11,15,25,0.12)" }}
-    >
-      <div className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-success" />
-        <span className="text-xs font-semibold text-ink">{title}</span>
+    <section className="border-b border-line bg-bg-white">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-10 sm:grid-cols-4">
+        {stats.map((s) => (
+          <div key={s.label} className="text-center">
+            <p className="text-gradient-cta font-display text-3xl font-bold">{s.value}</p>
+            <p className="mt-1 text-xs font-medium uppercase tracking-wide text-ink-faint">{s.label}</p>
+          </div>
+        ))}
       </div>
-      <p className="mt-1 text-xs text-ink-soft">{detail}</p>
-    </div>
+    </section>
   );
 }
 
@@ -252,9 +238,7 @@ function QuoteMockup() {
       </div>
       <div className="mt-3 flex items-center justify-between">
         <span className="font-mono text-sm font-semibold text-ink">Total: $195.00</span>
-        <span className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-1.5 text-xs font-semibold text-white">
-          Approve quote
-        </span>
+        <span className="btn-primary px-3.5 py-1.5 text-xs">Approve quote</span>
       </div>
     </BrowserChrome>
   );
@@ -279,7 +263,7 @@ function InvoiceMockup() {
       </div>
       <div className="mt-4 flex items-center justify-between rounded-lg border border-line bg-bg-white px-3 py-2.5">
         <div className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-[10px] font-bold text-brand">
+          <span className="bg-brand-gradient flex h-8 w-8 items-center justify-center rounded-md text-[10px] font-bold text-white">
             PDF
           </span>
           <span className="text-sm text-ink-soft">invoice-1042.pdf</span>
@@ -306,7 +290,7 @@ function TeamMockup() {
             className="flex items-center justify-between rounded-lg border border-line px-3 py-2.5"
           >
             <div className="flex items-center gap-2.5">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-tint text-[11px] font-bold text-brand-dark">
+              <span className="bg-brand-gradient flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold text-white">
                 {m.name.charAt(0)}
               </span>
               <div>
@@ -316,7 +300,7 @@ function TeamMockup() {
             </div>
             <span
               className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${
-                m.role === "Owner" ? "bg-brand text-white" : "bg-line text-ink-soft"
+                m.role === "Owner" ? "bg-brand-gradient text-white" : "bg-line text-ink-soft"
               }`}
             >
               {m.role}
@@ -346,10 +330,11 @@ function Wedge() {
             <p className="font-display mt-2 text-2xl font-bold text-ink">Price &times; team size</p>
             <p className="mt-1 text-sm text-ink-soft">Bill grows every time you hire.</p>
           </div>
-          <div className="rounded-lg border border-brand bg-brand-tint p-5 text-left">
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand-dark">Quotenly</p>
-            <p className="font-display mt-2 text-2xl font-bold text-ink">One flat price</p>
-            <p className="mt-1 text-sm text-ink-soft">Unlimited teammates, always.</p>
+          <div className="relative overflow-hidden rounded-lg border border-brand bg-brand-tint p-5 text-left">
+            <div className="glow-blob -right-8 -top-8 h-24 w-24 bg-cta-end/20" />
+            <p className="relative text-xs font-semibold uppercase tracking-wide text-brand-dark">Quotenly</p>
+            <p className="text-gradient-cta font-display relative mt-2 text-2xl font-bold">One flat price</p>
+            <p className="relative mt-1 text-sm text-ink-soft">Unlimited teammates, always.</p>
           </div>
         </div>
       </div>
@@ -365,7 +350,8 @@ function ThreeSteps() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-bg-dark px-6 py-24">
+    <section className="bg-navy-gradient relative overflow-hidden px-6 py-24">
+      <div className="glow-blob left-1/2 top-0 h-96 w-96 -translate-x-1/2 bg-brand/30" />
       <div className="relative mx-auto max-w-5xl text-center">
         <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
           From quote to paid, in three steps
@@ -375,11 +361,11 @@ function ThreeSteps() {
           <StepPath className="pointer-events-none absolute inset-x-0 top-8 hidden h-px sm:block" />
           {steps.map((step, i) => (
             <div key={step.label} className="relative flex flex-col items-center">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-brand bg-bg-dark text-xs font-bold text-brand">
+              <span className="bg-brand-gradient flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white">
                 {i + 1}
               </span>
               <div className="mt-6">{step.mockup}</div>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-brand">{step.label}</p>
+              <p className="text-gradient-cta mt-4 text-xs font-semibold uppercase tracking-wide">{step.label}</p>
               <p className="mt-1 text-sm text-paper-soft">{step.title}</p>
             </div>
           ))}
@@ -407,7 +393,7 @@ function MiniCard({ title, detail }: { title: string; detail: string }) {
 function StepPath({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 600 2" fill="none" aria-hidden="true">
-      <line x1="0" y1="1" x2="600" y2="1" stroke="#2A5CDB" strokeWidth="1.5" strokeDasharray="1 8" strokeLinecap="round" />
+      <line x1="0" y1="1" x2="600" y2="1" stroke="#4d7dff" strokeWidth="1.5" strokeDasharray="1 8" strokeLinecap="round" />
     </svg>
   );
 }
@@ -429,8 +415,9 @@ function UseCases() {
   const trades = ["Handyman", "Electrical", "Plumbing", "Cleaning", "Landscaping", "Painting"];
 
   return (
-    <section className="bg-bg-dark px-6 py-24">
-      <div className="mx-auto max-w-4xl text-center">
+    <section className="bg-navy-gradient relative overflow-hidden px-6 py-24">
+      <div className="glow-blob right-[-10%] bottom-[-20%] h-80 w-80 bg-cta-end/20" />
+      <div className="relative mx-auto max-w-4xl text-center">
         <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
           Whatever the job, the workflow&apos;s the same
         </h2>
@@ -441,7 +428,7 @@ function UseCases() {
           {trades.map((trade) => (
             <span
               key={trade}
-              className="rounded-lg border border-line-dark bg-bg-dark-alt px-4 py-2 text-sm font-medium text-paper-ink"
+              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-paper-ink backdrop-blur-sm"
             >
               {trade}
             </span>
@@ -490,7 +477,7 @@ function Faq() {
             <details key={item.q} className="group px-6 py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-ink">
                 {item.q}
-                <span className="text-brand transition-transform group-open:rotate-45">+</span>
+                <span className="text-gradient-cta transition-transform group-open:rotate-45">+</span>
               </summary>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">{item.a}</p>
             </details>
@@ -503,16 +490,14 @@ function Faq() {
 
 function FinalCta() {
   return (
-    <section className="bg-bg-dark px-6 py-28 text-center">
-      <div className="mx-auto max-w-2xl">
+    <section className="bg-hero-gradient relative overflow-hidden px-6 py-28 text-center">
+      <div className="glow-blob left-1/2 top-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 bg-brand/25" />
+      <div className="relative mx-auto max-w-2xl">
         <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
           Built for crews who&apos;d rather be working than managing software.
         </h2>
         <div className="mt-8">
-          <Link
-            href="/signup"
-            className="inline-block rounded-lg bg-brand px-7 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
-          >
+          <Link href="/signup" className="btn-primary px-7 py-3 text-base">
             Start free
           </Link>
         </div>
