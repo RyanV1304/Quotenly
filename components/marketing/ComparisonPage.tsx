@@ -22,41 +22,41 @@ export default function ComparisonPage({
   honestNote: string;
 }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-bg-white">
       <MarketingNav />
 
-      <section className="bg-wash bg-dot-grid bg-white px-6 py-20 text-center">
-        <span className="inline-block rounded-full bg-brand-blue-pale px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-blue-deep">
+      <section className="bg-bg-white px-6 py-20 text-center">
+        <span className="inline-block rounded-full bg-brand-tint px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">
           Quotenly vs {competitorName}
         </span>
-        <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight text-black sm:text-5xl">
+        <h1 className="font-display mx-auto mt-4 max-w-3xl text-4xl font-bold leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl">
           {headline}
         </h1>
-        <p className="mx-auto mt-5 max-w-xl text-lg text-black/60">{subhead}</p>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-ink-soft">{subhead}</p>
       </section>
 
-      <section className="bg-white px-6 pb-20">
-        <div className="mx-auto max-w-3xl overflow-x-auto rounded-2xl border border-black/10">
+      <section className="bg-bg-white px-6 pb-20">
+        <div className="mx-auto max-w-3xl overflow-x-auto rounded-lg border border-line">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-black/10 bg-brand-blue-pale/40">
-                <th className="px-5 py-3 font-semibold text-black">Feature</th>
-                <th className="px-5 py-3 font-semibold text-brand-blue-deep">Quotenly</th>
-                <th className="px-5 py-3 font-semibold text-black/60">{competitorName}</th>
+              <tr className="border-b border-line bg-brand-tint">
+                <th className="px-5 py-3 font-semibold text-ink">Feature</th>
+                <th className="px-5 py-3 font-semibold text-brand-dark">Quotenly</th>
+                <th className="px-5 py-3 font-semibold text-ink-soft">{competitorName}</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-line">
               {rows.map((row) => (
-                <tr key={row.feature} className="border-b border-black/5 last:border-0">
-                  <td className="px-5 py-3 font-medium text-black">{row.feature}</td>
-                  <td className="px-5 py-3 text-brand-blue-deep">{row.quotenly}</td>
-                  <td className="px-5 py-3 text-black/60">{row.competitor}</td>
+                <tr key={row.feature} className="bg-white">
+                  <td className="px-5 py-3 font-medium text-ink">{row.feature}</td>
+                  <td className="px-5 py-3 text-brand-dark">{row.quotenly}</td>
+                  <td className="px-5 py-3 text-ink-soft">{row.competitor}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="mx-auto mt-6 max-w-3xl text-center text-xs text-black/40">{honestNote}</p>
+        <p className="mx-auto mt-6 max-w-3xl text-center text-xs text-ink-faint">{honestNote}</p>
       </section>
 
       <ClosingCta />

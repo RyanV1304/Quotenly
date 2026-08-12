@@ -20,57 +20,55 @@ export default async function ClientsPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-xl font-semibold">Clients</h1>
+      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Clients</h1>
 
-      {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-          {error}
-        </p>
-      )}
+      {error && <p className="alert-error">{error}</p>}
 
-      <details className="rounded-md border border-black/10 p-4 dark:border-white/10">
-        <summary className="cursor-pointer text-sm font-medium">Add a client</summary>
+      <details className="group rounded-lg border border-line bg-white p-5">
+        <summary className="cursor-pointer text-sm font-semibold text-ink">Add a client</summary>
         <form action={createClientRecord} className="mt-4 grid grid-cols-2 gap-3">
-          <input name="name" required placeholder="Client name" className="col-span-2 rounded-md border border-black/15 px-3 py-2 text-sm dark:border-white/20" />
-          <input name="contact_email" type="email" placeholder="Email" className="rounded-md border border-black/15 px-3 py-2 text-sm dark:border-white/20" />
-          <input name="contact_phone" placeholder="Phone" className="rounded-md border border-black/15 px-3 py-2 text-sm dark:border-white/20" />
-          <input name="job_address" placeholder="Job address" className="col-span-2 rounded-md border border-black/15 px-3 py-2 text-sm dark:border-white/20" />
-          <textarea name="notes" placeholder="Notes" className="col-span-2 rounded-md border border-black/15 px-3 py-2 text-sm dark:border-white/20" />
-          <button type="submit" className="col-span-2 rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
+          <input name="name" required placeholder="Client name" className="input col-span-2" />
+          <input name="contact_email" type="email" placeholder="Email" className="input" />
+          <input name="contact_phone" placeholder="Phone" className="input" />
+          <input name="job_address" placeholder="Job address" className="input col-span-2" />
+          <textarea name="notes" placeholder="Notes" className="input col-span-2" />
+          <button type="submit" className="btn-primary col-span-2 w-fit">
             Save client
           </button>
         </form>
       </details>
 
-      <table className="w-full text-left text-sm">
-        <thead className="border-b border-black/10 text-black/60 dark:border-white/10 dark:text-white/60">
-          <tr>
-            <th className="py-2 font-medium">Name</th>
-            <th className="py-2 font-medium">Contact</th>
-            <th className="py-2 font-medium">Job address</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clients?.map((c) => (
-            <tr key={c.id} className="border-b border-black/5 dark:border-white/5">
-              <td className="py-2">
-                <Link href={`/app/clients/${c.id}`} className="underline">
-                  {c.name}
-                </Link>
-              </td>
-              <td className="py-2">{c.contact_email || c.contact_phone || "-"}</td>
-              <td className="py-2">{c.job_address || "-"}</td>
-            </tr>
-          ))}
-          {clients?.length === 0 && (
+      <div className="overflow-hidden rounded-lg border border-line">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>
-              <td colSpan={3} className="py-4 text-black/50 dark:text-white/50">
-                No clients yet.
-              </td>
+              <th className="px-4 py-2.5 font-semibold">Name</th>
+              <th className="px-4 py-2.5 font-semibold">Contact</th>
+              <th className="px-4 py-2.5 font-semibold">Job address</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-line">
+            {clients?.map((c) => (
+              <tr key={c.id} className="bg-white">
+                <td className="px-4 py-2.5">
+                  <Link href={`/app/clients/${c.id}`} className="font-medium text-brand hover:underline">
+                    {c.name}
+                  </Link>
+                </td>
+                <td className="px-4 py-2.5 text-ink-soft">{c.contact_email || c.contact_phone || "-"}</td>
+                <td className="px-4 py-2.5 text-ink-soft">{c.job_address || "-"}</td>
+              </tr>
+            ))}
+            {clients?.length === 0 && (
+              <tr>
+                <td colSpan={3} className="px-4 py-6 text-center text-ink-faint">
+                  No clients yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

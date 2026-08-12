@@ -132,3 +132,114 @@ body {
     animation: none;
   }
 }
+
+@layer components {
+  .input {
+    border-radius: 0.5rem;
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .input:focus {
+    border-color: var(--brand);
+  }
+
+  .input::placeholder {
+    color: var(--ink-faint);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background: var(--brand);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--brand-dark);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.15s ease;
+  }
+
+  .btn-secondary:hover {
+    background: var(--brand-tint);
+  }
+
+  .btn-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .btn-link:hover {
+    color: var(--ink);
+  }
+
+  .btn-link-danger {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--danger);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .field-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .alert-error {
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--danger) 20%, transparent);
+    background: var(--danger-tint);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--danger);
+  }
+
+  .alert-success {
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
+    background: var(--success-tint);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--success);
+  }
+
+  .alert-warning {
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent);
+    background: var(--warning-tint);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--warning);
+  }
+}

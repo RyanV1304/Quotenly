@@ -19,7 +19,7 @@ export default async function VerifyEmailPage({
   if (!profile) {
     return (
       <AuthShell title="Link invalid">
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-ink-soft">
           This verification link isn&apos;t valid or has already been used.
         </p>
       </AuthShell>
@@ -34,12 +34,12 @@ export default async function VerifyEmailPage({
     <AuthShell
       title="Email verified"
       footer={
-        <Link href="/app/dashboard" className="font-semibold text-brand-blue hover:text-brand-blue-deep">
+        <Link href="/app/dashboard" className="font-semibold text-brand hover:text-brand-dark">
           Go to dashboard
         </Link>
       }
     >
-      <p className="text-sm text-black/60">Your email address has been confirmed.</p>
+      <p className="text-sm text-ink-soft">Your email address has been confirmed.</p>
     </AuthShell>
   );
 }

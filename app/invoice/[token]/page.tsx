@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { markInvoiceViewed } from "@/app/actions/public";
 import { formatCurrency, formatDate } from "@/lib/format";
+import StatusBadge from "@/components/StatusBadge";
 import type { LineItem } from "@/lib/types";
 
 export default async function PublicInvoicePage({ params }: { params: Promise<{ token: string }> }) {
@@ -28,65 +29,69 @@ export default async function PublicInvoicePage({ params }: { params: Promise<{ 
   const branding = brandings?.[0];
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col gap-6 px-4 py-12">
-      <div>
-        {branding?.logo_url && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={branding.logo_url} alt={branding.business_name ?? ""} className="mb-2 h-12" />
-        )}
-        <h1 className="text-2xl font-semibold">{branding?.business_name ?? "Invoice"}</h1>
-        {branding?.address && <p className="text-sm text-black/60 dark:text-white/60">{branding.address}</p>}
-        {branding?.phone && <p className="text-sm text-black/60 dark:text-white/60">{branding.phone}</p>}
-      </div>
-
-      <div className="flex justify-between">
+    <div className="min-h-screen bg-bg-white px-4 py-12">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         <div>
-          <p className="text-sm text-black/60 dark:text-white/60">Billed to</p>
-          <p className="font-medium">{client?.name}</p>
-          {client?.job_address && <p className="text-sm text-black/60 dark:text-white/60">{client.job_address}</p>}
+          {branding?.logo_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={branding.logo_url} alt={branding.business_name ?? ""} className="mb-2 h-12" />
+          )}
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">{branding?.business_name ?? "Invoice"}</h1>
+          {branding?.address && <p className="text-sm text-ink-soft">{branding.address}</p>}
+          {branding?.phone && <p className="text-sm text-ink-soft">{branding.phone}</p>}
         </div>
-        <div className="text-right">
-          <p className="text-sm text-black/60 dark:text-white/60">Due date</p>
-          <p className="font-medium">{formatDate(invoice.due_date)}</p>
+
+        <div className="flex justify-between">
+          <div>
+            <p className="text-sm text-ink-faint">Billed to</p>
+            <p className="font-medium text-ink">{client?.name}</p>
+            {client?.job_address && <p className="text-sm text-ink-soft">{client.job_address}</p>}
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-ink-faint">Due date</p>
+            <p className="font-medium text-ink">{formatDate(invoice.due_date)}</p>
+          </div>
         </div>
-      </div>
 
-      <table className="w-full text-left text-sm">
-        <thead className="border-b border-black/10 text-black/60 dark:border-white/10 dark:text-white/60">
-          <tr>
-            <th className="py-2 font-medium">Description</th>
-            <th className="py-2 font-medium">Qty</th>
-            <th className="py-2 font-medium">Rate</th>
-            <th className="py-2 font-medium">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(lineItems as LineItem[] | null)?.map((li) => (
-            <tr key={li.id} className="border-b border-black/5 dark:border-white/5">
-              <td className="py-2">{li.description}</td>
-              <td className="py-2">{li.quantity}</td>
-              <td className="py-2">{formatCurrency(li.rate)}</td>
-              <td className="py-2">{formatCurrency(li.amount)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <div className="overflow-hidden rounded-lg border border-line">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-white text-xs uppercase tracking-wide text-ink-faint">
+              <tr>
+                <th className="px-4 py-2.5 font-semibold">Description</th>
+                <th className="px-4 py-2.5 font-semibold">Qty</th>
+                <th className="px-4 py-2.5 font-semibold">Rate</th>
+                <th className="px-4 py-2.5 font-semibold">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line">
+              {(lineItems as LineItem[] | null)?.map((li) => (
+                <tr key={li.id} className="bg-white">
+                  <td className="px-4 py-2.5 text-ink">{li.description}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      <div className="flex flex-col items-end gap-1 text-sm">
-        <div>Subtotal: {formatCurrency(invoice.subtotal)}</div>
-        <div className="text-lg font-semibold">Total: {formatCurrency(invoice.total)}</div>
-      </div>
+        <div className="flex flex-col items-end gap-1 text-sm">
+          <div className="font-mono text-ink-soft">Subtotal: {formatCurrency(invoice.subtotal)}</div>
+          <div className="font-mono text-lg font-bold text-ink">Total: {formatCurrency(invoice.total)}</div>
+        </div>
 
-      <div className="rounded-md border border-black/10 p-4 dark:border-white/10">
-        <p className="text-sm font-medium">
-          Status: <span className="capitalize">{invoice.status}</span>
-        </p>
-        {invoice.payment_instructions && (
-          <>
-            <p className="mt-2 text-sm text-black/60 dark:text-white/60">How to pay</p>
-            <p className="text-sm">{invoice.payment_instructions}</p>
-          </>
-        )}
+        <div className="rounded-lg border border-line bg-white p-5">
+          <p className="text-sm font-medium">
+            Status: <StatusBadge status={invoice.status} />
+          </p>
+          {invoice.payment_instructions && (
+            <>
+              <p className="mt-3 text-sm text-ink-faint">How to pay</p>
+              <p className="text-sm text-ink">{invoice.payment_instructions}</p>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { formatCurrency, formatDate } from "@/lib/format";
+import StatusBadge from "@/components/StatusBadge";
 
 export default async function DashboardPage() {
   const membership = await requireMembership();
@@ -22,8 +23,8 @@ export default async function DashboardPage() {
     ]);
 
     return (
-      <div className="flex flex-col gap-8">
-        <h1 className="text-xl font-semibold">Your jobs</h1>
+      <div className="flex flex-col gap-10">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Your jobs</h1>
         <JobSection title="Quotes" rows={quotes ?? []} kind="quotes" />
         <JobSection title="Invoices" rows={invoices ?? []} kind="invoices" />
       </div>
@@ -74,42 +75,44 @@ export default async function DashboardPage() {
   });
 
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="text-xl font-semibold">Dashboard</h1>
+    <div className="flex flex-col gap-10">
+      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Dashboard</h1>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-md border border-black/10 p-4 dark:border-white/10">
-          <p className="text-sm text-black/60 dark:text-white/60">Total outstanding</p>
-          <p className="mt-1 text-2xl font-semibold">{formatCurrency(totalOutstanding)}</p>
+        <div className="rounded-lg border border-line bg-white p-5">
+          <p className="text-sm text-ink-soft">Total outstanding</p>
+          <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalOutstanding)}</p>
         </div>
-        <div className="rounded-md border border-black/10 p-4 dark:border-white/10">
-          <p className="text-sm text-black/60 dark:text-white/60">Paid this month</p>
-          <p className="mt-1 text-2xl font-semibold">{formatCurrency(totalPaidThisMonth)}</p>
+        <div className="rounded-lg border border-line bg-white p-5">
+          <p className="text-sm text-ink-soft">Paid this month</p>
+          <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalPaidThisMonth)}</p>
         </div>
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold">Per-teammate breakdown</h2>
-        <table className="mt-2 w-full text-left text-sm">
-          <thead className="border-b border-black/10 text-black/60 dark:border-white/10 dark:text-white/60">
-            <tr>
-              <th className="py-2 font-medium">Teammate</th>
-              <th className="py-2 font-medium">Quotes</th>
-              <th className="py-2 font-medium">Invoices</th>
-              <th className="py-2 font-medium">Invoice total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {breakdown.map((b) => (
-              <tr key={b.key} className="border-b border-black/5 dark:border-white/5">
-                <td className="py-2">{b.name}</td>
-                <td className="py-2">{b.quoteCount}</td>
-                <td className="py-2">{b.invoiceCount}</td>
-                <td className="py-2">{formatCurrency(b.invoiceTotal)}</td>
+        <h2 className="font-display text-lg font-bold text-ink">Per-teammate breakdown</h2>
+        <div className="mt-3 overflow-hidden rounded-lg border border-line">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
+              <tr>
+                <th className="px-4 py-2.5 font-semibold">Teammate</th>
+                <th className="px-4 py-2.5 font-semibold">Quotes</th>
+                <th className="px-4 py-2.5 font-semibold">Invoices</th>
+                <th className="px-4 py-2.5 font-semibold">Invoice total</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-line">
+              {breakdown.map((b) => (
+                <tr key={b.key} className="bg-white">
+                  <td className="px-4 py-2.5 text-ink">{b.name}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{b.quoteCount}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{b.invoiceCount}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(b.invoiceTotal)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -126,29 +129,33 @@ function JobSection({
 }) {
   return (
     <div>
-      <h2 className="text-lg font-semibold">{title}</h2>
+      <h2 className="font-display text-lg font-bold text-ink">{title}</h2>
       {rows.length === 0 ? (
-        <p className="mt-2 text-sm text-black/50 dark:text-white/50">Nothing assigned yet.</p>
+        <p className="mt-3 text-sm text-ink-faint">Nothing assigned yet.</p>
       ) : (
-        <table className="mt-2 w-full text-left text-sm">
-          <tbody>
-            {rows.map((r) => {
-              const client = Array.isArray(r.clients) ? r.clients[0] : r.clients;
-              return (
-                <tr key={r.id} className="border-b border-black/5 dark:border-white/5">
-                  <td className="py-2">
-                    <Link href={`/app/${kind}/${r.id}`} className="underline">
-                      {client?.name ?? "Unknown client"}
-                    </Link>
-                  </td>
-                  <td className="py-2 capitalize">{r.status}</td>
-                  <td className="py-2">{formatCurrency(r.total)}</td>
-                  <td className="py-2 text-black/50 dark:text-white/50">{formatDate(r.created_at)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="mt-3 overflow-hidden rounded-lg border border-line">
+          <table className="w-full text-left text-sm">
+            <tbody className="divide-y divide-line">
+              {rows.map((r) => {
+                const client = Array.isArray(r.clients) ? r.clients[0] : r.clients;
+                return (
+                  <tr key={r.id} className="bg-white">
+                    <td className="px-4 py-2.5">
+                      <Link href={`/app/${kind}/${r.id}`} className="font-medium text-brand hover:underline">
+                        {client?.name ?? "Unknown client"}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <StatusBadge status={r.status} />
+                    </td>
+                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(r.total)}</td>
+                    <td className="px-4 py-2.5 text-ink-faint">{formatDate(r.created_at)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { updateQuote, sendQuote, convertToInvoice, duplicateQuote } from "@/app/actions/quotes";
 import LineItemsEditor from "@/components/LineItemsEditor";
+import StatusBadge from "@/components/StatusBadge";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 export default async function QuoteDetailPage({
@@ -46,39 +47,39 @@ export default async function QuoteDetailPage({
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <Link href="/app/quotes" className="text-sm underline">
+      <Link href="/app/quotes" className="btn-link w-fit">
         &larr; Back to quotes
       </Link>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold">Quote for {client?.name}</h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Status: <span className="capitalize">{quote.status}</span>
-            {quote.viewed_at && <> &middot; Viewed {formatDate(quote.viewed_at)}</>} &middot;{" "}
-            <a href={shareUrl} target="_blank" className="underline" rel="noreferrer">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Quote for {client?.name}</h1>
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+            <StatusBadge status={quote.status} />
+            {quote.viewed_at && <span>Viewed {formatDate(quote.viewed_at)}</span>}
+            <a href={shareUrl} target="_blank" className="btn-link" rel="noreferrer">
               Public link
             </a>
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex shrink-0 gap-2">
           {quote.status === "draft" && (
             <form action={sendAction}>
-              <button type="submit" className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
+              <button type="submit" className="btn-primary">
                 Send to client
               </button>
             </form>
           )}
           {quote.status === "approved" && (
             <form action={convertAction}>
-              <button type="submit" className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
+              <button type="submit" className="btn-primary">
                 Convert to invoice
               </button>
             </form>
           )}
           {quote.status === "declined" && (
             <form action={duplicateAction}>
-              <button type="submit" className="rounded-md border border-black/20 px-4 py-2 text-sm font-medium dark:border-white/30">
+              <button type="submit" className="btn-secondary">
                 Duplicate as new draft
               </button>
             </form>
@@ -86,46 +87,44 @@ export default async function QuoteDetailPage({
         </div>
       </div>
 
-      {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-          {error}
-        </p>
-      )}
+      {error && <p className="alert-error">{error}</p>}
 
       {readOnly ? (
         <>
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-black/10 text-black/60 dark:border-white/10 dark:text-white/60">
-              <tr>
-                <th className="py-2 font-medium">Description</th>
-                <th className="py-2 font-medium">Qty</th>
-                <th className="py-2 font-medium">Rate</th>
-                <th className="py-2 font-medium">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lineItems?.map((li) => (
-                <tr key={li.id} className="border-b border-black/5 dark:border-white/5">
-                  <td className="py-2">{li.description}</td>
-                  <td className="py-2">{li.quantity}</td>
-                  <td className="py-2">{formatCurrency(li.rate)}</td>
-                  <td className="py-2">{formatCurrency(li.amount)}</td>
+          <div className="overflow-hidden rounded-lg border border-line">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
+                <tr>
+                  <th className="px-4 py-2.5 font-semibold">Description</th>
+                  <th className="px-4 py-2.5 font-semibold">Qty</th>
+                  <th className="px-4 py-2.5 font-semibold">Rate</th>
+                  <th className="px-4 py-2.5 font-semibold">Amount</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {lineItems?.map((li) => (
+                  <tr key={li.id} className="bg-white">
+                    <td className="px-4 py-2.5 text-ink">{li.description}</td>
+                    <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {quote.notes && (
-            <div className="text-sm">
-              <p className="text-black/60 dark:text-white/60">Notes</p>
-              <p>{quote.notes}</p>
+            <div className="rounded-lg border border-line bg-white p-4 text-sm">
+              <p className="text-ink-faint">Notes</p>
+              <p className="mt-1 text-ink">{quote.notes}</p>
             </div>
           )}
         </>
       ) : (
         <form action={updateAction} className="flex flex-col gap-4">
-          <label className="flex flex-col gap-1 text-sm">
+          <label className="field-label">
             Assign to
-            <select name="assigned_to" defaultValue={quote.assigned_to ?? ""} className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20">
+            <select name="assigned_to" defaultValue={quote.assigned_to ?? ""} className="input">
               <option value="">Unassigned</option>
               {members?.map((m) => (
                 <option key={m.user_id} value={m.user_id ?? ""}>
@@ -146,22 +145,18 @@ export default async function QuoteDetailPage({
             }))}
           />
 
-          <label className="flex flex-col gap-1 text-sm">
+          <label className="field-label">
             Notes
-            <textarea
-              name="notes"
-              defaultValue={quote.notes ?? ""}
-              className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
-            />
+            <textarea name="notes" defaultValue={quote.notes ?? ""} className="input" />
           </label>
 
-          <button type="submit" className="w-fit rounded-md border border-black/20 px-4 py-2 text-sm font-medium dark:border-white/30">
+          <button type="submit" className="btn-secondary w-fit">
             Save changes
           </button>
         </form>
       )}
 
-      <p className="text-sm font-medium">Total: {formatCurrency(quote.total)}</p>
+      <p className="font-mono text-right text-base font-semibold text-ink">Total: {formatCurrency(quote.total)}</p>
     </div>
   );
 }

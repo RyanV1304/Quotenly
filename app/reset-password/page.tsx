@@ -33,12 +33,12 @@ export default async function ResetPasswordPage({
       <AuthShell
         title="Link expired"
         footer={
-          <Link href="/forgot-password" className="font-semibold text-brand-blue hover:text-brand-blue-deep">
+          <Link href="/forgot-password" className="font-semibold text-brand hover:text-brand-dark">
             Request a new link
           </Link>
         }
       >
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-ink-soft">
           {exchangeError || "This reset link is invalid or has expired."}
         </p>
       </AuthShell>
@@ -47,34 +47,17 @@ export default async function ResetPasswordPage({
 
   return (
     <AuthShell title="Choose a new password">
-      {error && (
-        <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-      )}
+      {error && <p className="alert-error mb-4">{error}</p>}
       <form action={submitNewPassword} className="flex flex-col gap-3.5">
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           New password
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            className="rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm text-black outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/15"
-          />
+          <input name="password" type="password" required minLength={8} className="input" />
         </label>
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           Confirm password
-          <input
-            name="confirmPassword"
-            type="password"
-            required
-            minLength={8}
-            className="rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm text-black outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/15"
-          />
+          <input name="confirmPassword" type="password" required minLength={8} className="input" />
         </label>
-        <button
-          type="submit"
-          className="mt-1 rounded-full bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:-translate-y-0.5 hover:bg-brand-blue-deep active:translate-y-0"
-        >
+        <button type="submit" className="btn-primary mt-1">
           Set new password
         </button>
       </form>

@@ -8,9 +8,6 @@ import {
 import AuthShell from "@/components/AuthShell";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 
-const fieldClass =
-  "rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm text-black outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/15";
-
 export default async function InvitePage({
   params,
   searchParams,
@@ -35,7 +32,7 @@ export default async function InvitePage({
   if (!invite) {
     return (
       <AuthShell title="Invite not found">
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-ink-soft">
           This invite link isn&apos;t valid. Ask whoever invited you to send a new one.
         </p>
       </AuthShell>
@@ -45,7 +42,7 @@ export default async function InvitePage({
   if (invite.status === "cancelled") {
     return (
       <AuthShell title="Invite cancelled">
-        <p className="text-sm text-black/60">This invite has been cancelled by the workspace owner.</p>
+        <p className="text-sm text-ink-soft">This invite has been cancelled by the workspace owner.</p>
       </AuthShell>
     );
   }
@@ -55,12 +52,12 @@ export default async function InvitePage({
       <AuthShell
         title="Already used"
         footer={
-          <a href="/login" className="font-semibold text-brand-blue hover:text-brand-blue-deep">
+          <a href="/login" className="font-semibold text-brand hover:text-brand-dark">
             Log in
           </a>
         }
       >
-        <p className="text-sm text-black/60">This invite has already been used.</p>
+        <p className="text-sm text-ink-soft">This invite has already been used.</p>
       </AuthShell>
     );
   }
@@ -68,7 +65,7 @@ export default async function InvitePage({
   if (new Date(invite.expires_at) < new Date()) {
     return (
       <AuthShell title="Invite expired">
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-ink-soft">
           This invite has expired. Ask {workspaceName ?? "the workspace"}&apos;s owner to send a
           new one.
         </p>
@@ -86,7 +83,7 @@ export default async function InvitePage({
     if (!user) {
       return (
         <AuthShell title="Session expired">
-          <p className="text-sm text-black/60">Please log in again to continue.</p>
+          <p className="text-sm text-ink-soft">Please log in again to continue.</p>
         </AuthShell>
       );
     }
@@ -111,24 +108,18 @@ export default async function InvitePage({
 
     return (
       <AuthShell eyebrow="Confirm switch" title="Switch workspaces?">
-        <p className="text-sm text-black/60">
+        <p className="text-sm text-ink-soft">
           You&apos;re currently part of <strong>{oldWorkspaceName ?? "another workspace"}</strong>.
           Joining <strong>{workspaceName}</strong> will remove your access to{" "}
           {oldWorkspaceName ?? "that workspace"}. Continue?
         </p>
         <div className="mt-5 flex gap-3">
           <form action={confirmAction}>
-            <button
-              type="submit"
-              className="rounded-full bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:bg-brand-blue-deep"
-            >
+            <button type="submit" className="btn-primary">
               Switch workspaces
             </button>
           </form>
-          <a
-            href="/app/dashboard"
-            className="rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold text-black transition hover:border-black/20"
-          >
+          <a href="/app/dashboard" className="btn-secondary">
             Cancel
           </a>
         </div>
@@ -150,51 +141,43 @@ export default async function InvitePage({
           : `Create your account for ${invite.email} to finish joining.`
       }
     >
-      {error && (
-        <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-      )}
+      {error && <p className="alert-error mb-4">{error}</p>}
 
       {isExistingAccountFlow ? (
         <form action={acceptExisting} className="flex flex-col gap-3.5">
-          <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+          <label className="field-label">
             Password
-            <input name="password" type="password" required className={fieldClass} />
+            <input name="password" type="password" required className="input" />
           </label>
-          <button
-            type="submit"
-            className="mt-1 rounded-full bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:-translate-y-0.5 hover:bg-brand-blue-deep active:translate-y-0"
-          >
+          <button type="submit" className="btn-primary mt-1">
             Log in and join
           </button>
         </form>
       ) : (
         <>
           <GoogleSignInButton />
-          <p className="mt-2 text-center text-xs text-black/40">
+          <p className="mt-2 text-center text-xs text-ink-faint">
             Use the Google account for {invite.email}
           </p>
-          <div className="my-5 flex items-center gap-3 text-xs font-medium text-black/30">
-            <div className="h-px flex-1 bg-black/10" />
+          <div className="my-5 flex items-center gap-3 text-xs font-medium text-ink-faint">
+            <div className="h-px flex-1 bg-line" />
             or
-            <div className="h-px flex-1 bg-black/10" />
+            <div className="h-px flex-1 bg-line" />
           </div>
           <form action={acceptNew} className="flex flex-col gap-3.5">
-            <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+            <label className="field-label">
               Name
-              <input name="name" required minLength={2} className={fieldClass} />
+              <input name="name" required minLength={2} className="input" />
             </label>
-            <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+            <label className="field-label">
               Password
-              <input name="password" type="password" required minLength={8} className={fieldClass} />
+              <input name="password" type="password" required minLength={8} className="input" />
             </label>
-            <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+            <label className="field-label">
               Confirm password
-              <input name="confirmPassword" type="password" required minLength={8} className={fieldClass} />
+              <input name="confirmPassword" type="password" required minLength={8} className="input" />
             </label>
-            <button
-              type="submit"
-              className="mt-1 rounded-full bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:-translate-y-0.5 hover:bg-brand-blue-deep active:translate-y-0"
-            >
+            <button type="submit" className="btn-primary mt-1">
               Join workspace
             </button>
           </form>

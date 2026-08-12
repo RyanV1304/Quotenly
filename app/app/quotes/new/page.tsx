@@ -29,18 +29,14 @@ export default async function NewQuotePage({
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <h1 className="text-xl font-semibold">New quote</h1>
+      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">New quote</h1>
 
-      {error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-          {error}
-        </p>
-      )}
+      {error && <p className="alert-error">{error}</p>}
 
       <form action={createQuote} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="field-label">
           Client
-          <select name="client_id" required defaultValue={clientId ?? ""} className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20">
+          <select name="client_id" required defaultValue={clientId ?? ""} className="input">
             <option value="" disabled>
               Select a client
             </option>
@@ -52,9 +48,9 @@ export default async function NewQuotePage({
           </select>
         </label>
 
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="field-label">
           Assign to
-          <select name="assigned_to" defaultValue={membership.userId} className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20">
+          <select name="assigned_to" defaultValue={membership.userId} className="input">
             <option value="">Unassigned</option>
             {members?.map((m) => (
               <option key={m.user_id} value={m.user_id ?? ""}>
@@ -69,12 +65,12 @@ export default async function NewQuotePage({
           initialTaxRate={(branding?.default_tax_percent ?? 0) / 100}
         />
 
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="field-label">
           Notes
-          <textarea name="notes" className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20" />
+          <textarea name="notes" className="input" />
         </label>
 
-        <button type="submit" className="mt-2 w-fit rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
+        <button type="submit" className="btn-primary mt-2 w-fit">
           Save quote
         </button>
       </form>

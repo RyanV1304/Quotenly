@@ -4,9 +4,6 @@ import GoogleSignInButton from "@/components/GoogleSignInButton";
 import AuthShell from "@/components/AuthShell";
 import PasswordStrengthField from "@/components/PasswordStrengthField";
 
-const fieldClass =
-  "rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-sm text-black outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/15";
-
 export default async function SignUpPage({
   searchParams,
 }: {
@@ -22,56 +19,51 @@ export default async function SignUpPage({
       footer={
         <>
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-brand-blue hover:text-brand-blue-deep">
+          <Link href="/login" className="font-semibold text-brand hover:text-brand-dark">
             Log in
           </Link>
         </>
       }
     >
-      {error && (
-        <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-      )}
+      {error && <p className="alert-error mb-4">{error}</p>}
 
       <GoogleSignInButton />
 
-      <div className="my-5 flex items-center gap-3 text-xs font-medium text-black/30">
-        <div className="h-px flex-1 bg-black/10" />
+      <div className="my-5 flex items-center gap-3 text-xs font-medium text-ink-faint">
+        <div className="h-px flex-1 bg-line" />
         or
-        <div className="h-px flex-1 bg-black/10" />
+        <div className="h-px flex-1 bg-line" />
       </div>
 
       <form action={signUp} className="flex flex-col gap-3.5">
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           Full name
-          <input name="name" required minLength={2} defaultValue={name ?? ""} className={fieldClass} />
+          <input name="name" required minLength={2} defaultValue={name ?? ""} className="input" />
         </label>
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           Business name
           <input
             name="businessName"
             required
             minLength={2}
             defaultValue={businessName ?? ""}
-            className={fieldClass}
+            className="input"
             placeholder="Acme Handyman Co."
           />
         </label>
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           Email
-          <input name="email" type="email" required defaultValue={email ?? ""} className={fieldClass} />
+          <input name="email" type="email" required defaultValue={email ?? ""} className="input" />
         </label>
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           Password
           <PasswordStrengthField name="password" />
         </label>
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
+        <label className="field-label">
           Confirm password
-          <input name="confirmPassword" type="password" required minLength={8} className={fieldClass} />
+          <input name="confirmPassword" type="password" required minLength={8} className="input" />
         </label>
-        <button
-          type="submit"
-          className="mt-2 rounded-full bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:-translate-y-0.5 hover:bg-brand-blue-deep active:translate-y-0"
-        >
+        <button type="submit" className="btn-primary mt-2">
           Create workspace
         </button>
       </form>

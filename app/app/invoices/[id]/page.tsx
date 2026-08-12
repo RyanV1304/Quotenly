@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { updateInvoiceDetails, sendInvoice, markInvoicePaid, sendReminderNow } from "@/app/actions/invoices";
 import { formatCurrency, formatDate } from "@/lib/format";
+import StatusBadge from "@/components/StatusBadge";
 
 export default async function InvoiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -40,35 +41,34 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <Link href="/app/invoices" className="text-sm underline">
+      <Link href="/app/invoices" className="btn-link w-fit">
         &larr; Back to invoices
       </Link>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold">Invoice for {client?.name}</h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
-            Status: <span className="capitalize">{isOverdue ? "overdue" : invoice.status}</span> &middot;{" "}
-            <a href={shareUrl} target="_blank" className="underline" rel="noreferrer">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoice for {client?.name}</h1>
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+            <StatusBadge status={isOverdue ? "overdue" : invoice.status} />
+            <a href={shareUrl} target="_blank" className="btn-link" rel="noreferrer">
               Public link
-            </a>{" "}
-            &middot;{" "}
-            <a href={`/api/invoices/${id}/pdf`} className="underline" target="_blank" rel="noreferrer">
+            </a>
+            <a href={`/api/invoices/${id}/pdf`} className="btn-link" target="_blank" rel="noreferrer">
               Download PDF
             </a>
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex shrink-0 gap-2">
           {invoice.status === "draft" && (
             <form action={sendAction}>
-              <button type="submit" className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
+              <button type="submit" className="btn-primary">
                 Send to client
               </button>
             </form>
           )}
           {invoice.status !== "paid" && invoice.status !== "draft" && (
             <form action={reminderAction}>
-              <button type="submit" className="rounded-md border border-black/20 px-4 py-2 text-sm font-medium dark:border-white/30">
+              <button type="submit" className="btn-secondary">
                 Send reminder now
               </button>
             </form>
@@ -77,68 +77,63 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
       </div>
 
       {invoice.status === "paid" ? (
-        <div className="rounded-md border border-green-200 bg-green-50 p-4 text-sm text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-300">
+        <div className="alert-success">
           Paid {invoice.paid_at ? formatDate(invoice.paid_at) : ""}
           {invoice.paid_note && <> &mdash; {invoice.paid_note}</>}
         </div>
       ) : (
-        <details className="rounded-md border border-black/10 p-4 dark:border-white/10">
-          <summary className="cursor-pointer text-sm font-medium">Mark as paid</summary>
+        <details className="group rounded-lg border border-line bg-white p-5">
+          <summary className="cursor-pointer text-sm font-semibold text-ink">Mark as paid</summary>
           <form action={paidAction} className="mt-3 flex flex-col gap-3">
-            <label className="flex flex-col gap-1 text-sm">
+            <label className="field-label">
               Payment date
               <input
                 type="date"
                 name="paidDate"
                 defaultValue={new Date().toISOString().slice(0, 10)}
-                className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
+                className="input"
               />
             </label>
-            <label className="flex flex-col gap-1 text-sm">
+            <label className="field-label">
               Note (optional)
-              <input
-                name="paidNote"
-                placeholder="e.g. Paid via Zelle"
-                className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20"
-              />
+              <input name="paidNote" placeholder="e.g. Paid via Zelle" className="input" />
             </label>
-            <button
-              type="submit"
-              className="w-fit rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black"
-            >
+            <button type="submit" className="btn-primary w-fit">
               Confirm paid
             </button>
           </form>
         </details>
       )}
 
-      <table className="w-full text-left text-sm">
-        <thead className="border-b border-black/10 text-black/60 dark:border-white/10 dark:text-white/60">
-          <tr>
-            <th className="py-2 font-medium">Description</th>
-            <th className="py-2 font-medium">Qty</th>
-            <th className="py-2 font-medium">Rate</th>
-            <th className="py-2 font-medium">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {lineItems?.map((li) => (
-            <tr key={li.id} className="border-b border-black/5 dark:border-white/5">
-              <td className="py-2">{li.description}</td>
-              <td className="py-2">{li.quantity}</td>
-              <td className="py-2">{formatCurrency(li.rate)}</td>
-              <td className="py-2">{formatCurrency(li.amount)}</td>
+      <div className="overflow-hidden rounded-lg border border-line">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
+            <tr>
+              <th className="px-4 py-2.5 font-semibold">Description</th>
+              <th className="px-4 py-2.5 font-semibold">Qty</th>
+              <th className="px-4 py-2.5 font-semibold">Rate</th>
+              <th className="px-4 py-2.5 font-semibold">Amount</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-line">
+            {lineItems?.map((li) => (
+              <tr key={li.id} className="bg-white">
+                <td className="px-4 py-2.5 text-ink">{li.description}</td>
+                <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
+                <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
+                <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <p className="text-right text-sm font-medium">Total: {formatCurrency(invoice.total)}</p>
+      <p className="font-mono text-right text-base font-semibold text-ink">Total: {formatCurrency(invoice.total)}</p>
 
       <form action={updateAction} className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="field-label">
           Assign to
-          <select name="assigned_to" defaultValue={invoice.assigned_to ?? ""} className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20">
+          <select name="assigned_to" defaultValue={invoice.assigned_to ?? ""} className="input">
             <option value="">Unassigned</option>
             {members?.map((m) => (
               <option key={m.user_id} value={m.user_id ?? ""}>
@@ -147,15 +142,20 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="field-label">
           Due date
-          <input type="date" name="due_date" defaultValue={invoice.due_date ?? ""} className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20" />
+          <input type="date" name="due_date" defaultValue={invoice.due_date ?? ""} className="input" />
         </label>
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="field-label">
           Payment instructions
-          <textarea name="payment_instructions" defaultValue={invoice.payment_instructions ?? ""} className="rounded-md border border-black/15 px-3 py-2 dark:border-white/20" placeholder="Pay via check, cash, or Zelle to..." />
+          <textarea
+            name="payment_instructions"
+            defaultValue={invoice.payment_instructions ?? ""}
+            className="input"
+            placeholder="Pay via check, cash, or Zelle to..."
+          />
         </label>
-        <button type="submit" className="w-fit rounded-md border border-black/20 px-4 py-2 text-sm font-medium dark:border-white/30">
+        <button type="submit" className="btn-secondary w-fit">
           Save changes
         </button>
       </form>
