@@ -34,7 +34,7 @@ export default async function SettingsPage({
       {error && <p className="alert-error">{error}</p>}
       {success && <p className="alert-success">Settings saved.</p>}
 
-      <form action={updateWorkspaceSettings} className="flex flex-col gap-4" encType="multipart/form-data">
+      <form action={updateWorkspaceSettings} className="flex flex-col gap-4">
         <label className="field-label">
           Business name
           <input name="businessName" defaultValue={membership.workspaceName} className="input" />

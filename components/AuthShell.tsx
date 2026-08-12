@@ -22,9 +22,7 @@ export default function AuthShell({
           alt="Trade technician working on-site"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-hero-gradient" />
-        <div className="glow-blob left-[-10%] top-[-10%] h-96 w-96 bg-brand/40" />
-        <div className="glow-blob bottom-[-15%] right-[-10%] h-80 w-80 bg-cta-end/25" />
+        <div className="absolute inset-0 bg-navy-950/80" />
 
         <div className="relative flex h-full flex-col justify-between p-10">
           <Link href="/" className="font-display text-lg font-bold tracking-tight text-white">

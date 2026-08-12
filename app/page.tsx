@@ -31,8 +31,8 @@ export default async function Home() {
 
 function EyebrowBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
-      <span className="h-1.5 w-1.5 rounded-full bg-cta-end" />
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-white">
+      <span className="h-1.5 w-1.5 rounded-full bg-brand-light" />
       {children}
     </span>
   );
@@ -72,9 +72,6 @@ function Nav() {
 function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy-950">
-      <div className="glow-blob left-[-10%] top-[-20%] h-[32rem] w-[32rem] bg-brand/40" />
-      <div className="glow-blob right-[-15%] top-[10%] h-[26rem] w-[26rem] bg-cta-end/25" />
-
       <div className="relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -82,14 +79,12 @@ function Hero() {
           alt="Trade technician working on-site"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-hero-gradient" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/20" />
+        <div className="absolute inset-0 bg-navy-950/80" />
 
         <div className="relative mx-auto flex min-h-[38rem] max-w-4xl flex-col items-center justify-center px-6 pb-20 pt-32 text-center sm:min-h-[44rem]">
           <EyebrowBadge>Free during launch</EyebrowBadge>
           <h1 className="font-display mx-auto mt-6 max-w-3xl text-4xl font-bold leading-[1.08] tracking-[-0.02em] text-white sm:text-6xl">
-            Quote it. Send it. Get paid.{" "}
-            <span className="text-gradient-cta">Nothing else to learn.</span>
+            Quote it. Send it. Get paid. Nothing else to learn.
           </h1>
           <p className="mx-auto mt-6 max-w-[52ch] text-lg leading-relaxed text-white/70">
             Quotenly is quoting and invoicing built for small trade crews &mdash; one flat price, no
@@ -121,7 +116,7 @@ function StatBar() {
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-10 sm:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="text-center">
-            <p className="text-gradient-cta font-display text-3xl font-bold">{s.value}</p>
+            <p className="font-display text-3xl font-bold text-brand">{s.value}</p>
             <p className="mt-1 text-xs font-medium uppercase tracking-wide text-ink-faint">{s.label}</p>
           </div>
         ))}
@@ -263,7 +258,7 @@ function InvoiceMockup() {
       </div>
       <div className="mt-4 flex items-center justify-between rounded-lg border border-line bg-bg-white px-3 py-2.5">
         <div className="flex items-center gap-2">
-          <span className="bg-brand-gradient flex h-8 w-8 items-center justify-center rounded-md text-[10px] font-bold text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-brand text-[10px] font-bold text-white">
             PDF
           </span>
           <span className="text-sm text-ink-soft">invoice-1042.pdf</span>
@@ -290,7 +285,7 @@ function TeamMockup() {
             className="flex items-center justify-between rounded-lg border border-line px-3 py-2.5"
           >
             <div className="flex items-center gap-2.5">
-              <span className="bg-brand-gradient flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold text-white">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-white">
                 {m.name.charAt(0)}
               </span>
               <div>
@@ -300,7 +295,7 @@ function TeamMockup() {
             </div>
             <span
               className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${
-                m.role === "Owner" ? "bg-brand-gradient text-white" : "bg-line text-ink-soft"
+                m.role === "Owner" ? "bg-brand text-white" : "bg-line text-ink-soft"
               }`}
             >
               {m.role}
@@ -330,11 +325,10 @@ function Wedge() {
             <p className="font-display mt-2 text-2xl font-bold text-ink">Price &times; team size</p>
             <p className="mt-1 text-sm text-ink-soft">Bill grows every time you hire.</p>
           </div>
-          <div className="relative overflow-hidden rounded-lg border border-brand bg-brand-tint p-5 text-left">
-            <div className="glow-blob -right-8 -top-8 h-24 w-24 bg-cta-end/20" />
-            <p className="relative text-xs font-semibold uppercase tracking-wide text-brand-dark">Quotenly</p>
-            <p className="text-gradient-cta font-display relative mt-2 text-2xl font-bold">One flat price</p>
-            <p className="relative mt-1 text-sm text-ink-soft">Unlimited teammates, always.</p>
+          <div className="rounded-lg border border-brand bg-brand-tint p-5 text-left">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-dark">Quotenly</p>
+            <p className="font-display mt-2 text-2xl font-bold text-brand">One flat price</p>
+            <p className="mt-1 text-sm text-ink-soft">Unlimited teammates, always.</p>
           </div>
         </div>
       </div>
@@ -350,8 +344,7 @@ function ThreeSteps() {
   ];
 
   return (
-    <section className="bg-navy-gradient relative overflow-hidden px-6 py-24">
-      <div className="glow-blob left-1/2 top-0 h-96 w-96 -translate-x-1/2 bg-brand/30" />
+    <section className="bg-navy-950 px-6 py-24">
       <div className="relative mx-auto max-w-5xl text-center">
         <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
           From quote to paid, in three steps
@@ -361,11 +354,11 @@ function ThreeSteps() {
           <StepPath className="pointer-events-none absolute inset-x-0 top-8 hidden h-px sm:block" />
           {steps.map((step, i) => (
             <div key={step.label} className="relative flex flex-col items-center">
-              <span className="bg-brand-gradient flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-bold text-white">
                 {i + 1}
               </span>
               <div className="mt-6">{step.mockup}</div>
-              <p className="text-gradient-cta mt-4 text-xs font-semibold uppercase tracking-wide">{step.label}</p>
+              <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-brand-light">{step.label}</p>
               <p className="mt-1 text-sm text-paper-soft">{step.title}</p>
             </div>
           ))}
@@ -415,9 +408,8 @@ function UseCases() {
   const trades = ["Handyman", "Electrical", "Plumbing", "Cleaning", "Landscaping", "Painting"];
 
   return (
-    <section className="bg-navy-gradient relative overflow-hidden px-6 py-24">
-      <div className="glow-blob right-[-10%] bottom-[-20%] h-80 w-80 bg-cta-end/20" />
-      <div className="relative mx-auto max-w-4xl text-center">
+    <section className="bg-navy-950 px-6 py-24">
+      <div className="mx-auto max-w-4xl text-center">
         <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
           Whatever the job, the workflow&apos;s the same
         </h2>
@@ -428,7 +420,7 @@ function UseCases() {
           {trades.map((trade) => (
             <span
               key={trade}
-              className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-paper-ink backdrop-blur-sm"
+              className="rounded-lg border border-line-dark bg-bg-dark-alt px-4 py-2 text-sm font-medium text-paper-ink"
             >
               {trade}
             </span>
@@ -477,7 +469,7 @@ function Faq() {
             <details key={item.q} className="group px-6 py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-ink">
                 {item.q}
-                <span className="text-gradient-cta transition-transform group-open:rotate-45">+</span>
+                <span className="text-brand transition-transform group-open:rotate-45">+</span>
               </summary>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">{item.a}</p>
             </details>
@@ -490,9 +482,8 @@ function Faq() {
 
 function FinalCta() {
   return (
-    <section className="bg-hero-gradient relative overflow-hidden px-6 py-28 text-center">
-      <div className="glow-blob left-1/2 top-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 bg-brand/25" />
-      <div className="relative mx-auto max-w-2xl">
+    <section className="bg-navy-950 px-6 py-28 text-center">
+      <div className="mx-auto max-w-2xl">
         <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white sm:text-4xl">
           Built for crews who&apos;d rather be working than managing software.
         </h2>

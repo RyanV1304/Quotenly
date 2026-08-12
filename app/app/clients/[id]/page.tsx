@@ -27,10 +27,27 @@ export default async function ClientDetailPage({
 
   if (!client) notFound();
 
-  const [{ data: quotes }, { data: invoices }] = await Promise.all([
-    supabase.from("quotes").select("id, status, total, created_at").eq("client_id", id).order("created_at", { ascending: false }),
-    supabase.from("invoices").select("id, status, total, created_at").eq("client_id", id).order("created_at", { ascending: false }),
-  ]);
+  let quotesQuery = supabase
+    .from("quotes")
+    .select("id, status, total, created_at")
+    .eq("client_id", id)
+    .order("created_at", { ascending: false });
+  let invoicesQuery = supabase
+    .from("invoices")
+    .select("id, status, total, created_at")
+    .eq("client_id", id)
+    .order("created_at", { ascending: false });
+
+  if (membership.role === "teammate") {
+    quotesQuery = quotesQuery.eq("assigned_to", membership.userId);
+    invoicesQuery = invoicesQuery.eq("assigned_to", membership.userId);
+  }
+
+  const [{ data: quotes }, { data: invoices }] = await Promise.all([quotesQuery, invoicesQuery]);
+
+  if (membership.role === "teammate" && (quotes ?? []).length === 0 && (invoices ?? []).length === 0) {
+    notFound();
+  }
 
   const updateAction = updateClientRecord.bind(null, id);
 

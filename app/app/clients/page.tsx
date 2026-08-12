@@ -12,11 +12,29 @@ export default async function ClientsPage({
   const { error } = await searchParams;
 
   const supabase = await createClient();
-  const { data: clients } = await supabase
+
+  let clientsQuery = supabase
     .from("clients")
     .select("*")
     .eq("workspace_id", membership.workspaceId)
     .order("name");
+
+  if (membership.role === "teammate") {
+    const [{ data: assignedQuotes }, { data: assignedInvoices }] = await Promise.all([
+      supabase.from("quotes").select("client_id").eq("assigned_to", membership.userId),
+      supabase.from("invoices").select("client_id").eq("assigned_to", membership.userId),
+    ]);
+    const clientIds = Array.from(
+      new Set(
+        [...(assignedQuotes ?? []), ...(assignedInvoices ?? [])]
+          .map((r) => r.client_id)
+          .filter((id): id is string => !!id)
+      )
+    );
+    clientsQuery = clientsQuery.in("id", clientIds.length > 0 ? clientIds : ["00000000-0000-0000-0000-000000000000"]);
+  }
+
+  const { data: clients } = await clientsQuery;
 
   return (
     <div className="flex flex-col gap-8">

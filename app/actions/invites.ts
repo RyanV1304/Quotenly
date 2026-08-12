@@ -141,11 +141,34 @@ export async function removeTeammate(memberId: string) {
   }
 
   const supabase = await createClient();
+
+  const { data: member } = await supabase
+    .from("workspace_members")
+    .select("user_id")
+    .eq("id", memberId)
+    .eq("workspace_id", membership.workspaceId)
+    .single();
+
   await supabase
     .from("workspace_members")
     .delete()
     .eq("id", memberId)
     .eq("workspace_id", membership.workspaceId);
+
+  if (member?.user_id) {
+    await Promise.all([
+      supabase
+        .from("quotes")
+        .update({ assigned_to: null })
+        .eq("workspace_id", membership.workspaceId)
+        .eq("assigned_to", member.user_id),
+      supabase
+        .from("invoices")
+        .update({ assigned_to: null })
+        .eq("workspace_id", membership.workspaceId)
+        .eq("assigned_to", member.user_id),
+    ]);
+  }
 
   revalidatePath("/app/settings/team");
 }
