@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { acceptInvite } from "@/app/actions/auth";
 import AuthShell from "@/components/AuthShell";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 export default async function InvitePage({
   params,
@@ -38,6 +39,18 @@ export default async function InvitePage({
       {error && (
         <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
+
+      <GoogleSignInButton />
+      <p className="mt-2 text-center text-xs text-black/40">
+        Use the Google account for {invite.invited_email}
+      </p>
+
+      <div className="my-5 flex items-center gap-3 text-xs font-medium text-black/30">
+        <div className="h-px flex-1 bg-black/10" />
+        or
+        <div className="h-px flex-1 bg-black/10" />
+      </div>
+
       <form action={acceptWithToken} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm font-medium text-black/70">
           Password
