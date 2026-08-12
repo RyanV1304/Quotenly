@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   description: "Quoting and invoicing for small trade crews. One flat price, no per-seat billing, no bloat.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"

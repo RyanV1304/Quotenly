@@ -9,7 +9,7 @@ export async function createClientRecord(formData: FormData) {
   const membership = await requireMembership();
   const name = String(formData.get("name") || "").trim();
   if (!name) {
-    redirect("/clients?error=" + encodeURIComponent("Client name is required."));
+    redirect("/app/clients?error=" + encodeURIComponent("Client name is required."));
   }
 
   const supabase = await createClient();
@@ -27,10 +27,10 @@ export async function createClientRecord(formData: FormData) {
     .single();
 
   if (error || !data) {
-    redirect("/clients?error=" + encodeURIComponent(error?.message || "Could not create client."));
+    redirect("/app/clients?error=" + encodeURIComponent(error?.message || "Could not create client."));
   }
 
-  redirect(`/clients/${data.id}`);
+  redirect(`/app/clients/${data.id}`);
 }
 
 export async function updateClientRecord(clientId: string, formData: FormData) {
@@ -49,9 +49,9 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
     .eq("id", clientId);
 
   if (error) {
-    redirect(`/clients/${clientId}?error=${encodeURIComponent(error.message)}`);
+    redirect(`/app/clients/${clientId}?error=${encodeURIComponent(error.message)}`);
   }
 
-  revalidatePath(`/clients/${clientId}`);
-  redirect(`/clients/${clientId}`);
+  revalidatePath(`/app/clients/${clientId}`);
+  redirect(`/app/clients/${clientId}`);
 }

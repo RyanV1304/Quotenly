@@ -16,7 +16,7 @@ export async function completeOnboarding(formData: FormData) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   const admin = createAdminClient();
@@ -49,5 +49,5 @@ export async function completeOnboarding(formData: FormData) {
     email: user.email,
   });
 
-  redirect("/dashboard");
+  redirect("/app/dashboard");
 }

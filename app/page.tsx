@@ -9,7 +9,7 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect("/dashboard");
+    redirect("/app/dashboard");
   }
 
   return (
@@ -45,11 +45,11 @@ function Nav() {
           </a>
         </nav>
         <div className="flex items-center gap-5 text-sm">
-          <Link href="/sign-in" className="hidden font-medium text-black/70 hover:text-black sm:block">
+          <Link href="/login" className="hidden font-medium text-black/70 hover:text-black sm:block">
             Sign in
           </Link>
           <Link
-            href="/sign-up"
+            href="/signup"
             className="rounded-full bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-blue/30 transition hover:bg-brand-blue-deep"
           >
             Start free
@@ -77,7 +77,7 @@ function Hero() {
         </p>
         <div className="mt-9 flex items-center justify-center gap-3">
           <Link
-            href="/sign-up"
+            href="/signup"
             className="inline-flex items-center gap-2 rounded-full bg-brand-blue px-8 py-3.5 text-base font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:bg-brand-blue-deep"
           >
             Start free
@@ -572,7 +572,7 @@ function FinalCta() {
         </h2>
         <div className="mt-8">
           <Link
-            href="/sign-up"
+            href="/signup"
             className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-base font-semibold text-brand-dark shadow-lg transition hover:bg-white/90"
           >
             Start free
@@ -609,10 +609,10 @@ function Footer() {
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-black">Account</span>
-            <Link href="/sign-in" className="text-black/50 hover:text-black">
+            <Link href="/login" className="text-black/50 hover:text-black">
               Sign in
             </Link>
-            <Link href="/sign-up" className="text-black/50 hover:text-black">
+            <Link href="/signup" className="text-black/50 hover:text-black">
               Start free
             </Link>
           </div>

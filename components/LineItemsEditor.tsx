@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { LineItemType } from "@/lib/types";
+import { saveLineItemAsTemplate } from "@/app/actions/templates";
 
 interface Row {
   description: string;
@@ -55,6 +56,16 @@ export default function LineItemsEditor({
 
   function removeRow(index: number) {
     setRows((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  const [savedIndex, setSavedIndex] = useState<number | null>(null);
+
+  async function saveAsTemplate(index: number) {
+    const row = rows[index];
+    if (!row.description.trim()) return;
+    await saveLineItemAsTemplate(row);
+    setSavedIndex(index);
+    setTimeout(() => setSavedIndex(null), 2000);
   }
 
   return (
@@ -120,6 +131,13 @@ export default function LineItemsEditor({
               className="col-span-1 text-red-600 dark:text-red-400"
             >
               &times;
+            </button>
+            <button
+              type="button"
+              onClick={() => saveAsTemplate(i)}
+              className="col-span-12 w-fit text-xs text-black/40 underline dark:text-white/40"
+            >
+              {savedIndex === i ? "Saved as template" : "Save as template"}
             </button>
           </div>
         ))}

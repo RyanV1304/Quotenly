@@ -2,25 +2,22 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
-import { revalidatePath } from "next/cache";
+import type { LineItemType } from "@/lib/types";
 
-export async function createTemplate(formData: FormData) {
+export async function saveLineItemAsTemplate(item: {
+  description: string;
+  type: LineItemType;
+  rate: number;
+}) {
   const membership = await requireMembership();
   const supabase = await createClient();
 
+  if (!item.description.trim()) return;
+
   await supabase.from("line_item_templates").insert({
     workspace_id: membership.workspaceId,
-    label: String(formData.get("label") || "").trim(),
-    type: String(formData.get("type") || "labor"),
-    default_rate: Number(formData.get("default_rate") || 0),
+    label: item.description.trim(),
+    type: item.type,
+    default_rate: item.rate,
   });
-
-  revalidatePath("/templates");
-}
-
-export async function deleteTemplate(templateId: string) {
-  await requireMembership();
-  const supabase = await createClient();
-  await supabase.from("line_item_templates").delete().eq("id", templateId);
-  revalidatePath("/templates");
 }

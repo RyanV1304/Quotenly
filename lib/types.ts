@@ -1,16 +1,14 @@
 export type MemberRole = "owner" | "teammate";
-export type QuoteStatus = "draft" | "sent" | "approved";
+export type QuoteStatus = "draft" | "sent" | "approved" | "declined";
 export type InvoiceStatus = "draft" | "sent" | "viewed" | "paid" | "overdue";
 export type LineItemType = "labor" | "materials" | "flat_fee";
+export type InviteStatus = "pending" | "accepted" | "cancelled";
 
 export interface Workspace {
   id: string;
   name: string;
   owner_id: string;
   created_at: string;
-  join_code: string | null;
-  join_password_hash: string | null;
-  join_enabled: boolean;
 }
 
 export interface WorkspaceMember {
@@ -22,6 +20,25 @@ export interface WorkspaceMember {
   invite_token: string;
   invited_at: string;
   joined_at: string | null;
+}
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  name: string;
+  email_verified: boolean;
+  created_at: string;
+}
+
+export interface Invite {
+  id: string;
+  workspace_id: string;
+  email: string;
+  token: string;
+  status: InviteStatus;
+  expires_at: string;
+  created_at: string;
+  last_resent_at: string | null;
 }
 
 export interface WorkspaceBranding {
@@ -71,7 +88,10 @@ export interface Quote {
   subtotal: number;
   tax_rate: number;
   total: number;
+  notes: string | null;
   share_token: string;
+  viewed_at: string | null;
+  sent_at: string | null;
   created_at: string;
 }
 
@@ -88,5 +108,8 @@ export interface Invoice {
   due_date: string | null;
   payment_instructions: string | null;
   share_token: string;
+  paid_at: string | null;
+  paid_note: string | null;
+  sent_at: string | null;
   created_at: string;
 }

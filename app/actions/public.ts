@@ -9,6 +9,17 @@ export async function approveQuote(token: string) {
   revalidatePath(`/quote/${token}`);
 }
 
+export async function declineQuote(token: string) {
+  const supabase = await createClient();
+  await supabase.rpc("decline_quote_by_token", { p_token: token });
+  revalidatePath(`/quote/${token}`);
+}
+
+export async function markQuoteViewed(token: string) {
+  const supabase = await createClient();
+  await supabase.rpc("mark_quote_viewed_by_token", { p_token: token });
+}
+
 export async function markInvoiceViewed(token: string) {
   const supabase = await createClient();
   await supabase.rpc("mark_invoice_viewed_by_token", { p_token: token });

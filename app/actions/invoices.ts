@@ -6,6 +6,25 @@ import { getResend, FROM_EMAIL } from "@/lib/resend";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+async function sendInvoiceEmail(
+  to: string,
+  workspaceName: string,
+  shareUrl: string,
+  subject: string,
+  intro: string
+) {
+  try {
+    await getResend().emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject,
+      html: `<p>${intro}</p><p><a href="${shareUrl}">View your invoice</a></p>`,
+    });
+  } catch {
+    // best-effort; owner can share the link manually
+  }
+}
+
 export async function updateInvoiceDetails(invoiceId: string, formData: FormData) {
   await requireMembership();
   const supabase = await createClient();
@@ -19,8 +38,8 @@ export async function updateInvoiceDetails(invoiceId: string, formData: FormData
     .update({ due_date: dueDate, payment_instructions: paymentInstructions, assigned_to: assignedTo })
     .eq("id", invoiceId);
 
-  revalidatePath(`/invoices/${invoiceId}`);
-  redirect(`/invoices/${invoiceId}`);
+  revalidatePath(`/app/invoices/${invoiceId}`);
+  redirect(`/app/invoices/${invoiceId}`);
 }
 
 export async function sendInvoice(invoiceId: string) {
@@ -33,32 +52,69 @@ export async function sendInvoice(invoiceId: string) {
     .eq("id", invoiceId)
     .single();
 
-  if (!invoice) redirect("/invoices");
+  if (!invoice) redirect("/app/invoices");
 
-  await supabase.from("invoices").update({ status: "sent" }).eq("id", invoiceId);
+  await supabase
+    .from("invoices")
+    .update({ status: "sent", sent_at: new Date().toISOString() })
+    .eq("id", invoiceId);
 
-  const client = Array.isArray(invoice.clients) ? invoice.clients[0] : invoice.clients;
-  const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invoice/${invoice.share_token}`;
+  const client = Array.isArray(invoice!.clients) ? invoice!.clients[0] : invoice!.clients;
+  const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invoice/${invoice!.share_token}`;
 
   if (client?.contact_email) {
-    try {
-      await getResend().emails.send({
-        from: FROM_EMAIL,
-        to: client.contact_email,
-        subject: `Invoice from ${membership.workspaceName}`,
-        html: `<p>${membership.workspaceName} sent you an invoice.</p><p><a href="${shareUrl}">View your invoice</a></p>`,
-      });
-    } catch {
-      // status is already updated; owner can share the link manually if email fails
-    }
+    await sendInvoiceEmail(
+      client.contact_email,
+      membership.workspaceName,
+      shareUrl,
+      `Invoice from ${membership.workspaceName}`,
+      `${membership.workspaceName} sent you an invoice.`
+    );
   }
 
-  revalidatePath(`/invoices/${invoiceId}`);
+  revalidatePath(`/app/invoices/${invoiceId}`);
 }
 
-export async function markInvoicePaid(invoiceId: string) {
+export async function sendReminderNow(invoiceId: string) {
+  const membership = await requireMembership();
+  const supabase = await createClient();
+
+  const { data: invoice } = await supabase
+    .from("invoices")
+    .select("*, clients(name, contact_email)")
+    .eq("id", invoiceId)
+    .single();
+
+  if (!invoice) redirect("/app/invoices");
+
+  const client = Array.isArray(invoice!.clients) ? invoice!.clients[0] : invoice!.clients;
+  const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invoice/${invoice!.share_token}`;
+
+  if (client?.contact_email) {
+    await sendInvoiceEmail(
+      client.contact_email,
+      membership.workspaceName,
+      shareUrl,
+      "Payment reminder: invoice due",
+      `This is a reminder that your invoice from ${membership.workspaceName} is due.`
+    );
+    await supabase.from("invoice_reminders_log").insert({ invoice_id: invoiceId });
+  }
+
+  revalidatePath(`/app/invoices/${invoiceId}`);
+}
+
+export async function markInvoicePaid(invoiceId: string, formData: FormData) {
   await requireMembership();
   const supabase = await createClient();
-  await supabase.from("invoices").update({ status: "paid" }).eq("id", invoiceId);
-  revalidatePath(`/invoices/${invoiceId}`);
+
+  const paidDate = String(formData.get("paidDate") || "") || new Date().toISOString().slice(0, 10);
+  const paidNote = String(formData.get("paidNote") || "").trim() || null;
+
+  await supabase
+    .from("invoices")
+    .update({ status: "paid", paid_at: paidDate, paid_note: paidNote })
+    .eq("id", invoiceId);
+
+  revalidatePath(`/app/invoices/${invoiceId}`);
 }

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { approveQuote } from "@/app/actions/public";
+import { approveQuote, declineQuote, markQuoteViewed } from "@/app/actions/public";
 import { formatCurrency } from "@/lib/format";
 import type { LineItem } from "@/lib/types";
 
@@ -16,6 +16,10 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
   const quote = quotes?.[0];
   if (!quote) notFound();
 
+  if (quote.status === "sent") {
+    await markQuoteViewed(token);
+  }
+
   const [{ data: clients }, { data: brandings }] = await Promise.all([
     supabase.rpc("get_client_public_info", { p_client_id: quote.client_id }),
     supabase.rpc("get_branding_public_info", { p_workspace_id: quote.workspace_id }),
@@ -24,6 +28,7 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
   const branding = brandings?.[0];
 
   const approveAction = approveQuote.bind(null, token);
+  const declineAction = declineQuote.bind(null, token);
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col gap-6 px-4 py-12">
@@ -66,6 +71,13 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
         </tbody>
       </table>
 
+      {quote.notes && (
+        <div className="text-sm">
+          <p className="text-black/60 dark:text-white/60">Notes</p>
+          <p>{quote.notes}</p>
+        </div>
+      )}
+
       <div className="flex flex-col items-end gap-1 text-sm">
         <div>Subtotal: {formatCurrency(quote.subtotal)}</div>
         <div className="text-lg font-semibold">Total: {formatCurrency(quote.total)}</div>
@@ -76,14 +88,24 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
           Status: <span className="font-medium capitalize">{quote.status}</span>
         </p>
         {quote.status === "sent" && (
-          <form action={approveAction} className="mt-3">
-            <button type="submit" className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
-              Approve this quote
-            </button>
-          </form>
+          <div className="mt-3 flex gap-2">
+            <form action={approveAction}>
+              <button type="submit" className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black">
+                Approve this quote
+              </button>
+            </form>
+            <form action={declineAction}>
+              <button type="submit" className="rounded-md border border-black/20 px-4 py-2 text-sm font-medium dark:border-white/30">
+                Decline
+              </button>
+            </form>
+          </div>
         )}
         {quote.status === "approved" && (
           <p className="mt-2 text-green-700 dark:text-green-400">You&apos;ve approved this quote. Thank you!</p>
+        )}
+        {quote.status === "declined" && (
+          <p className="mt-2 text-black/60 dark:text-white/60">You&apos;ve declined this quote.</p>
         )}
       </div>
     </div>

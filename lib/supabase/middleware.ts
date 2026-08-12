@@ -28,20 +28,20 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isPublicPath =
-    path.startsWith("/sign-in") ||
-    path.startsWith("/sign-up") ||
-    path.startsWith("/invite") ||
-    path.startsWith("/quote/") ||
-    path.startsWith("/invoice/") ||
-    path.startsWith("/api/") ||
-    path.startsWith("/auth/callback") ||
-    path.startsWith("/onboarding") ||
-    path.startsWith("/join");
+  const isAppRoute = path.startsWith("/app") || path.startsWith("/onboarding");
+  const isAuthEntryPoint = path === "/login" || path === "/signup";
 
-  if (!user && !isPublicPath && path !== "/") {
+  if (!user && isAppRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = "/sign-in";
+    url.pathname = "/login";
+    url.searchParams.set("redirect", path);
+    return NextResponse.redirect(url);
+  }
+
+  if (user && isAuthEntryPoint) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/app/dashboard";
+    url.search = "";
     return NextResponse.redirect(url);
   }
 

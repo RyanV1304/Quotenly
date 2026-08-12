@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const origin = req.nextUrl.origin;
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/sign-in?error=${encodeURIComponent("Google sign-in failed.")}`);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent("Google sign-in failed.")}`);
   }
 
   let cookieResponse = NextResponse.next({ request: req });
@@ -34,11 +34,11 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error || !data.user) {
-    return NextResponse.redirect(`${origin}/sign-in?error=${encodeURIComponent("Google sign-in failed.")}`);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent("Google sign-in failed.")}`);
   }
 
   let target = "/onboarding";
-  let consumedJoinToken = false;
+  const admin = createAdminClient();
 
   const { data: membership } = await supabase
     .from("workspace_members")
@@ -48,46 +48,32 @@ export async function GET(req: NextRequest) {
     .maybeSingle();
 
   if (membership) {
-    target = "/dashboard";
+    target = "/app/dashboard";
   } else {
-    const admin = createAdminClient();
-    const joinToken = req.cookies.get("pending_join_token")?.value;
+    await admin.from("users").upsert(
+      { id: data.user.id, email: data.user.email ?? "", name: data.user.user_metadata?.full_name ?? "" },
+      { onConflict: "id", ignoreDuplicates: true }
+    );
 
-    if (joinToken) {
-      const { data: pending } = await admin
-        .from("pending_joins")
-        .select("workspace_id, expires_at")
-        .eq("token", joinToken)
+    if (data.user.email) {
+      const { data: pendingInvite } = await admin
+        .from("invites")
+        .select("id, workspace_id")
+        .eq("email", data.user.email)
+        .eq("status", "pending")
+        .gte("expires_at", new Date().toISOString())
         .maybeSingle();
 
-      if (pending && new Date(pending.expires_at) >= new Date()) {
+      if (pendingInvite) {
         await admin.from("workspace_members").insert({
-          workspace_id: pending.workspace_id,
+          workspace_id: pendingInvite.workspace_id,
           user_id: data.user.id,
           role: "teammate",
           invited_email: data.user.email,
           joined_at: new Date().toISOString(),
         });
-        await admin.from("pending_joins").delete().eq("token", joinToken);
-        consumedJoinToken = true;
-        target = "/dashboard";
-      }
-    }
-
-    if (!consumedJoinToken && data.user.email) {
-      const { data: pendingInvite } = await admin
-        .from("workspace_members")
-        .select("id")
-        .eq("invited_email", data.user.email)
-        .is("joined_at", null)
-        .maybeSingle();
-
-      if (pendingInvite) {
-        await admin
-          .from("workspace_members")
-          .update({ user_id: data.user.id, joined_at: new Date().toISOString() })
-          .eq("id", pendingInvite.id);
-        target = "/dashboard";
+        await admin.from("invites").update({ status: "accepted" }).eq("id", pendingInvite.id);
+        target = "/app/dashboard";
       }
     }
   }
@@ -96,8 +82,5 @@ export async function GET(req: NextRequest) {
   cookieResponse.cookies.getAll().forEach((cookie) => {
     redirectResponse.cookies.set(cookie);
   });
-  if (consumedJoinToken) {
-    redirectResponse.cookies.delete("pending_join_token");
-  }
   return redirectResponse;
 }

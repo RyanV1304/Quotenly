@@ -15,7 +15,7 @@ export default async function OnboardingPage({
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   return (
