@@ -8,6 +8,9 @@ export interface Workspace {
   name: string;
   owner_id: string;
   created_at: string;
+  join_code: string | null;
+  join_password_hash: string | null;
+  join_enabled: boolean;
 }
 
 export interface WorkspaceMember {

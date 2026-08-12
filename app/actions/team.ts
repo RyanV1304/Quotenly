@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
+import { hashPassword, generateJoinCode } from "@/lib/password";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -44,6 +45,73 @@ export async function inviteTeammate(formData: FormData) {
   } catch {
     // invite row is created regardless; owner can resend/share the link manually if email fails
   }
+
+  revalidatePath("/team");
+}
+
+export async function setupJoinCode(formData: FormData) {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/team?error=" + encodeURIComponent("Only the workspace owner can manage the join code."));
+  }
+
+  const password = String(formData.get("joinPassword") || "");
+  if (password.length < 8) {
+    redirect("/team?error=" + encodeURIComponent("Join password must be at least 8 characters."));
+  }
+
+  const supabase = await createClient();
+
+  const { data: current } = await supabase
+    .from("workspaces")
+    .select("join_code")
+    .eq("id", membership.workspaceId)
+    .single();
+
+  const joinCode = current?.join_code || generateJoinCode();
+
+  const { error } = await supabase
+    .from("workspaces")
+    .update({
+      join_code: joinCode,
+      join_password_hash: hashPassword(password),
+      join_enabled: true,
+    })
+    .eq("id", membership.workspaceId);
+
+  if (error) {
+    redirect("/team?error=" + encodeURIComponent(error.message));
+  }
+
+  revalidatePath("/team");
+}
+
+export async function regenerateJoinCode() {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/team?error=" + encodeURIComponent("Only the workspace owner can manage the join code."));
+  }
+
+  const supabase = await createClient();
+  await supabase
+    .from("workspaces")
+    .update({ join_code: generateJoinCode() })
+    .eq("id", membership.workspaceId);
+
+  revalidatePath("/team");
+}
+
+export async function disableJoinCode() {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/team?error=" + encodeURIComponent("Only the workspace owner can manage the join code."));
+  }
+
+  const supabase = await createClient();
+  await supabase
+    .from("workspaces")
+    .update({ join_enabled: false })
+    .eq("id", membership.workspaceId);
 
   revalidatePath("/team");
 }
