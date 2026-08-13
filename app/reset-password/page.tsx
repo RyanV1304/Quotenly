@@ -12,15 +12,10 @@ export default async function ResetPasswordPage({
   const supabase = await createClient();
 
   let sessionEstablished = false;
-  let exchangeError: string | null = null;
 
   if (code) {
     const { error: exchangeErr } = await supabase.auth.exchangeCodeForSession(code);
-    if (exchangeErr) {
-      exchangeError = exchangeErr.message;
-    } else {
-      sessionEstablished = true;
-    }
+    sessionEstablished = !exchangeErr;
   } else {
     const {
       data: { user },
@@ -38,9 +33,7 @@ export default async function ResetPasswordPage({
           </Link>
         }
       >
-        <p className="text-sm text-ink-soft">
-          {exchangeError || "This reset link is invalid or has expired."}
-        </p>
+        <p className="text-sm text-ink-soft">This reset link is invalid or has expired.</p>
       </AuthShell>
     );
   }

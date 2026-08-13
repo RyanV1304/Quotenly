@@ -56,14 +56,39 @@ function Nav() {
             FAQ
           </a>
         </nav>
-        <div className="flex items-center gap-5 text-sm">
-          <Link href="/login" className="hidden font-medium text-white/75 transition-colors hover:text-white sm:block">
+        <div className="hidden items-center gap-5 text-sm sm:flex">
+          <Link href="/login" className="font-medium text-white/75 transition-colors hover:text-white">
             Log in
           </Link>
           <Link href="/signup" className="btn-primary">
             Start free
           </Link>
         </div>
+        <details className="relative sm:hidden">
+          <summary className="flex h-9 w-9 list-none items-center justify-center rounded-lg border border-white/20 text-white [&::-webkit-details-marker]:hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
+            </svg>
+          </summary>
+          <div className="absolute right-0 top-12 flex w-48 flex-col gap-1 rounded-lg border border-line bg-white p-2 text-sm font-medium text-ink shadow-lg">
+            <a href="#product" className="rounded-md px-3 py-2 hover:bg-brand-tint">
+              Product
+            </a>
+            <a href="#pricing" className="rounded-md px-3 py-2 hover:bg-brand-tint">
+              Pricing
+            </a>
+            <a href="#faq" className="rounded-md px-3 py-2 hover:bg-brand-tint">
+              FAQ
+            </a>
+            <div className="my-1 h-px bg-line" />
+            <Link href="/login" className="rounded-md px-3 py-2 hover:bg-brand-tint">
+              Log in
+            </Link>
+            <Link href="/signup" className="rounded-md px-3 py-2 font-semibold text-brand hover:bg-brand-tint">
+              Start free
+            </Link>
+          </div>
+        </details>
       </div>
     </header>
   );

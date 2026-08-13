@@ -77,6 +77,7 @@ export async function sendInvite(formData: FormData) {
 
   await sendInviteEmail(email, membership.workspaceName, membership.email, invite!.token);
   revalidatePath("/app/settings/team");
+  redirect("/app/settings/team");
 }
 
 export async function resendInvite(inviteId: string) {
@@ -116,6 +117,7 @@ export async function resendInvite(inviteId: string) {
   }
 
   revalidatePath("/app/settings/team");
+  redirect("/app/settings/team");
 }
 
 export async function cancelInvite(inviteId: string) {
@@ -132,6 +134,7 @@ export async function cancelInvite(inviteId: string) {
     .eq("workspace_id", membership.workspaceId);
 
   revalidatePath("/app/settings/team");
+  redirect("/app/settings/team");
 }
 
 export async function removeTeammate(memberId: string) {
@@ -171,6 +174,7 @@ export async function removeTeammate(memberId: string) {
   }
 
   revalidatePath("/app/settings/team");
+  redirect("/app/settings/team");
 }
 
 export async function acceptInviteNewAccount(token: string, formData: FormData) {

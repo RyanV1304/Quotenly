@@ -91,7 +91,7 @@ export default async function DashboardPage() {
 
       <div>
         <h2 className="font-display text-lg font-bold text-ink">Per-teammate breakdown</h2>
-        <div className="mt-3 overflow-hidden rounded-lg border border-line">
+        <div className="mt-3 overflow-x-auto rounded-lg border border-line">
           <table className="w-full text-left text-sm">
             <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
               <tr>
@@ -133,7 +133,7 @@ function JobSection({
       {rows.length === 0 ? (
         <p className="mt-3 text-sm text-ink-faint">Nothing assigned yet.</p>
       ) : (
-        <div className="mt-3 overflow-hidden rounded-lg border border-line">
+        <div className="mt-3 overflow-x-auto rounded-lg border border-line">
           <table className="w-full text-left text-sm">
             <tbody className="divide-y divide-line">
               {rows.map((r) => {

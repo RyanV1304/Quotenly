@@ -17,7 +17,7 @@ export default async function InvoicesPage() {
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoices</h1>
 
-      <div className="overflow-hidden rounded-lg border border-line">
+      <div className="overflow-x-auto rounded-lg border border-line">
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>

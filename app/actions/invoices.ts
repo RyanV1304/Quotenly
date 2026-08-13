@@ -73,6 +73,7 @@ export async function sendInvoice(invoiceId: string) {
   }
 
   revalidatePath(`/app/invoices/${invoiceId}`);
+  redirect(`/app/invoices/${invoiceId}`);
 }
 
 export async function sendReminderNow(invoiceId: string) {
@@ -102,6 +103,7 @@ export async function sendReminderNow(invoiceId: string) {
   }
 
   revalidatePath(`/app/invoices/${invoiceId}`);
+  redirect(`/app/invoices/${invoiceId}`);
 }
 
 export async function markInvoicePaid(invoiceId: string, formData: FormData) {

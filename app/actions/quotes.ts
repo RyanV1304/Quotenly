@@ -122,6 +122,7 @@ export async function sendQuote(quoteId: string) {
   }
 
   revalidatePath(`/app/quotes/${quoteId}`);
+  redirect(`/app/quotes/${quoteId}`);
 }
 
 export async function duplicateQuote(quoteId: string) {

@@ -67,7 +67,7 @@ export default async function TeamPage({
       {pendingInvites && pendingInvites.length > 0 && (
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Pending invites</h2>
-          <div className="mt-2 overflow-hidden rounded-lg border border-line">
+          <div className="mt-2 overflow-x-auto rounded-lg border border-line">
             <table className="w-full text-left text-sm">
               <tbody className="divide-y divide-line">
                 {pendingInvites.map((inv) => (
@@ -94,7 +94,7 @@ export default async function TeamPage({
         </div>
       )}
 
-      <div className="overflow-hidden rounded-lg border border-line">
+      <div className="overflow-x-auto rounded-lg border border-line">
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>

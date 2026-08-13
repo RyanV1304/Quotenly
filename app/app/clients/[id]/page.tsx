@@ -109,7 +109,7 @@ function JobTable({
     return <p className="mt-3 text-sm text-ink-faint">None yet.</p>;
   }
   return (
-    <div className="mt-3 overflow-hidden rounded-lg border border-line">
+    <div className="mt-3 overflow-x-auto rounded-lg border border-line">
       <table className="w-full text-left text-sm">
         <tbody className="divide-y divide-line">
           {rows.map((r) => (
