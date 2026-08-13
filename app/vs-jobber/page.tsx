@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import ComparisonPage from "@/components/marketing/ComparisonPage";
+
+export const metadata: Metadata = {
+  title: "Quotenly vs. Jobber",
+  description:
+    "Jobber is a full field-service platform with per-user pricing. Quotenly is just quoting and invoicing, priced flat for your whole crew. See the honest comparison.",
+};
 
 export default function VsJobberPage() {
   return (

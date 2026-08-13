@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { signIn } from "@/app/actions/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import AuthShell from "@/components/AuthShell";
+
+export const metadata: Metadata = {
+  title: "Log in",
+  description: "Log in to Quotenly to get back to your quotes and invoices.",
+};
 
 export default async function SignInPage({
   searchParams,

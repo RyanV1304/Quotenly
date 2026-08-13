@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import ComparisonPage from "@/components/marketing/ComparisonPage";
+
+export const metadata: Metadata = {
+  title: "Quotenly vs. Housecall Pro",
+  description:
+    "Housecall Pro bundles scheduling, dispatch, and marketing tools into a per-user platform. Quotenly focuses on quotes and invoices at one flat price. See the honest comparison.",
+};
 
 export default function VsHousecallProPage() {
   return (

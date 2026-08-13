@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { signUp } from "@/app/actions/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import AuthShell from "@/components/AuthShell";
 import PasswordStrengthField from "@/components/PasswordStrengthField";
+
+export const metadata: Metadata = {
+  title: "Create your workspace",
+  description: "Free during early access. No per-seat cost, ever — quoting and invoicing for small trade crews.",
+};
 
 export default async function SignUpPage({
   searchParams,

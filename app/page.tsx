@@ -557,6 +557,15 @@ function Footer() {
               Start free
             </Link>
           </div>
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold text-ink">Legal</span>
+            <Link href="/privacy" className="text-ink-soft hover:text-ink">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-ink-soft hover:text-ink">
+              Terms
+            </Link>
+          </div>
         </div>
       </div>
       <div className="mx-auto mt-10 max-w-6xl border-t border-line pt-6 text-center text-xs text-ink-faint">
