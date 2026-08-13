@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AuthShell({
   eyebrow,
@@ -16,11 +17,12 @@ export default function AuthShell({
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="relative hidden overflow-hidden lg:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/images/hero-technician.webp"
           alt="Trade technician working on-site"
-          className="absolute inset-0 h-full w-full object-cover"
+          fill
+          sizes="50vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-navy-950/80" />
 

@@ -16,13 +16,10 @@ export default async function AccountPage({
 
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("name, email_verified")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  const { data: googleOnly } = await supabase.rpc("email_uses_google_only", { p_email: user.email! });
+  const [{ data: profile }, { data: googleOnly }] = await Promise.all([
+    supabase.from("users").select("name, email_verified").eq("id", user.id).maybeSingle(),
+    supabase.rpc("email_uses_google_only", { p_email: user.email! }),
+  ]);
 
   return (
     <div className="flex max-w-md flex-col gap-8">

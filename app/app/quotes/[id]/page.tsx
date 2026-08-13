@@ -19,15 +19,8 @@ export default async function QuoteDetailPage({
   const membership = await requireMembership();
   const supabase = await createClient();
 
-  const { data: quote } = await supabase
-    .from("quotes")
-    .select("*, clients(id, name)")
-    .eq("id", id)
-    .single();
-
-  if (!quote) notFound();
-
-  const [{ data: lineItems }, { data: members }, { data: templates }] = await Promise.all([
+  const [{ data: quote }, { data: lineItems }, { data: members }, { data: templates }] = await Promise.all([
+    supabase.from("quotes").select("*, clients(id, name)").eq("id", id).single(),
     supabase.from("quote_line_items").select("*").eq("quote_id", id).order("sort_order"),
     supabase
       .from("workspace_members")
@@ -36,6 +29,8 @@ export default async function QuoteDetailPage({
       .not("joined_at", "is", null),
     supabase.from("line_item_templates").select("*").eq("workspace_id", membership.workspaceId).order("label"),
   ]);
+
+  if (!quote) notFound();
 
   const client = Array.isArray(quote.clients) ? quote.clients[0] : quote.clients;
   const updateAction = updateQuote.bind(null, id);

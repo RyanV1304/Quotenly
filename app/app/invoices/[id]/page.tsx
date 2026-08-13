@@ -11,15 +11,8 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
   const membership = await requireMembership();
   const supabase = await createClient();
 
-  const { data: invoice } = await supabase
-    .from("invoices")
-    .select("*, clients(id, name)")
-    .eq("id", id)
-    .single();
-
-  if (!invoice) notFound();
-
-  const [{ data: lineItems }, { data: members }] = await Promise.all([
+  const [{ data: invoice }, { data: lineItems }, { data: members }] = await Promise.all([
+    supabase.from("invoices").select("*, clients(id, name)").eq("id", id).single(),
     supabase.from("invoice_line_items").select("*").eq("invoice_id", id).order("sort_order"),
     supabase
       .from("workspace_members")
@@ -27,6 +20,8 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
       .eq("workspace_id", membership.workspaceId)
       .not("joined_at", "is", null),
   ]);
+
+  if (!invoice) notFound();
 
   const client = Array.isArray(invoice.clients) ? invoice.clients[0] : invoice.clients;
   const updateAction = updateInvoiceDetails.bind(null, id);

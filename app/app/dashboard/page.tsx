@@ -31,9 +31,15 @@ export default async function DashboardPage() {
     );
   }
 
-  const { data: invoices } = await supabase
-    .from("invoices")
-    .select("id, status, total, created_at, assigned_to");
+  const [{ data: invoices }, { data: members }, { data: allQuotes }] = await Promise.all([
+    supabase.from("invoices").select("id, status, total, created_at, assigned_to"),
+    supabase
+      .from("workspace_members")
+      .select("user_id, invited_email, role")
+      .eq("workspace_id", membership.workspaceId)
+      .not("joined_at", "is", null),
+    supabase.from("quotes").select("id, status, assigned_to"),
+  ]);
 
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
@@ -47,24 +53,15 @@ export default async function DashboardPage() {
     .filter((i) => i.status === "paid" && new Date(i.created_at) >= startOfMonth)
     .reduce((sum, i) => sum + i.total, 0);
 
-  const { data: members } = await supabase
-    .from("workspace_members")
-    .select("user_id, invited_email, role")
-    .eq("workspace_id", membership.workspaceId)
-    .not("joined_at", "is", null);
-
   const memberUserIds = (members ?? []).map((m) => m.user_id).filter((id): id is string => !!id);
   const { data: profiles } = memberUserIds.length
     ? await supabase.from("users").select("id, name").in("id", memberUserIds)
     : { data: [] as { id: string; name: string }[] };
   const nameByUserId = new Map((profiles ?? []).map((p) => [p.id, p.name]));
 
-  const { data: allQuotes } = await supabase.from("quotes").select("id, status, assigned_to");
-  const { data: allInvoices } = await supabase.from("invoices").select("id, status, assigned_to, total");
-
   const breakdown = (members ?? []).map((m) => {
     const quoteCount = (allQuotes ?? []).filter((q) => q.assigned_to === m.user_id).length;
-    const memberInvoices = (allInvoices ?? []).filter((i) => i.assigned_to === m.user_id);
+    const memberInvoices = (invoices ?? []).filter((i) => i.assigned_to === m.user_id);
     return {
       key: m.user_id ?? m.invited_email,
       name: (m.user_id && nameByUserId.get(m.user_id)) || m.invited_email,

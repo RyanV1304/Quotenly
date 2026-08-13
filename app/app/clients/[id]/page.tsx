@@ -18,15 +18,6 @@ export default async function ClientDetailPage({
   const membership = await requireMembership();
   const supabase = await createClient();
 
-  const { data: client } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("id", id)
-    .eq("workspace_id", membership.workspaceId)
-    .single();
-
-  if (!client) notFound();
-
   let quotesQuery = supabase
     .from("quotes")
     .select("id, status, total, created_at")
@@ -43,7 +34,13 @@ export default async function ClientDetailPage({
     invoicesQuery = invoicesQuery.eq("assigned_to", membership.userId);
   }
 
-  const [{ data: quotes }, { data: invoices }] = await Promise.all([quotesQuery, invoicesQuery]);
+  const [{ data: client }, { data: quotes }, { data: invoices }] = await Promise.all([
+    supabase.from("clients").select("*").eq("id", id).eq("workspace_id", membership.workspaceId).single(),
+    quotesQuery,
+    invoicesQuery,
+  ]);
+
+  if (!client) notFound();
 
   if (membership.role === "teammate" && (quotes ?? []).length === 0 && (invoices ?? []).length === 0) {
     notFound();
