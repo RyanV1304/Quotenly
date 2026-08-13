@@ -128,6 +128,14 @@ export async function signIn(formData: FormData) {
 
   if (error) {
     await admin.from("login_attempts").insert({ email });
+
+    const { data: googleOnly } = await supabase.rpc("email_uses_google_only", { p_email: email });
+    if (googleOnly) {
+      redirect(
+        `/login${qs({ email, error: "This account signs in with Google — use the \"Continue with Google\" button above." })}`
+      );
+    }
+
     redirect(`/login${qs({ email, error: "Incorrect email or password" })}`);
   }
 

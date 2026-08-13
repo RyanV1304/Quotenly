@@ -22,6 +22,8 @@ export default async function AccountPage({
     .eq("id", user.id)
     .maybeSingle();
 
+  const { data: googleOnly } = await supabase.rpc("email_uses_google_only", { p_email: user.email! });
+
   return (
     <div className="flex max-w-md flex-col gap-8">
       <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Account</h1>
@@ -60,11 +62,21 @@ export default async function AccountPage({
       </form>
 
       <form action={changePassword} className="flex flex-col gap-3">
-        <p className="text-sm font-semibold text-ink">Change password</p>
-        <label className="field-label">
-          Current password
-          <input name="currentPassword" type="password" required className="input" />
-        </label>
+        <div>
+          <p className="text-sm font-semibold text-ink">{googleOnly ? "Set a password" : "Change password"}</p>
+          {googleOnly && (
+            <p className="mt-1 text-sm text-ink-soft">
+              You signed up with Google, so there&apos;s no password yet. Set one here if you&apos;d also like to be
+              able to log in with your email and password.
+            </p>
+          )}
+        </div>
+        {!googleOnly && (
+          <label className="field-label">
+            Current password
+            <input name="currentPassword" type="password" required className="input" />
+          </label>
+        )}
         <label className="field-label">
           New password
           <input name="newPassword" type="password" required minLength={8} className="input" />
@@ -74,7 +86,7 @@ export default async function AccountPage({
           <input name="confirmPassword" type="password" required minLength={8} className="input" />
         </label>
         <button type="submit" className="btn-secondary w-fit">
-          Update password
+          {googleOnly ? "Set password" : "Update password"}
         </button>
       </form>
 

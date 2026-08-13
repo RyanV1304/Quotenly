@@ -100,12 +100,16 @@ export async function changePassword(formData: FormData) {
     redirect("/app/account" + qs({ error: "New passwords don't match." }));
   }
 
-  const { error: verifyError } = await supabase.auth.signInWithPassword({
-    email: user!.email!,
-    password: currentPassword,
-  });
-  if (verifyError) {
-    redirect("/app/account" + qs({ error: "Current password is incorrect." }));
+  const { data: googleOnly } = await supabase.rpc("email_uses_google_only", { p_email: user!.email! });
+
+  if (!googleOnly) {
+    const { error: verifyError } = await supabase.auth.signInWithPassword({
+      email: user!.email!,
+      password: currentPassword,
+    });
+    if (verifyError) {
+      redirect("/app/account" + qs({ error: "Current password is incorrect." }));
+    }
   }
 
   const { error } = await supabase.auth.updateUser({ password: newPassword });
