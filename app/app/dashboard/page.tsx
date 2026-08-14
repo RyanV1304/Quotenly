@@ -4,9 +4,17 @@ import { requireMembership } from "@/lib/workspace";
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
   const membership = await requireMembership();
   const supabase = await createClient();
+  const { success } = await searchParams;
+  const ownershipBanner = success === "ownership-transferred" && (
+    <p className="alert-success">Ownership was transferred. Your role has been updated.</p>
+  );
 
   if (membership.role === "teammate") {
     const [{ data: quotes }, { data: invoices }] = await Promise.all([
@@ -25,6 +33,7 @@ export default async function DashboardPage() {
     return (
       <div className="flex flex-col gap-10">
         <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Your jobs</h1>
+        {ownershipBanner}
         <JobSection title="Quotes" rows={quotes ?? []} kind="quotes" />
         <JobSection title="Invoices" rows={invoices ?? []} kind="invoices" />
       </div>
@@ -74,6 +83,7 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-10">
       <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Dashboard</h1>
+      {ownershipBanner}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-lg border border-line bg-white p-5">

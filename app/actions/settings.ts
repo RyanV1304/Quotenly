@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireMembership } from "@/lib/workspace";
+import { getResend, FROM_EMAIL } from "@/lib/resend";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -118,4 +119,47 @@ export async function changePassword(formData: FormData) {
   }
 
   redirect("/app/account" + qs({ success: "password" }));
+}
+
+export async function transferOwnership(formData: FormData) {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/app/dashboard");
+  }
+
+  const newOwnerUserId = String(formData.get("newOwnerUserId") || "");
+  if (!newOwnerUserId) {
+    redirect("/app/settings" + qs({ error: "Select a teammate to transfer ownership to." }));
+  }
+
+  const supabase = await createClient();
+  const admin = createAdminClient();
+
+  const { data: newOwnerProfile } = await admin.from("users").select("email, name").eq("id", newOwnerUserId).maybeSingle();
+
+  const { error } = await supabase.rpc("transfer_workspace_ownership", {
+    p_workspace_id: membership.workspaceId,
+    p_new_owner_user_id: newOwnerUserId,
+  });
+
+  if (error) {
+    redirect("/app/settings" + qs({ error: error.message }));
+  }
+
+  const recipients = [membership.email, newOwnerProfile?.email].filter((e): e is string => !!e);
+  if (recipients.length > 0) {
+    try {
+      await getResend().emails.send({
+        from: FROM_EMAIL,
+        to: recipients,
+        subject: `Ownership of ${membership.workspaceName} has been transferred`,
+        html: `<p>${membership.name} transferred ownership of <strong>${membership.workspaceName}</strong> to ${newOwnerProfile?.name ?? "a teammate"}.</p><p>${newOwnerProfile?.name ?? "The new owner"} now has owner access, and ${membership.name} is now a teammate.</p>`,
+      });
+    } catch {
+      // ownership transfer already succeeded; email is best-effort
+    }
+  }
+
+  revalidatePath("/app/settings");
+  redirect("/app/dashboard" + qs({ success: "ownership-transferred" }));
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireMembership } from "@/lib/workspace";
 import { signOut, resendVerificationEmail } from "@/app/actions/auth";
+import GlobalSearch from "@/components/GlobalSearch";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const membership = await requireMembership();
@@ -28,6 +29,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                 </Link>
               ))}
             </nav>
+          </div>
+          <div className="hidden flex-1 justify-center px-6 md:flex">
+            <GlobalSearch />
           </div>
           <div className="hidden items-center gap-4 text-sm md:flex">
             <span className="text-ink-faint">
@@ -66,7 +70,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                 <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
               </svg>
             </summary>
-            <div className="absolute right-0 top-12 z-30 flex w-56 flex-col gap-1 rounded-lg border border-line bg-white p-2 text-sm font-medium text-ink shadow-lg">
+            <div className="absolute right-0 top-12 z-30 flex w-64 flex-col gap-1 rounded-lg border border-line bg-white p-2 text-sm font-medium text-ink shadow-lg">
+              <div className="px-1 pb-1">
+                <GlobalSearch className="max-w-none" />
+              </div>
+              <div className="my-1 h-px bg-line" />
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href} className="rounded-md px-3 py-2 hover:bg-brand-tint">
                   {item.label}
