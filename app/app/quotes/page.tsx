@@ -14,6 +14,12 @@ export default async function QuotesPage() {
     .select("id, status, total, created_at, clients(name)")
     .order("created_at", { ascending: false });
 
+  const quoteIds = (quotes ?? []).map((q) => q.id);
+  const { data: linkedInvoices } = quoteIds.length
+    ? await supabase.from("invoices").select("quote_id").in("quote_id", quoteIds)
+    : { data: [] as { quote_id: string | null }[] };
+  const invoicedQuoteIds = new Set((linkedInvoices ?? []).map((i) => i.quote_id));
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -51,12 +57,16 @@ export default async function QuotesPage() {
                   <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(q.total)}</td>
                   <td className="px-4 py-2.5 text-ink-faint">{formatDate(q.created_at)}</td>
                   <td className="px-4 py-2.5 text-right">
-                    {q.status === "approved" && (
-                      <form action={convertAction}>
-                        <button type="submit" className="btn-secondary">
-                          Add to invoice
-                        </button>
-                      </form>
+                    {invoicedQuoteIds.has(q.id) ? (
+                      <span className="text-xs text-ink-faint">Invoiced</span>
+                    ) : (
+                      q.status === "approved" && (
+                        <form action={convertAction}>
+                          <button type="submit" className="btn-secondary">
+                            Add to invoice
+                          </button>
+                        </form>
+                      )
                     )}
                   </td>
                 </tr>

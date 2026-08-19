@@ -20,16 +20,18 @@ export default async function QuoteDetailPage({
   const membership = await requireMembership();
   const supabase = await createClient();
 
-  const [{ data: quote }, { data: lineItems }, { data: members }, { data: templates }] = await Promise.all([
-    supabase.from("quotes").select("*, clients(id, name)").eq("id", id).single(),
-    supabase.from("quote_line_items").select("*").eq("quote_id", id).order("sort_order"),
-    supabase
-      .from("workspace_members")
-      .select("user_id, invited_email")
-      .eq("workspace_id", membership.workspaceId)
-      .not("joined_at", "is", null),
-    supabase.from("line_item_templates").select("*").eq("workspace_id", membership.workspaceId).order("label"),
-  ]);
+  const [{ data: quote }, { data: lineItems }, { data: members }, { data: templates }, { data: existingInvoice }] =
+    await Promise.all([
+      supabase.from("quotes").select("*, clients(id, name)").eq("id", id).single(),
+      supabase.from("quote_line_items").select("*").eq("quote_id", id).order("sort_order"),
+      supabase
+        .from("workspace_members")
+        .select("user_id, invited_email")
+        .eq("workspace_id", membership.workspaceId)
+        .not("joined_at", "is", null),
+      supabase.from("line_item_templates").select("*").eq("workspace_id", membership.workspaceId).order("label"),
+      supabase.from("invoices").select("id").eq("quote_id", id).maybeSingle(),
+    ]);
 
   if (!quote) notFound();
 
@@ -67,12 +69,17 @@ export default async function QuoteDetailPage({
               </button>
             </form>
           )}
-          {quote.status === "approved" && (
+          {quote.status === "approved" && !existingInvoice && (
             <form action={convertAction}>
               <button type="submit" className="btn-primary">
                 Convert to invoice
               </button>
             </form>
+          )}
+          {existingInvoice && (
+            <Link href={`/app/invoices/${existingInvoice.id}`} className="btn-secondary">
+              View invoice
+            </Link>
           )}
           {quote.status === "declined" && (
             <form action={duplicateAction}>

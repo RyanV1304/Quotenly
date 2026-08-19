@@ -180,6 +180,13 @@ export async function convertToInvoice(quoteId: string) {
   const { data: quote } = await supabase.from("quotes").select("*").eq("id", quoteId).single();
   if (!quote) redirect("/app/quotes");
 
+  const { data: existingInvoice } = await supabase
+    .from("invoices")
+    .select("id")
+    .eq("quote_id", quoteId)
+    .maybeSingle();
+  if (existingInvoice) redirect(`/app/invoices/${existingInvoice.id}`);
+
   const { data: lineItems } = await supabase
     .from("quote_line_items")
     .select("*")
