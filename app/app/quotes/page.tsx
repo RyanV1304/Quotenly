@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
+import { convertToInvoice } from "@/app/actions/quotes";
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
 
@@ -30,11 +31,13 @@ export default async function QuotesPage() {
               <th className="px-4 py-2.5 font-semibold">Status</th>
               <th className="px-4 py-2.5 font-semibold">Total</th>
               <th className="px-4 py-2.5 font-semibold">Created</th>
+              <th className="px-4 py-2.5 font-semibold"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-line">
             {quotes?.map((q) => {
               const client = Array.isArray(q.clients) ? q.clients[0] : q.clients;
+              const convertAction = convertToInvoice.bind(null, q.id);
               return (
                 <tr key={q.id} className="bg-bg-white">
                   <td className="px-4 py-2.5">
@@ -47,12 +50,21 @@ export default async function QuotesPage() {
                   </td>
                   <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(q.total)}</td>
                   <td className="px-4 py-2.5 text-ink-faint">{formatDate(q.created_at)}</td>
+                  <td className="px-4 py-2.5 text-right">
+                    {q.status === "approved" && (
+                      <form action={convertAction}>
+                        <button type="submit" className="btn-secondary">
+                          Add to invoice
+                        </button>
+                      </form>
+                    )}
+                  </td>
                 </tr>
               );
             })}
             {quotes?.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={5} className="px-4 py-6 text-center text-ink-faint">
                   {membership.role === "owner" ? "No quotes yet." : "No quotes assigned to you yet."}
                 </td>
               </tr>

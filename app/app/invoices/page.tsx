@@ -15,7 +15,15 @@ export default async function InvoicesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoices</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoices</h1>
+        <Link href="/app/quotes" className="btn-primary">
+          Add invoice
+        </Link>
+      </div>
+      <p className="-mt-4 text-sm text-ink-soft">
+        Invoices are created from approved quotes. Pick a quote on the next page to convert it.
+      </p>
 
       <div className="overflow-x-auto rounded-lg border border-line">
         <table className="w-full text-left text-sm">
