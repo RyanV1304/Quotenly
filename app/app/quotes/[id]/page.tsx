@@ -5,6 +5,7 @@ import { requireMembership } from "@/lib/workspace";
 import { updateQuote, sendQuote, convertToInvoice, duplicateQuote } from "@/app/actions/quotes";
 import LineItemsEditor from "@/components/LineItemsEditor";
 import StatusBadge from "@/components/StatusBadge";
+import CopyLinkButton from "@/components/CopyLinkButton";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 export default async function QuoteDetailPage({
@@ -55,6 +56,7 @@ export default async function QuoteDetailPage({
             <a href={shareUrl} target="_blank" className="btn-link" rel="noreferrer">
               Public link
             </a>
+            <CopyLinkButton url={shareUrl} />
           </p>
         </div>
         <div className="flex shrink-0 gap-2">

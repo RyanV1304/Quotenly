@@ -12,6 +12,7 @@ import {
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
 import LineItemsEditor from "@/components/LineItemsEditor";
+import CopyLinkButton from "@/components/CopyLinkButton";
 
 export default async function InvoiceDetailPage({
   params,
@@ -67,6 +68,7 @@ export default async function InvoiceDetailPage({
             <a href={shareUrl} target="_blank" className="btn-link" rel="noreferrer">
               Public link
             </a>
+            <CopyLinkButton url={shareUrl} />
             <a href={`/api/invoices/${id}/pdf`} className="btn-link" target="_blank" rel="noreferrer">
               Download PDF
             </a>
