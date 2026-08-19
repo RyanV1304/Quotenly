@@ -107,7 +107,7 @@ export default async function InvoiceDetailPage({
       )}
 
       {invoice.status !== "paid" && !isEditing && (
-        <details className="group rounded-lg border border-line bg-white p-5">
+        <details className="group rounded-lg border border-line bg-bg-white p-5">
           <summary className="cursor-pointer text-sm font-semibold text-ink">Mark as paid</summary>
           <form action={paidAction} className="mt-3 flex flex-col gap-3">
             <label className="field-label">
@@ -169,7 +169,7 @@ export default async function InvoiceDetailPage({
               </thead>
               <tbody className="divide-y divide-line">
                 {lineItems?.map((li) => (
-                  <tr key={li.id} className="bg-white">
+                  <tr key={li.id} className="bg-bg-white">
                     <td className="px-4 py-2.5 text-ink">{li.description}</td>
                     <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
                     <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>

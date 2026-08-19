@@ -100,7 +100,7 @@ export default async function QuoteDetailPage({
               </thead>
               <tbody className="divide-y divide-line">
                 {lineItems?.map((li) => (
-                  <tr key={li.id} className="bg-white">
+                  <tr key={li.id} className="bg-bg-white">
                     <td className="px-4 py-2.5 text-ink">{li.description}</td>
                     <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
                     <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
@@ -111,7 +111,7 @@ export default async function QuoteDetailPage({
             </table>
           </div>
           {quote.notes && (
-            <div className="rounded-lg border border-line bg-white p-4 text-sm">
+            <div className="rounded-lg border border-line bg-bg-white p-4 text-sm">
               <p className="text-ink-faint">Notes</p>
               <p className="mt-1 text-ink">{quote.notes}</p>
             </div>

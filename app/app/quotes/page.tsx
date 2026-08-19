@@ -36,7 +36,7 @@ export default async function QuotesPage() {
             {quotes?.map((q) => {
               const client = Array.isArray(q.clients) ? q.clients[0] : q.clients;
               return (
-                <tr key={q.id} className="bg-white">
+                <tr key={q.id} className="bg-bg-white">
                   <td className="px-4 py-2.5">
                     <Link href={`/app/quotes/${q.id}`} className="font-medium text-brand hover:underline">
                       {client?.name ?? "Unknown client"}

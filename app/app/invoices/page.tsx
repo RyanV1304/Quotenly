@@ -31,7 +31,7 @@ export default async function InvoicesPage() {
             {invoices?.map((inv) => {
               const client = Array.isArray(inv.clients) ? inv.clients[0] : inv.clients;
               return (
-                <tr key={inv.id} className="bg-white">
+                <tr key={inv.id} className="bg-bg-white">
                   <td className="px-4 py-2.5">
                     <Link href={`/app/invoices/${inv.id}`} className="font-medium text-brand hover:underline">
                       {client?.name ?? "Unknown client"}

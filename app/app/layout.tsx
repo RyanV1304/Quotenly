@@ -14,9 +14,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-bg-white">
+    <div id="app-shell" className="flex min-h-screen flex-col bg-bg-white text-ink">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem("quotenly-theme")||"system";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.getElementById("app-shell").setAttribute("data-theme","dark");}catch(e){}})();`,
+        }}
+      />
       <div className="h-1 w-full bg-brand" />
-      <header className="border-b border-line bg-white">
+      <header className="border-b border-line bg-bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
           <div className="flex items-center gap-8">
             <Link href="/app/dashboard" className="font-display text-base font-bold tracking-tight text-ink">
@@ -70,7 +75,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                 <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
               </svg>
             </summary>
-            <div className="absolute right-0 top-12 z-30 flex w-64 flex-col gap-1 rounded-lg border border-line bg-white p-2 text-sm font-medium text-ink shadow-lg">
+            <div className="absolute right-0 top-12 z-30 flex w-64 flex-col gap-1 rounded-lg border border-line bg-bg-white p-2 text-sm font-medium text-ink shadow-lg">
               <div className="px-1 pb-1">
                 <GlobalSearch className="max-w-none" />
               </div>

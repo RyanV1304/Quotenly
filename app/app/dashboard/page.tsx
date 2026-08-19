@@ -86,11 +86,11 @@ export default async function DashboardPage({
       {ownershipBanner}
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-lg border border-line bg-white p-5">
+        <div className="rounded-lg border border-line bg-bg-white p-5">
           <p className="text-sm text-ink-soft">Total outstanding</p>
           <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalOutstanding)}</p>
         </div>
-        <div className="rounded-lg border border-line bg-white p-5">
+        <div className="rounded-lg border border-line bg-bg-white p-5">
           <p className="text-sm text-ink-soft">Paid this month</p>
           <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalPaidThisMonth)}</p>
         </div>
@@ -110,7 +110,7 @@ export default async function DashboardPage({
             </thead>
             <tbody className="divide-y divide-line">
               {breakdown.map((b) => (
-                <tr key={b.key} className="bg-white">
+                <tr key={b.key} className="bg-bg-white">
                   <td className="px-4 py-2.5 text-ink">{b.name}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{b.quoteCount}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{b.invoiceCount}</td>
@@ -146,7 +146,7 @@ function JobSection({
               {rows.map((r) => {
                 const client = Array.isArray(r.clients) ? r.clients[0] : r.clients;
                 return (
-                  <tr key={r.id} className="bg-white">
+                  <tr key={r.id} className="bg-bg-white">
                     <td className="px-4 py-2.5">
                       <Link href={`/app/${kind}/${r.id}`} className="font-medium text-brand hover:underline">
                         {client?.name ?? "Unknown client"}

@@ -28,11 +28,7 @@ export default function GlobalSearch({ className = "" }: { className?: string })
 
   useEffect(() => {
     const q = query.trim();
-    if (q.length < 2) {
-      setResults(EMPTY);
-      setLoading(false);
-      return;
-    }
+    if (q.length < 2) return;
     setLoading(true);
     const timeout = setTimeout(async () => {
       try {
@@ -79,7 +75,7 @@ export default function GlobalSearch({ className = "" }: { className?: string })
         aria-label="Search"
       />
       {showDropdown && (
-        <div className="absolute left-0 right-0 top-11 z-40 max-h-96 overflow-y-auto rounded-lg border border-line bg-white p-2 shadow-lg">
+        <div className="absolute left-0 right-0 top-11 z-40 max-h-96 overflow-y-auto rounded-lg border border-line bg-bg-white p-2 shadow-lg">
           {loading && <p className="px-3 py-2 text-sm text-ink-faint">Searching...</p>}
           {!loading && !hasResults && <p className="px-3 py-2 text-sm text-ink-faint">No results for &quot;{query}&quot;</p>}
           {!loading && (

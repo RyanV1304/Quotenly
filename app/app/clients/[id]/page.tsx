@@ -56,7 +56,7 @@ export default async function ClientDetailPage({
 
       {error && <p className="alert-error">{error}</p>}
 
-      <details className="group rounded-lg border border-line bg-white p-5">
+      <details className="group rounded-lg border border-line bg-bg-white p-5">
         <summary className="font-display cursor-pointer text-xl font-bold text-ink">{client.name}</summary>
         <form action={updateAction} className="mt-4 grid grid-cols-2 gap-3">
           <input name="name" defaultValue={client.name} required className="input col-span-2" />
@@ -110,7 +110,7 @@ function JobTable({
       <table className="w-full text-left text-sm">
         <tbody className="divide-y divide-line">
           {rows.map((r) => (
-            <tr key={r.id} className="bg-white">
+            <tr key={r.id} className="bg-bg-white">
               <td className="px-4 py-2.5">
                 <Link href={`/app/${kind}/${r.id}`} className="font-mono font-medium text-brand hover:underline">
                   {r.id.slice(0, 8)}

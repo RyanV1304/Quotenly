@@ -42,7 +42,7 @@ export default async function ClientsPage({
 
       {error && <p className="alert-error">{error}</p>}
 
-      <details className="group rounded-lg border border-line bg-white p-5">
+      <details className="group rounded-lg border border-line bg-bg-white p-5">
         <summary className="cursor-pointer text-sm font-semibold text-ink">Add a client</summary>
         <form action={createClientRecord} className="mt-4 grid grid-cols-2 gap-3">
           <input name="name" required placeholder="Client name" className="input col-span-2" />
@@ -67,7 +67,7 @@ export default async function ClientsPage({
           </thead>
           <tbody className="divide-y divide-line">
             {clients?.map((c) => (
-              <tr key={c.id} className="bg-white">
+              <tr key={c.id} className="bg-bg-white">
                 <td className="px-4 py-2.5">
                   <Link href={`/app/clients/${c.id}`} className="font-medium text-brand hover:underline">
                     {c.name}

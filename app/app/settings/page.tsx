@@ -3,6 +3,42 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { updateWorkspaceSettings, transferOwnership } from "@/app/actions/settings";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
+
+const FEATURE_GUIDE: { title: string; body: string }[] = [
+  {
+    title: "Clients",
+    body: "Add a client's name, contact info, and job address. Every quote and invoice you create is linked to a client, and their page shows the full history of jobs you've done for them.",
+  },
+  {
+    title: "Quotes",
+    body: "Build a quote with line items (labor, materials, or a flat fee), then send it. The client gets a public link — no login needed — where they can Approve or Decline. Once approved, click \"Convert to invoice\" to turn it into a real invoice with one click.",
+  },
+  {
+    title: "Invoices",
+    body: "Invoices track payment status: draft, sent, viewed, overdue, or paid. Clients view them at a public link and see your payment instructions — Quotenly doesn't collect payment itself, so mark an invoice \"Paid\" yourself once you've been paid. You can edit a sent invoice's line items later; the client is automatically re-notified and the \"viewed\" status resets.",
+  },
+  {
+    title: "Copy link",
+    body: "Every quote and invoice has a \"Copy link\" button next to the public link. Use it to grab the share URL and send it yourself (text, WhatsApp, email) any time automatic email delivery isn't an option.",
+  },
+  {
+    title: "Global search",
+    body: "The search bar in the top navigation searches across clients, quote and invoice line items, and client contact info. Results are grouped by type — click one to jump straight to that page.",
+  },
+  {
+    title: "Team & roles",
+    body: "A workspace has one Owner and any number of Teammates. The Owner sees and manages everything. Teammates only see quotes and invoices assigned to them. Invite teammates from \"Manage team\" below — only the Owner can invite, remove, or manage teammates.",
+  },
+  {
+    title: "Transfer ownership",
+    body: "The current Owner can hand ownership to an existing teammate from this page. You'll become a Teammate yourself immediately, and only the new Owner can transfer it back.",
+  },
+  {
+    title: "Dashboard",
+    body: "Owners see total outstanding balance, amount paid this month, and a per-teammate breakdown of quotes and invoices. Teammates see just their own assigned jobs.",
+  },
+];
 
 export default async function SettingsPage({
   searchParams,
@@ -45,49 +81,91 @@ export default async function SettingsPage({
       {error && <p className="alert-error">{error}</p>}
       {success && <p className="alert-success">Settings saved.</p>}
 
-      <form action={updateWorkspaceSettings} className="flex flex-col gap-4">
-        <label className="field-label">
-          Business name
-          <input name="businessName" defaultValue={membership.workspaceName} className="input" />
-        </label>
+      <section className="rounded-lg border border-line bg-bg-white p-5">
+        <h2 className="text-sm font-semibold text-ink">Business profile</h2>
+        <p className="mt-1 text-sm text-ink-soft">
+          This appears on your quotes, invoices, and the branded PDFs your clients see.
+        </p>
+        <form action={updateWorkspaceSettings} className="mt-4 flex flex-col gap-4">
+          <label className="field-label">
+            Business name
+            <input name="businessName" defaultValue={membership.workspaceName} className="input" />
+          </label>
 
-        <label className="field-label">
-          Logo
-          {branding?.logo_url && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={branding.logo_url} alt="Current logo" className="mb-1 h-12 w-auto" />
-          )}
-          <input name="logo" type="file" accept="image/*" className="text-sm text-ink-soft" />
-        </label>
+          <label className="field-label">
+            Logo
+            {branding?.logo_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={branding.logo_url} alt="Current logo" className="mb-1 h-12 w-auto" />
+            )}
+            <input name="logo" type="file" accept="image/*" className="text-sm text-ink-soft" />
+          </label>
 
-        <label className="field-label">
-          Default tax %
-          <input
-            name="defaultTaxPercent"
-            type="number"
-            step="0.01"
-            defaultValue={branding?.default_tax_percent ?? 0}
-            className="input w-32"
-          />
-        </label>
+          <label className="field-label">
+            Business address
+            <input name="address" defaultValue={branding?.address ?? ""} placeholder="123 Main St, Springfield" className="input" />
+          </label>
 
-        <label className="field-label">
-          Default payment instructions
-          <textarea
-            name="paymentInstructions"
-            defaultValue={branding?.payment_instructions ?? ""}
-            placeholder="Pay via check, cash, or Zelle to..."
-            className="input"
-          />
-        </label>
+          <div className="grid grid-cols-2 gap-4">
+            <label className="field-label">
+              Business phone
+              <input name="phone" defaultValue={branding?.phone ?? ""} placeholder="(555) 123-4567" className="input" />
+            </label>
+            <label className="field-label">
+              Business email
+              <input
+                name="businessEmail"
+                type="email"
+                defaultValue={branding?.email ?? ""}
+                placeholder="hello@yourbusiness.com"
+                className="input"
+              />
+            </label>
+          </div>
 
-        <button type="submit" className="btn-primary w-fit">
-          Save settings
-        </button>
-      </form>
+          <div className="my-1 h-px bg-line" />
+
+          <h3 className="text-sm font-semibold text-ink">Quote &amp; invoice defaults</h3>
+
+          <label className="field-label">
+            Default tax %
+            <input
+              name="defaultTaxPercent"
+              type="number"
+              step="0.01"
+              defaultValue={branding?.default_tax_percent ?? 0}
+              className="input w-32"
+            />
+          </label>
+
+          <label className="field-label">
+            Default payment instructions
+            <textarea
+              name="paymentInstructions"
+              defaultValue={branding?.payment_instructions ?? ""}
+              placeholder="Pay via check, cash, or Zelle to..."
+              className="input"
+            />
+          </label>
+
+          <button type="submit" className="btn-primary w-fit">
+            Save settings
+          </button>
+        </form>
+      </section>
+
+      <section className="rounded-lg border border-line bg-bg-white p-5">
+        <h2 className="text-sm font-semibold text-ink">Appearance</h2>
+        <p className="mt-1 text-sm text-ink-soft">
+          Choose how the app looks on this device. This only affects your own view, not what clients see.
+        </p>
+        <div className="mt-4">
+          <ThemeToggle />
+        </div>
+      </section>
 
       {teammates && teammates.length > 0 && (
-        <div className="rounded-lg border border-line bg-white p-5">
+        <section className="rounded-lg border border-line bg-bg-white p-5">
           <p className="text-sm font-semibold text-ink">Transfer ownership</p>
           <p className="mt-1 text-sm text-ink-soft">
             Move ownership of this workspace to an existing teammate. You&apos;ll become a teammate yourself.
@@ -128,8 +206,36 @@ export default async function SettingsPage({
               </button>
             </form>
           )}
-        </div>
+        </section>
       )}
+
+      <section className="rounded-lg border border-line bg-bg-white p-5">
+        <h2 className="text-sm font-semibold text-ink">Feature guide</h2>
+        <p className="mt-1 text-sm text-ink-soft">Stuck on something? A quick rundown of what each part of Quotenly does.</p>
+        <div className="mt-4 flex flex-col divide-y divide-line">
+          {FEATURE_GUIDE.map((item) => (
+            <details key={item.title} className="group py-2.5 first:pt-0 last:pb-0">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-ink marker:hidden">
+                <span className="inline-flex items-center gap-2">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="text-ink-faint transition-transform group-open:rotate-90"
+                  >
+                    <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {item.title}
+                </span>
+              </summary>
+              <p className="mt-2 pl-6 text-sm text-ink-soft">{item.body}</p>
+            </details>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

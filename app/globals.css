@@ -31,6 +31,24 @@
   --foreground: var(--ink);
 }
 
+#app-shell[data-theme="dark"] {
+  --bg-white: #131826;
+  --ink: #eef0f4;
+  --ink-soft: #a7adba;
+  --ink-faint: #6c7280;
+  --line: #262c3d;
+  --brand-tint: #1a2440;
+  --success-tint: #10241c;
+  --warning-tint: #2a2110;
+  --danger-tint: #2c1614;
+  --background: var(--bg-white);
+  --foreground: var(--ink);
+}
+
+#app-shell[data-theme="dark"] .input {
+  background: #0f1420;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

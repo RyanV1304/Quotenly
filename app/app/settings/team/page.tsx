@@ -71,7 +71,7 @@ export default async function TeamPage({
             <table className="w-full text-left text-sm">
               <tbody className="divide-y divide-line">
                 {pendingInvites.map((inv) => (
-                  <tr key={inv.id} className="bg-white">
+                  <tr key={inv.id} className="bg-bg-white">
                     <td className="px-4 py-2.5 text-ink">{inv.email}</td>
                     <td className="px-4 py-2.5 text-ink-faint">Sent {formatDate(inv.created_at)}</td>
                     <td className="px-4 py-2.5 text-right">
@@ -108,7 +108,7 @@ export default async function TeamPage({
             {members?.map((m) => {
               const name = m.user_id ? nameByUserId.get(m.user_id) : undefined;
               return (
-                <tr key={m.id} className="bg-white">
+                <tr key={m.id} className="bg-bg-white">
                   <td className="px-4 py-2.5 text-ink">{name || "-"}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{m.invited_email}</td>
                   <td className="px-4 py-2.5 capitalize text-ink-soft">{m.role}</td>

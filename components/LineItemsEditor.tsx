@@ -95,7 +95,7 @@ export default function LineItemsEditor({
 
       <div className="flex flex-col gap-2">
         {rows.map((row, i) => (
-          <div key={i} className="grid grid-cols-12 items-center gap-2 rounded-lg border border-line bg-white p-2.5">
+          <div key={i} className="grid grid-cols-12 items-center gap-2 rounded-lg border border-line bg-bg-white p-2.5">
             <input
               value={row.description}
               onChange={(e) => updateRow(i, { description: e.target.value })}

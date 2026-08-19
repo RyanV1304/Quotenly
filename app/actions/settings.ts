@@ -21,6 +21,9 @@ export async function updateWorkspaceSettings(formData: FormData) {
   }
 
   const businessName = String(formData.get("businessName") || "").trim();
+  const address = String(formData.get("address") || "").trim();
+  const phone = String(formData.get("phone") || "").trim();
+  const businessEmail = String(formData.get("businessEmail") || "").trim();
   const defaultTaxPercent = Number(formData.get("defaultTaxPercent") || 0);
   const paymentInstructions = String(formData.get("paymentInstructions") || "").trim();
   const logoFile = formData.get("logo") as File | null;
@@ -50,6 +53,9 @@ export async function updateWorkspaceSettings(formData: FormData) {
 
   const updatePayload: Record<string, unknown> = {
     business_name: businessName || membership.workspaceName,
+    address: address || null,
+    phone: phone || null,
+    email: businessEmail || null,
     default_tax_percent: defaultTaxPercent,
     payment_instructions: paymentInstructions || null,
   };
