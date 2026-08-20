@@ -48,6 +48,12 @@ export interface WorkspaceBranding {
   address: string | null;
   phone: string | null;
   email: string | null;
+  default_tax_percent: number | null;
+  payment_instructions: string | null;
+  invoice_number_start: number;
+  next_invoice_number: number;
+  review_link: string | null;
+  review_requests_enabled: boolean;
 }
 
 export interface Client {
@@ -58,6 +64,37 @@ export interface Client {
   contact_phone: string | null;
   job_address: string | null;
   notes: string | null;
+  created_at: string;
+}
+
+export type JobStatus = "active" | "completed";
+
+export interface Job {
+  id: string;
+  workspace_id: string;
+  client_id: string;
+  assigned_to: string | null;
+  quote_id: string | null;
+  invoice_id: string | null;
+  title: string;
+  status: JobStatus;
+  created_at: string;
+}
+
+export interface JobPhoto {
+  id: string;
+  job_id: string;
+  url: string;
+  uploaded_by: string | null;
+  created_at: string;
+}
+
+export interface JobExpense {
+  id: string;
+  job_id: string;
+  description: string;
+  amount: number;
+  date: string;
   created_at: string;
 }
 
@@ -89,6 +126,7 @@ export interface Quote {
   tax_rate: number;
   total: number;
   notes: string | null;
+  signature_url: string | null;
   share_token: string;
   viewed_at: string | null;
   sent_at: string | null;
@@ -101,6 +139,7 @@ export interface Invoice {
   quote_id: string | null;
   client_id: string;
   assigned_to: string | null;
+  invoice_number: number | null;
   status: InvoiceStatus;
   subtotal: number;
   tax_rate: number;

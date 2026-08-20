@@ -53,6 +53,12 @@ export default function InvoicePdf({
             {client.job_address && <Text style={styles.muted}>{client.job_address}</Text>}
           </View>
           <View>
+            {invoice.invoice_number && (
+              <>
+                <Text style={styles.label}>Invoice #</Text>
+                <Text style={{ marginBottom: 8 }}>INV-{invoice.invoice_number}</Text>
+              </>
+            )}
             <Text style={styles.label}>Due date</Text>
             <Text>{invoice.due_date ?? "-"}</Text>
           </View>

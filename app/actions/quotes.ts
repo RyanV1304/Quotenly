@@ -199,6 +199,10 @@ export async function convertToInvoice(quoteId: string) {
     .eq("workspace_id", membership.workspaceId)
     .maybeSingle();
 
+  const { data: invoiceNumber } = await supabase.rpc("get_next_invoice_number", {
+    p_workspace_id: membership.workspaceId,
+  });
+
   const dueDate = new Date();
   dueDate.setDate(dueDate.getDate() + 14);
 
@@ -209,6 +213,7 @@ export async function convertToInvoice(quoteId: string) {
       quote_id: quote!.id,
       client_id: quote!.client_id,
       assigned_to: quote!.assigned_to,
+      invoice_number: invoiceNumber ?? null,
       subtotal: quote!.subtotal,
       tax_rate: quote!.tax_rate,
       total: quote!.total,

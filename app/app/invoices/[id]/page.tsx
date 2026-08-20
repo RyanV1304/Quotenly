@@ -62,7 +62,14 @@ export default async function InvoiceDetailPage({
 
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoice for {client?.name}</h1>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">
+            Invoice for {client?.name}
+            {invoice.invoice_number && (
+              <span className="ml-2 font-mono text-base font-medium text-ink-faint">
+                INV-{invoice.invoice_number}
+              </span>
+            )}
+          </h1>
           <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
             <StatusBadge status={isOverdue ? "overdue" : invoice.status} />
             <a href={shareUrl} target="_blank" className="btn-link" rel="noreferrer">

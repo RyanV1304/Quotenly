@@ -9,6 +9,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const navItems = [
     { href: "/app/dashboard", label: "Dashboard" },
     { href: "/app/clients", label: "Clients" },
+    { href: "/app/jobs", label: "Jobs" },
     { href: "/app/quotes", label: "Quotes" },
     { href: "/app/invoices", label: "Invoices" },
   ];

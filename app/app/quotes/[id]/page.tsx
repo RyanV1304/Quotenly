@@ -123,6 +123,13 @@ export default async function QuoteDetailPage({
               <p className="mt-1 text-ink">{quote.notes}</p>
             </div>
           )}
+          {quote.signature_url && (
+            <div className="rounded-lg border border-line bg-bg-white p-4 text-sm">
+              <p className="text-ink-faint">Client signature</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={quote.signature_url} alt="Client signature" className="mt-2 h-20 rounded border border-line bg-white" />
+            </div>
+          )}
         </>
       ) : (
         <form action={updateAction} className="flex flex-col gap-4">

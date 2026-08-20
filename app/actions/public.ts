@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 async function notifyQuoteDecision(token: string, decision: "approved" | "declined") {
   const admin = createAdminClient();
@@ -40,9 +41,44 @@ async function notifyQuoteDecision(token: string, decision: "approved" | "declin
   }
 }
 
-export async function approveQuote(token: string) {
+export async function approveQuote(token: string, formData: FormData) {
   const supabase = await createClient();
-  await supabase.rpc("approve_quote_by_token", { p_token: token });
+  const admin = createAdminClient();
+
+  const signatureDataUrl = String(formData.get("signatureDataUrl") || "");
+  if (!signatureDataUrl.startsWith("data:image/")) {
+    redirect(`/quote/${token}?error=${encodeURIComponent("Please sign before approving.")}`);
+  }
+
+  let signatureUrl: string | null = null;
+
+  const { data: quote } = await admin
+    .from("quotes")
+    .select("id, workspace_id")
+    .eq("share_token", token)
+    .maybeSingle();
+
+  if (quote) {
+    const base64 = signatureDataUrl.split(",")[1];
+    const buffer = Buffer.from(base64, "base64");
+    const path = `${quote.workspace_id}/${quote.id}/${Date.now()}.png`;
+
+    const { error: uploadError } = await admin.storage.from("signatures").upload(path, buffer, {
+      contentType: "image/png",
+      upsert: true,
+    });
+
+    if (!uploadError) {
+      const { data: pub } = admin.storage.from("signatures").getPublicUrl(path);
+      signatureUrl = pub.publicUrl;
+    }
+  }
+
+  if (!signatureUrl) {
+    redirect(`/quote/${token}?error=${encodeURIComponent("Could not save your signature. Please try again.")}`);
+  }
+
+  await supabase.rpc("approve_quote_by_token", { p_token: token, p_signature_url: signatureUrl });
   await notifyQuoteDecision(token, "approved");
   revalidatePath(`/quote/${token}`);
 }

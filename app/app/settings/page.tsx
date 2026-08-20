@@ -38,6 +38,14 @@ const FEATURE_GUIDE: { title: string; body: string }[] = [
     title: "Dashboard",
     body: "Owners see total outstanding balance, amount paid this month, and a per-teammate breakdown of quotes and invoices. Teammates see just their own assigned jobs.",
   },
+  {
+    title: "Invoice numbers",
+    body: "Every invoice gets a sequential number (INV-1001, INV-1002, ...) shown on the invoice, the invoice list, and the PDF — useful for bookkeeping and taxes. Set a starting number in Business Profile before you create your first invoice.",
+  },
+  {
+    title: "Review requests",
+    body: "Add your Google Business (or any) review link and turn on review requests, and Quotenly will automatically email the client a few days after you mark an invoice paid, asking them to leave a review.",
+  },
 ];
 
 export default async function SettingsPage({
@@ -144,6 +152,45 @@ export default async function SettingsPage({
               name="paymentInstructions"
               defaultValue={branding?.payment_instructions ?? ""}
               placeholder="Pay via check, cash, or Zelle to..."
+              className="input"
+            />
+          </label>
+
+          <label className="field-label">
+            Starting invoice number
+            <input
+              name="invoiceNumberStart"
+              type="number"
+              min={1}
+              defaultValue={branding?.invoice_number_start ?? 1001}
+              className="input w-32"
+            />
+            <span className="text-xs font-normal text-ink-faint">
+              Only takes effect if it&apos;s higher than any invoice number already in use.
+            </span>
+          </label>
+
+          <div className="my-1 h-px bg-line" />
+
+          <h3 className="text-sm font-semibold text-ink">Review requests</h3>
+
+          <label className="flex items-center gap-2 text-sm font-medium text-ink">
+            <input
+              type="checkbox"
+              name="reviewRequestsEnabled"
+              defaultChecked={branding?.review_requests_enabled ?? false}
+              className="rounded"
+            />
+            Automatically ask clients for a review a few days after an invoice is paid
+          </label>
+
+          <label className="field-label">
+            Review link
+            <input
+              name="reviewLink"
+              type="url"
+              defaultValue={branding?.review_link ?? ""}
+              placeholder="https://g.page/r/your-business/review"
               className="input"
             />
           </label>

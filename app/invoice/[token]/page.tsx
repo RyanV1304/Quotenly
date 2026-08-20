@@ -36,7 +36,12 @@ export default async function PublicInvoicePage({ params }: { params: Promise<{ 
             // eslint-disable-next-line @next/next/no-img-element
             <img src={branding.logo_url} alt={branding.business_name ?? ""} className="mb-2 h-12" />
           )}
-          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">{branding?.business_name ?? "Invoice"}</h1>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">
+            {branding?.business_name ?? "Invoice"}
+            {invoice.invoice_number && (
+              <span className="ml-2 font-mono text-base font-medium text-ink-faint">INV-{invoice.invoice_number}</span>
+            )}
+          </h1>
           {branding?.address && <p className="text-sm text-ink-soft">{branding.address}</p>}
           {branding?.phone && <p className="text-sm text-ink-soft">{branding.phone}</p>}
         </div>

@@ -10,7 +10,7 @@ export default async function InvoicesPage() {
 
   const { data: invoices } = await supabase
     .from("invoices")
-    .select("id, status, total, due_date, created_at, clients(name)")
+    .select("id, invoice_number, status, total, due_date, created_at, clients(name)")
     .order("created_at", { ascending: false });
 
   return (
@@ -29,6 +29,7 @@ export default async function InvoicesPage() {
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>
+              <th className="px-4 py-2.5 font-semibold">#</th>
               <th className="px-4 py-2.5 font-semibold">Client</th>
               <th className="px-4 py-2.5 font-semibold">Status</th>
               <th className="px-4 py-2.5 font-semibold">Total</th>
@@ -40,6 +41,9 @@ export default async function InvoicesPage() {
               const client = Array.isArray(inv.clients) ? inv.clients[0] : inv.clients;
               return (
                 <tr key={inv.id} className="bg-bg-white">
+                  <td className="font-mono px-4 py-2.5 text-ink-faint">
+                    {inv.invoice_number ? `INV-${inv.invoice_number}` : "—"}
+                  </td>
                   <td className="px-4 py-2.5">
                     <Link href={`/app/invoices/${inv.id}`} className="font-medium text-brand hover:underline">
                       {client?.name ?? "Unknown client"}
@@ -55,7 +59,7 @@ export default async function InvoicesPage() {
             })}
             {invoices?.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={5} className="px-4 py-6 text-center text-ink-faint">
                   {membership.role === "owner" ? "No invoices yet." : "No invoices assigned to you yet."}
                 </td>
               </tr>

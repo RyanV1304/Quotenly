@@ -26,6 +26,9 @@ export async function updateWorkspaceSettings(formData: FormData) {
   const businessEmail = String(formData.get("businessEmail") || "").trim();
   const defaultTaxPercent = Number(formData.get("defaultTaxPercent") || 0);
   const paymentInstructions = String(formData.get("paymentInstructions") || "").trim();
+  const invoiceNumberStart = Number(formData.get("invoiceNumberStart") || 1001);
+  const reviewLink = String(formData.get("reviewLink") || "").trim();
+  const reviewRequestsEnabled = formData.get("reviewRequestsEnabled") === "on";
   const logoFile = formData.get("logo") as File | null;
 
   const admin = createAdminClient();
@@ -51,6 +54,12 @@ export async function updateWorkspaceSettings(formData: FormData) {
     await supabase.from("workspaces").update({ name: businessName }).eq("id", membership.workspaceId);
   }
 
+  const { data: currentBranding } = await supabase
+    .from("workspace_branding")
+    .select("invoice_number_start, next_invoice_number")
+    .eq("workspace_id", membership.workspaceId)
+    .single();
+
   const updatePayload: Record<string, unknown> = {
     business_name: businessName || membership.workspaceName,
     address: address || null,
@@ -58,8 +67,17 @@ export async function updateWorkspaceSettings(formData: FormData) {
     email: businessEmail || null,
     default_tax_percent: defaultTaxPercent,
     payment_instructions: paymentInstructions || null,
+    review_link: reviewLink || null,
+    review_requests_enabled: reviewRequestsEnabled,
   };
   if (logoUrl) updatePayload.logo_url = logoUrl;
+
+  if (invoiceNumberStart > 0 && currentBranding) {
+    updatePayload.invoice_number_start = invoiceNumberStart;
+    if (invoiceNumberStart > currentBranding.next_invoice_number) {
+      updatePayload.next_invoice_number = invoiceNumberStart;
+    }
+  }
 
   const { error } = await supabase
     .from("workspace_branding")

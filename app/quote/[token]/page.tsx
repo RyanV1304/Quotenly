@@ -3,10 +3,18 @@ import { createClient } from "@/lib/supabase/server";
 import { approveQuote, declineQuote, markQuoteViewed } from "@/app/actions/public";
 import { formatCurrency } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
+import SignaturePad from "@/components/SignaturePad";
 import type { LineItem } from "@/lib/types";
 
-export default async function PublicQuotePage({ params }: { params: Promise<{ token: string }> }) {
+export default async function PublicQuotePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ token: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
   const { token } = await params;
+  const { error } = await searchParams;
   const supabase = await createClient();
 
   const [{ data: quotes }, { data: lineItems }] = await Promise.all([
@@ -91,12 +99,11 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
           <p className="text-sm">
             Status: <StatusBadge status={quote.status} />
           </p>
+          {error && <p className="alert-error mt-3">{error}</p>}
           {quote.status === "sent" && (
-            <div className="mt-4 flex gap-2">
-              <form action={approveAction}>
-                <button type="submit" className="btn-primary">
-                  Approve this quote
-                </button>
+            <div className="mt-4 flex flex-col gap-4">
+              <form action={approveAction} className="flex flex-col gap-3">
+                <SignaturePad submitLabel="Approve & sign" />
               </form>
               <form action={declineAction}>
                 <button type="submit" className="btn-secondary">
@@ -106,7 +113,16 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
             </div>
           )}
           {quote.status === "approved" && (
-            <p className="mt-3 font-medium text-success">You&apos;ve approved this quote. Thank you!</p>
+            <div className="mt-3">
+              <p className="font-medium text-success">You&apos;ve approved this quote. Thank you!</p>
+              {quote.signature_url && (
+                <div className="mt-3">
+                  <p className="text-xs text-ink-faint">Signed</p>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={quote.signature_url} alt="Signature" className="mt-1 h-20 rounded border border-line bg-white" />
+                </div>
+              )}
+            </div>
           )}
           {quote.status === "declined" && (
             <p className="mt-3 text-ink-soft">You&apos;ve declined this quote.</p>
