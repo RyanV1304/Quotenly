@@ -8,8 +8,8 @@ import type { ActivityAction } from "@/lib/activity";
 const ACTION_LABELS: Record<ActivityAction, string> = {
   quote_created: "created a quote",
   quote_sent: "sent a quote to the client",
-  quote_approved: "Client approved a quote",
-  quote_declined: "Client declined a quote",
+  quote_approved: "approved the quote",
+  quote_declined: "declined the quote",
   invoice_created: "created an invoice",
   invoice_marked_paid: "marked an invoice as paid",
   teammate_invited: "invited a teammate",

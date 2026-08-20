@@ -16,7 +16,7 @@ export default async function JobsPage({
 
   let jobsQuery = supabase
     .from("jobs")
-    .select("id, title, status, created_at, clients(name), quotes(total)")
+    .select("id, title, status, assigned_to, created_at, clients(name), quotes(total)")
     .eq("workspace_id", membership.workspaceId)
     .order("created_at", { ascending: false });
 
@@ -34,6 +34,8 @@ export default async function JobsPage({
       .not("joined_at", "is", null),
   ]);
 
+  const emailByUserId = new Map((members ?? []).map((m) => [m.user_id, m.invited_email]));
+
   const jobIds = (jobs ?? []).map((j) => j.id);
   const { data: allExpenses } = jobIds.length
     ? await supabase.from("job_expenses").select("job_id, amount").in("job_id", jobIds)
@@ -43,7 +45,7 @@ export default async function JobsPage({
     actualCostByJobId.set(e.job_id, (actualCostByJobId.get(e.job_id) ?? 0) + e.amount);
   }
 
-  const csvColumns = ["Client", "Job", "Status", "Quoted", "Actual cost", "Profit", "Created"];
+  const csvColumns = ["Client", "Job", "Status", "Assigned to", "Quoted", "Actual cost", "Profit", "Created"];
   const csvRows = (jobs ?? []).map((j) => {
     const client = Array.isArray(j.clients) ? j.clients[0] : j.clients;
     const quote = Array.isArray(j.quotes) ? j.quotes[0] : j.quotes;
@@ -53,6 +55,7 @@ export default async function JobsPage({
       client?.name ?? "Unknown client",
       j.title,
       j.status,
+      j.assigned_to ? emailByUserId.get(j.assigned_to) ?? "Unknown" : "Unassigned",
       quoted.toFixed(2),
       actual.toFixed(2),
       (quoted - actual).toFixed(2),
@@ -104,6 +107,7 @@ export default async function JobsPage({
               <th className="px-4 py-2.5 font-semibold">Job</th>
               <th className="px-4 py-2.5 font-semibold">Client</th>
               <th className="px-4 py-2.5 font-semibold">Status</th>
+              {membership.role === "owner" && <th className="px-4 py-2.5 font-semibold">Assigned to</th>}
               <th className="px-4 py-2.5 font-semibold">Created</th>
             </tr>
           </thead>
@@ -119,13 +123,18 @@ export default async function JobsPage({
                   </td>
                   <td className="px-4 py-2.5 text-ink-soft">{client?.name ?? "Unknown client"}</td>
                   <td className="px-4 py-2.5 capitalize text-ink-soft">{j.status}</td>
+                  {membership.role === "owner" && (
+                    <td className="px-4 py-2.5 text-ink-soft">
+                      {j.assigned_to ? emailByUserId.get(j.assigned_to) ?? "Unknown" : "Unassigned"}
+                    </td>
+                  )}
                   <td className="px-4 py-2.5 text-ink-faint">{formatDate(j.created_at)}</td>
                 </tr>
               );
             })}
             {jobs?.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={membership.role === "owner" ? 5 : 4} className="px-4 py-6 text-center text-ink-faint">
                   {membership.role === "owner" ? "No jobs yet." : "No jobs assigned to you yet."}
                 </td>
               </tr>
