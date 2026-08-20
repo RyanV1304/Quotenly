@@ -18,8 +18,11 @@ export async function createQuote(formData: FormData) {
   const notes = String(formData.get("notes") || "").trim() || null;
   const items = parseLineItems(String(formData.get("items") || "[]"));
 
-  if (!clientId || items.length === 0) {
-    redirect("/app/quotes/new?error=" + encodeURIComponent("Pick a client and add at least one line item."));
+  if (!clientId) {
+    redirect("/app/quotes/new?error=" + encodeURIComponent("Pick a client."));
+  }
+  if (items.length === 0) {
+    redirect("/app/quotes/new?error=" + encodeURIComponent("Add at least one line item with a description."));
   }
 
   const { subtotal, total } = computeTotals(items, taxRate);

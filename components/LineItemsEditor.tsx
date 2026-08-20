@@ -100,6 +100,7 @@ export default function LineItemsEditor({
               value={row.description}
               onChange={(e) => updateRow(i, { description: e.target.value })}
               placeholder="Description"
+              required
               className="input col-span-5 py-1.5"
             />
             <select
