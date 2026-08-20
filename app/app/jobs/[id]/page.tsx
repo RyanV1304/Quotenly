@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { uploadJobPhoto, deleteJobPhoto, addJobExpense, deleteJobExpense, updateJobStatus } from "@/app/actions/jobs";
 import { formatCurrency, formatDate } from "@/lib/format";
+import FileUploadSquare from "@/components/FileUploadSquare";
 
 export default async function JobDetailPage({
   params,
@@ -94,8 +95,8 @@ export default async function JobDetailPage({
 
       <section>
         <h2 className="font-display text-lg font-bold text-ink">Photos</h2>
-        <form action={uploadAction} className="mt-3 flex items-center gap-2">
-          <input name="photo" type="file" accept="image/*" required className="text-sm text-ink-soft" />
+        <form action={uploadAction} className="mt-3 flex items-center gap-3">
+          <FileUploadSquare name="photo" accept="image/*" required />
           <button type="submit" className="btn-secondary shrink-0">
             Upload
           </button>

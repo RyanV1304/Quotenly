@@ -4,6 +4,7 @@ import { requireMembership } from "@/lib/workspace";
 import { updateWorkspaceSettings, transferOwnership } from "@/app/actions/settings";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import FileUploadSquare from "@/components/FileUploadSquare";
 
 const FEATURE_GUIDE: { title: string; body: string }[] = [
   {
@@ -116,14 +117,16 @@ export default async function SettingsPage({
             <input name="businessName" defaultValue={membership.workspaceName} className="input" />
           </label>
 
-          <label className="field-label">
+          <div className="field-label">
             Logo
-            {branding?.logo_url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={branding.logo_url} alt="Current logo" className="mb-1 h-12 w-auto" />
-            )}
-            <input name="logo" type="file" accept="image/*" className="text-sm text-ink-soft" />
-          </label>
+            <div className="flex items-center gap-3">
+              {branding?.logo_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={branding.logo_url} alt="Current logo" className="h-16 w-16 rounded-lg border border-line object-contain bg-bg-white p-1" />
+              )}
+              <FileUploadSquare name="logo" accept="image/*" label="Click to upload" />
+            </div>
+          </div>
 
           <label className="field-label">
             Business address
