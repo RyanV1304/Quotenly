@@ -19,7 +19,11 @@ export default async function JobDetailPage({
   const supabase = await createClient();
 
   const [{ data: job }, { data: photos }, { data: expenses }] = await Promise.all([
-    supabase.from("jobs").select("*, clients(id, name), quotes(id, total), invoices(id, total)").eq("id", id).single(),
+    supabase
+      .from("jobs")
+      .select("*, clients(id, name), quotes(id, total, status), invoices(id, total, status)")
+      .eq("id", id)
+      .single(),
     supabase.from("job_photos").select("*").eq("job_id", id).order("created_at", { ascending: false }),
     supabase.from("job_expenses").select("*").eq("job_id", id).order("date", { ascending: false }),
   ]);
@@ -29,6 +33,7 @@ export default async function JobDetailPage({
 
   const client = Array.isArray(job.clients) ? job.clients[0] : job.clients;
   const quote = Array.isArray(job.quotes) ? job.quotes[0] : job.quotes;
+  const invoice = Array.isArray(job.invoices) ? job.invoices[0] : job.invoices;
 
   const uploadAction = uploadJobPhoto.bind(null, id);
   const expenseAction = addJobExpense.bind(null, id);
@@ -87,11 +92,22 @@ export default async function JobDetailPage({
         </div>
       )}
 
-      {!quote && (
-        <p className="text-sm text-ink-faint">
-          This job isn&apos;t linked to a quote yet, so &quot;Quoted&quot; will show as $0 until one is.
-        </p>
-      )}
+      <div className="flex flex-wrap items-center gap-3 text-sm">
+        {quote ? (
+          <Link href={`/app/quotes/${quote.id}`} className="btn-link">
+            View linked quote ({formatCurrency(quote.total)}, {quote.status})
+          </Link>
+        ) : (
+          <span className="text-ink-faint">
+            Not linked to a quote yet — &quot;Quoted&quot; shows as $0 until one is.
+          </span>
+        )}
+        {invoice && (
+          <Link href={`/app/invoices/${invoice.id}`} className="btn-link">
+            View linked invoice ({formatCurrency(invoice.total)}, {invoice.status})
+          </Link>
+        )}
+      </div>
 
       <section>
         <h2 className="font-display text-lg font-bold text-ink">Photos</h2>

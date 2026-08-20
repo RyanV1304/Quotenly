@@ -57,6 +57,24 @@ export async function createQuote(formData: FormData) {
     }))
   );
 
+  const jobChoice = String(formData.get("job_choice") || "");
+  if (jobChoice && jobChoice !== "new") {
+    await supabase
+      .from("jobs")
+      .update({ quote_id: quote.id })
+      .eq("id", jobChoice)
+      .eq("client_id", clientId)
+      .is("quote_id", null);
+  } else {
+    await supabase.from("jobs").insert({
+      workspace_id: membership.workspaceId,
+      client_id: clientId,
+      assigned_to: assignedTo,
+      quote_id: quote.id,
+      title: items[0]?.description ?? "New job",
+    });
+  }
+
   await logActivity(membership.workspaceId, membership.userId, "quote_created", quote.id);
 
   redirect(`/app/quotes/${quote.id}`);
@@ -249,6 +267,8 @@ export async function convertToInvoice(quoteId: string) {
       }))
     );
   }
+
+  await supabase.from("jobs").update({ invoice_id: invoice!.id }).eq("quote_id", quoteId);
 
   await logActivity(membership.workspaceId, membership.userId, "invoice_created", invoice!.id);
 
