@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
+import { logActivity } from "@/lib/activity";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -79,13 +80,19 @@ export async function approveQuote(token: string, formData: FormData) {
   }
 
   await supabase.rpc("approve_quote_by_token", { p_token: token, p_signature_url: signatureUrl });
+  if (quote) await logActivity(quote.workspace_id, null, "quote_approved", quote.id);
   await notifyQuoteDecision(token, "approved");
   revalidatePath(`/quote/${token}`);
 }
 
 export async function declineQuote(token: string) {
   const supabase = await createClient();
+  const admin = createAdminClient();
+
+  const { data: quote } = await admin.from("quotes").select("id, workspace_id").eq("share_token", token).maybeSingle();
+
   await supabase.rpc("decline_quote_by_token", { p_token: token });
+  if (quote) await logActivity(quote.workspace_id, null, "quote_declined", quote.id);
   await notifyQuoteDecision(token, "declined");
   revalidatePath(`/quote/${token}`);
 }

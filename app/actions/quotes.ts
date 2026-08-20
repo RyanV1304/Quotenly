@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { computeTotals, parseLineItems } from "@/lib/calc";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
+import { logActivity } from "@/lib/activity";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -52,6 +53,8 @@ export async function createQuote(formData: FormData) {
       sort_order: i,
     }))
   );
+
+  await logActivity(membership.workspaceId, membership.userId, "quote_created", quote.id);
 
   redirect(`/app/quotes/${quote.id}`);
 }
@@ -120,6 +123,8 @@ export async function sendQuote(quoteId: string) {
       // status is already updated; owner can share the link manually if email fails
     }
   }
+
+  await logActivity(membership.workspaceId, membership.userId, "quote_sent", quoteId);
 
   revalidatePath(`/app/quotes/${quoteId}`);
   redirect(`/app/quotes/${quoteId}`);
@@ -241,6 +246,8 @@ export async function convertToInvoice(quoteId: string) {
       }))
     );
   }
+
+  await logActivity(membership.workspaceId, membership.userId, "invoice_created", invoice!.id);
 
   redirect(`/app/invoices/${invoice!.id}`);
 }

@@ -7,11 +7,12 @@ import StatusBadge from "@/components/StatusBadge";
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string }>;
+  searchParams: Promise<{ success?: string; period?: string }>;
 }) {
   const membership = await requireMembership();
   const supabase = await createClient();
-  const { success } = await searchParams;
+  const { success, period: periodParam } = await searchParams;
+  const period = periodParam === "year" ? "year" : "month";
   const ownershipBanner = success === "ownership-transferred" && (
     <p className="alert-success">Ownership was transferred. Your role has been updated.</p>
   );
@@ -80,6 +81,32 @@ export default async function DashboardPage({
     };
   });
 
+  const periodStart = new Date();
+  if (period === "year") {
+    periodStart.setMonth(0, 1);
+  } else {
+    periodStart.setDate(1);
+  }
+  periodStart.setHours(0, 0, 0, 0);
+
+  const { data: periodJobs } = await supabase
+    .from("jobs")
+    .select("id, quotes(total)")
+    .eq("workspace_id", membership.workspaceId)
+    .gte("created_at", periodStart.toISOString());
+
+  const periodJobIds = (periodJobs ?? []).map((j) => j.id);
+  const { data: periodExpenses } = periodJobIds.length
+    ? await supabase.from("job_expenses").select("job_id, amount").in("job_id", periodJobIds)
+    : { data: [] as { job_id: string; amount: number }[] };
+
+  const totalQuoted = (periodJobs ?? []).reduce((sum, j) => {
+    const quote = Array.isArray(j.quotes) ? j.quotes[0] : j.quotes;
+    return sum + (quote?.total ?? 0);
+  }, 0);
+  const totalActualCost = (periodExpenses ?? []).reduce((sum, e) => sum + e.amount, 0);
+  const totalProfit = totalQuoted - totalActualCost;
+
   return (
     <div className="flex flex-col gap-10">
       <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Dashboard</h1>
@@ -94,6 +121,43 @@ export default async function DashboardPage({
           <p className="text-sm text-ink-soft">Paid this month</p>
           <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalPaidThisMonth)}</p>
         </div>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-lg font-bold text-ink">Profit</h2>
+          <div className="flex gap-1 rounded-lg border border-line bg-bg-white p-1 text-sm">
+            <Link
+              href="/app/dashboard?period=month"
+              className={`rounded-md px-3 py-1 font-medium ${period === "month" ? "bg-brand text-white" : "text-ink-soft"}`}
+            >
+              This month
+            </Link>
+            <Link
+              href="/app/dashboard?period=year"
+              className={`rounded-md px-3 py-1 font-medium ${period === "year" ? "bg-brand text-white" : "text-ink-soft"}`}
+            >
+              This year
+            </Link>
+          </div>
+        </div>
+        <div className="mt-3 grid grid-cols-3 gap-4">
+          <div className="rounded-lg border border-line bg-bg-white p-4">
+            <p className="text-xs text-ink-faint">Total quoted</p>
+            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(totalQuoted)}</p>
+          </div>
+          <div className="rounded-lg border border-line bg-bg-white p-4">
+            <p className="text-xs text-ink-faint">Actual costs</p>
+            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(totalActualCost)}</p>
+          </div>
+          <div className="rounded-lg border border-line bg-bg-white p-4">
+            <p className="text-xs text-ink-faint">Profit</p>
+            <p className={`font-mono mt-1 text-lg font-bold ${totalProfit < 0 ? "text-danger" : "text-success"}`}>
+              {formatCurrency(totalProfit)}
+            </p>
+          </div>
+        </div>
+        <p className="mt-2 text-xs text-ink-faint">Based on jobs created in this period, via the Jobs page.</p>
       </div>
 
       <div>

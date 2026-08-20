@@ -6,3 +6,14 @@ export function formatDate(iso: string | null) {
   if (!iso) return "-";
   return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 }
+
+export function formatDateTime(iso: string | null) {
+  if (!iso) return "-";
+  return new Date(iso).toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}

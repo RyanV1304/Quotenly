@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
+import ExportCsvButton from "@/components/ExportCsvButton";
 
 export default async function InvoicesPage() {
   const membership = await requireMembership();
@@ -13,13 +14,36 @@ export default async function InvoicesPage() {
     .select("id, invoice_number, status, total, due_date, created_at, clients(name)")
     .order("created_at", { ascending: false });
 
+  const invoiceIds = (invoices ?? []).map((inv) => inv.id);
+  const { data: linkedJobs } = invoiceIds.length
+    ? await supabase.from("jobs").select("invoice_id, title").in("invoice_id", invoiceIds)
+    : { data: [] as { invoice_id: string | null; title: string }[] };
+  const jobTitleByInvoiceId = new Map((linkedJobs ?? []).map((j) => [j.invoice_id, j.title]));
+
+  const csvColumns = ["Client", "Job", "Invoice #", "Status", "Total", "Due date", "Created"];
+  const csvRows = (invoices ?? []).map((inv) => {
+    const client = Array.isArray(inv.clients) ? inv.clients[0] : inv.clients;
+    return [
+      client?.name ?? "Unknown client",
+      jobTitleByInvoiceId.get(inv.id) ?? "",
+      inv.invoice_number ? `INV-${inv.invoice_number}` : "",
+      inv.status,
+      inv.total.toFixed(2),
+      inv.due_date ?? "",
+      inv.created_at.slice(0, 10),
+    ];
+  });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoices</h1>
-        <Link href="/app/quotes" className="btn-primary">
-          Add invoice
-        </Link>
+        <div className="flex gap-2">
+          <ExportCsvButton filename="invoices.csv" columns={csvColumns} rows={csvRows} />
+          <Link href="/app/quotes" className="btn-primary">
+            Add invoice
+          </Link>
+        </div>
       </div>
       <p className="-mt-4 text-sm text-ink-soft">
         Invoices are created from approved quotes. Pick a quote on the next page to convert it.

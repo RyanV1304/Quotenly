@@ -44,6 +44,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               {membership.workspaceName} &middot; <span className="capitalize">{membership.role}</span>
             </span>
             {membership.role === "owner" && (
+              <Link href="/app/activity" className="font-medium text-ink-soft transition-colors hover:text-ink">
+                Activity
+              </Link>
+            )}
+            {membership.role === "owner" && (
               <Link
                 href="/app/settings"
                 title="Settings"
@@ -86,6 +91,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                   {item.label}
                 </Link>
               ))}
+              {membership.role === "owner" && (
+                <Link href="/app/activity" className="rounded-md px-3 py-2 hover:bg-brand-tint">
+                  Activity
+                </Link>
+              )}
               {membership.role === "owner" && (
                 <Link href="/app/settings" className="rounded-md px-3 py-2 hover:bg-brand-tint">
                   Settings

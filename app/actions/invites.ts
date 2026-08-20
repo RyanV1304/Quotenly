@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireMembership } from "@/lib/workspace";
 import { validatePassword } from "@/lib/validation";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
+import { logActivity } from "@/lib/activity";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -76,6 +77,7 @@ export async function sendInvite(formData: FormData) {
   }
 
   await sendInviteEmail(email, membership.workspaceName, membership.email, invite!.token);
+  await logActivity(membership.workspaceId, membership.userId, "teammate_invited");
   revalidatePath("/app/settings/team");
   redirect("/app/settings/team");
 }
@@ -172,6 +174,8 @@ export async function removeTeammate(memberId: string) {
         .eq("assigned_to", member.user_id),
     ]);
   }
+
+  await logActivity(membership.workspaceId, membership.userId, "teammate_removed", member?.user_id ?? null);
 
   revalidatePath("/app/settings/team");
   redirect("/app/settings/team");

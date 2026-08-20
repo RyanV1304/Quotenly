@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
-import { updateClientRecord } from "@/app/actions/clients";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { updateClientRecord, addClientNote, deleteClientNote } from "@/app/actions/clients";
+import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
 
 export default async function ClientDetailPage({
@@ -34,10 +34,11 @@ export default async function ClientDetailPage({
     invoicesQuery = invoicesQuery.eq("assigned_to", membership.userId);
   }
 
-  const [{ data: client }, { data: quotes }, { data: invoices }] = await Promise.all([
+  const [{ data: client }, { data: quotes }, { data: invoices }, { data: notes }] = await Promise.all([
     supabase.from("clients").select("*").eq("id", id).eq("workspace_id", membership.workspaceId).single(),
     quotesQuery,
     invoicesQuery,
+    supabase.from("client_notes").select("*").eq("client_id", id).order("created_at", { ascending: false }),
   ]);
 
   if (!client) notFound();
@@ -46,7 +47,14 @@ export default async function ClientDetailPage({
     notFound();
   }
 
+  const authorIds = Array.from(new Set((notes ?? []).map((n) => n.author_user_id).filter((v): v is string => !!v)));
+  const { data: authors } = authorIds.length
+    ? await supabase.from("users").select("id, name").in("id", authorIds)
+    : { data: [] as { id: string; name: string }[] };
+  const authorNameById = new Map((authors ?? []).map((a) => [a.id, a.name]));
+
   const updateAction = updateClientRecord.bind(null, id);
+  const addNoteAction = addClientNote.bind(null, id);
 
   return (
     <div className="flex flex-col gap-8">
@@ -75,6 +83,42 @@ export default async function ClientDetailPage({
         <div>Phone: {client.contact_phone || "-"}</div>
         <div className="col-span-2">Job address: {client.job_address || "-"}</div>
         {client.notes && <div className="col-span-2">Notes: {client.notes}</div>}
+      </div>
+
+      <div>
+        <h2 className="font-display text-lg font-bold text-ink">Notes</h2>
+        <p className="mt-1 text-sm text-ink-soft">Timestamped notes — e.g. &quot;Called 8/15 — prefers afternoon appointments&quot;.</p>
+        <form action={addNoteAction} className="mt-3 flex gap-2">
+          <textarea name="note_text" required placeholder="Add a note..." className="input flex-1" rows={2} />
+          <button type="submit" className="btn-secondary shrink-0 self-end">
+            Add note
+          </button>
+        </form>
+        {notes && notes.length > 0 ? (
+          <div className="mt-4 flex flex-col gap-2">
+            {notes.map((n) => {
+              const deleteAction = deleteClientNote.bind(null, id, n.id);
+              return (
+                <div key={n.id} className="rounded-lg border border-line bg-bg-white p-3 text-sm">
+                  <p className="text-ink">{n.note_text}</p>
+                  <div className="mt-1.5 flex items-center justify-between text-xs text-ink-faint">
+                    <span>
+                      {n.author_user_id ? authorNameById.get(n.author_user_id) ?? "Unknown" : "Unknown"} &middot;{" "}
+                      {formatDateTime(n.created_at)}
+                    </span>
+                    <form action={deleteAction}>
+                      <button type="submit" className="btn-link-danger">
+                        Delete
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-ink-faint">No notes yet.</p>
+        )}
       </div>
 
       <div>

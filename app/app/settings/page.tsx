@@ -12,7 +12,11 @@ const FEATURE_GUIDE: { title: string; body: string }[] = [
   },
   {
     title: "Quotes",
-    body: "Build a quote with line items (labor, materials, or a flat fee), then send it. The client gets a public link — no login needed — where they can Approve or Decline. Once approved, click \"Convert to invoice\" to turn it into a real invoice with one click.",
+    body: "Build a quote with line items (labor, materials, or a flat fee), then send it. The client gets a public link — no login needed — where they draw a signature and Approve, or Decline. Once approved, click \"Convert to invoice\" to turn it into a real invoice with one click.",
+  },
+  {
+    title: "Jobs",
+    body: "A job groups the photos, actual expenses, and profit tracking for a piece of work, separate from the quote/invoice paper trail. Optionally link a job to a quote to compare what you quoted against what it actually cost.",
   },
   {
     title: "Invoices",
@@ -45,6 +49,18 @@ const FEATURE_GUIDE: { title: string; body: string }[] = [
   {
     title: "Review requests",
     body: "Add your Google Business (or any) review link and turn on review requests, and Quotenly will automatically email the client a few days after you mark an invoice paid, asking them to leave a review.",
+  },
+  {
+    title: "Client notes",
+    body: "Each client page has a timestamped notes feed — separate from the single contact-notes field — so you can log things like \"Called 8/15 — prefers afternoon appointments\" over time instead of overwriting a single note.",
+  },
+  {
+    title: "CSV export",
+    body: "The Invoices and Jobs pages each have an Export CSV button that downloads the current list in accountant-friendly columns — handy for handing off to a bookkeeper or your own tax records.",
+  },
+  {
+    title: "Activity log (owner only)",
+    body: "The Activity page lists key events across the workspace — quotes created/sent/approved/declined, invoices created/paid, teammates invited/removed — with who did it and when.",
   },
 ];
 

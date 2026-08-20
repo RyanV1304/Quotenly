@@ -98,6 +98,14 @@ export interface JobExpense {
   created_at: string;
 }
 
+export interface ClientNote {
+  id: string;
+  client_id: string;
+  author_user_id: string | null;
+  note_text: string;
+  created_at: string;
+}
+
 export interface LineItemTemplate {
   id: string;
   workspace_id: string;

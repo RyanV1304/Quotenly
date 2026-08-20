@@ -55,3 +55,32 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
   revalidatePath(`/app/clients/${clientId}`);
   redirect(`/app/clients/${clientId}`);
 }
+
+export async function addClientNote(clientId: string, formData: FormData) {
+  const membership = await requireMembership();
+  const supabase = await createClient();
+
+  const noteText = String(formData.get("note_text") || "").trim();
+  if (!noteText) {
+    redirect(`/app/clients/${clientId}?error=${encodeURIComponent("Note can't be empty.")}`);
+  }
+
+  await supabase.from("client_notes").insert({
+    client_id: clientId,
+    author_user_id: membership.userId,
+    note_text: noteText,
+  });
+
+  revalidatePath(`/app/clients/${clientId}`);
+  redirect(`/app/clients/${clientId}`);
+}
+
+export async function deleteClientNote(clientId: string, noteId: string) {
+  await requireMembership();
+  const supabase = await createClient();
+
+  await supabase.from("client_notes").delete().eq("id", noteId);
+
+  revalidatePath(`/app/clients/${clientId}`);
+  redirect(`/app/clients/${clientId}`);
+}

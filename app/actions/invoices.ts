@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
 import { computeTotals, parseLineItems } from "@/lib/calc";
+import { logActivity } from "@/lib/activity";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -179,7 +180,7 @@ export async function editSentInvoice(invoiceId: string, formData: FormData) {
 }
 
 export async function markInvoicePaid(invoiceId: string, formData: FormData) {
-  await requireMembership();
+  const membership = await requireMembership();
   const supabase = await createClient();
 
   const paidDate = String(formData.get("paidDate") || "") || new Date().toISOString().slice(0, 10);
@@ -189,6 +190,8 @@ export async function markInvoicePaid(invoiceId: string, formData: FormData) {
     .from("invoices")
     .update({ status: "paid", paid_at: paidDate, paid_note: paidNote })
     .eq("id", invoiceId);
+
+  await logActivity(membership.workspaceId, membership.userId, "invoice_marked_paid", invoiceId);
 
   revalidatePath(`/app/invoices/${invoiceId}`);
 }

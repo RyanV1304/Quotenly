@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
 import { createJob } from "@/app/actions/jobs";
 import { formatDate } from "@/lib/format";
+import ExportCsvButton from "@/components/ExportCsvButton";
 
 export default async function JobsPage({
   searchParams,
@@ -15,7 +16,7 @@ export default async function JobsPage({
 
   let jobsQuery = supabase
     .from("jobs")
-    .select("id, title, status, created_at, clients(name)")
+    .select("id, title, status, created_at, clients(name), quotes(total)")
     .eq("workspace_id", membership.workspaceId)
     .order("created_at", { ascending: false });
 
@@ -33,9 +34,38 @@ export default async function JobsPage({
       .not("joined_at", "is", null),
   ]);
 
+  const jobIds = (jobs ?? []).map((j) => j.id);
+  const { data: allExpenses } = jobIds.length
+    ? await supabase.from("job_expenses").select("job_id, amount").in("job_id", jobIds)
+    : { data: [] as { job_id: string; amount: number }[] };
+  const actualCostByJobId = new Map<string, number>();
+  for (const e of allExpenses ?? []) {
+    actualCostByJobId.set(e.job_id, (actualCostByJobId.get(e.job_id) ?? 0) + e.amount);
+  }
+
+  const csvColumns = ["Client", "Job", "Status", "Quoted", "Actual cost", "Profit", "Created"];
+  const csvRows = (jobs ?? []).map((j) => {
+    const client = Array.isArray(j.clients) ? j.clients[0] : j.clients;
+    const quote = Array.isArray(j.quotes) ? j.quotes[0] : j.quotes;
+    const quoted = quote?.total ?? 0;
+    const actual = actualCostByJobId.get(j.id) ?? 0;
+    return [
+      client?.name ?? "Unknown client",
+      j.title,
+      j.status,
+      quoted.toFixed(2),
+      actual.toFixed(2),
+      (quoted - actual).toFixed(2),
+      j.created_at.slice(0, 10),
+    ];
+  });
+
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Jobs</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Jobs</h1>
+        <ExportCsvButton filename="jobs.csv" columns={csvColumns} rows={csvRows} />
+      </div>
 
       {error && <p className="alert-error">{error}</p>}
 
