@@ -29,6 +29,7 @@ export async function updateWorkspaceSettings(formData: FormData) {
   const invoiceNumberStart = Number(formData.get("invoiceNumberStart") || 1001);
   const reviewLink = String(formData.get("reviewLink") || "").trim();
   const reviewRequestsEnabled = formData.get("reviewRequestsEnabled") === "on";
+  const overdueDigestEnabled = formData.get("overdueDigestEnabled") === "on";
   const logoFile = formData.get("logo") as File | null;
 
   const admin = createAdminClient();
@@ -69,6 +70,7 @@ export async function updateWorkspaceSettings(formData: FormData) {
     payment_instructions: paymentInstructions || null,
     review_link: reviewLink || null,
     review_requests_enabled: reviewRequestsEnabled,
+    overdue_digest_enabled: overdueDigestEnabled,
   };
   if (logoUrl) updatePayload.logo_url = logoUrl;
 

@@ -63,6 +63,10 @@ const FEATURE_GUIDE: { title: string; body: string }[] = [
     title: "Activity log (owner only)",
     body: "The Activity page lists key events across the workspace — quotes created/sent/approved/declined, invoices created/paid, teammates invited/removed — with who did it and when.",
   },
+  {
+    title: "Weekly overdue-invoice digest",
+    body: "Every Monday, if you have any overdue invoices, you'll get an email with the count, total amount overdue, and a list of up to 10 clients with the amount and days overdue. No email is sent if nothing is overdue. Turn it off in Business Profile.",
+  },
 ];
 
 export default async function SettingsPage({
@@ -212,6 +216,20 @@ export default async function SettingsPage({
               placeholder="https://g.page/r/your-business/review"
               className="input"
             />
+          </label>
+
+          <div className="my-1 h-px bg-line" />
+
+          <h3 className="text-sm font-semibold text-ink">Weekly overdue-invoice digest</h3>
+
+          <label className="flex items-center gap-2 text-sm font-medium text-ink">
+            <input
+              type="checkbox"
+              name="overdueDigestEnabled"
+              defaultChecked={branding?.overdue_digest_enabled ?? true}
+              className="rounded"
+            />
+            Email me a Monday summary of overdue invoices
           </label>
 
           <button type="submit" className="btn-primary w-fit">

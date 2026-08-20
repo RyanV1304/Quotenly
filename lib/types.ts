@@ -54,6 +54,7 @@ export interface WorkspaceBranding {
   next_invoice_number: number;
   review_link: string | null;
   review_requests_enabled: boolean;
+  overdue_digest_enabled: boolean;
 }
 
 export interface Client {
