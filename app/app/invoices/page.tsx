@@ -5,14 +5,25 @@ import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
 import ExportCsvButton from "@/components/ExportCsvButton";
 
-export default async function InvoicesPage() {
+const STATUS_OPTIONS = ["draft", "sent", "viewed", "overdue", "paid"] as const;
+
+export default async function InvoicesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
   const membership = await requireMembership();
+  const { status: statusFilter } = await searchParams;
   const supabase = await createClient();
 
-  const { data: invoices } = await supabase
+  let invoicesQuery = supabase
     .from("invoices")
     .select("id, invoice_number, status, total, due_date, created_at, clients(name)")
     .order("created_at", { ascending: false });
+  if (statusFilter && (STATUS_OPTIONS as readonly string[]).includes(statusFilter)) {
+    invoicesQuery = invoicesQuery.eq("status", statusFilter);
+  }
+  const { data: invoices } = await invoicesQuery;
 
   const invoiceIds = (invoices ?? []).map((inv) => inv.id);
   const { data: linkedJobs } = invoiceIds.length
@@ -39,7 +50,11 @@ export default async function InvoicesPage() {
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Invoices</h1>
         <div className="flex gap-2">
-          <ExportCsvButton filename="invoices.csv" columns={csvColumns} rows={csvRows} />
+          <ExportCsvButton
+            filename={statusFilter ? `invoices-${statusFilter}.csv` : "invoices.csv"}
+            columns={csvColumns}
+            rows={csvRows}
+          />
           <Link href="/app/quotes" className="btn-primary">
             Add invoice
           </Link>
@@ -48,6 +63,25 @@ export default async function InvoicesPage() {
       <p className="-mt-4 text-sm text-ink-soft">
         Invoices are created from approved quotes. Pick a quote on the next page to convert it.
       </p>
+
+      <form className="flex items-center gap-2">
+        <select name="status" defaultValue={statusFilter ?? ""} className="input w-40">
+          <option value="">All statuses</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s} value={s}>
+              {s[0].toUpperCase() + s.slice(1)}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className="btn-secondary">
+          Filter
+        </button>
+        {statusFilter && (
+          <Link href="/app/invoices" className="btn-link">
+            Clear
+          </Link>
+        )}
+      </form>
 
       <div className="overflow-x-auto rounded-lg border border-line">
         <table className="w-full text-left text-sm">
@@ -84,7 +118,11 @@ export default async function InvoicesPage() {
             {invoices?.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-4 py-6 text-center text-ink-faint">
-                  {membership.role === "owner" ? "No invoices yet." : "No invoices assigned to you yet."}
+                  {statusFilter
+                    ? `No ${statusFilter} invoices.`
+                    : membership.role === "owner"
+                      ? "No invoices yet."
+                      : "No invoices assigned to you yet."}
                 </td>
               </tr>
             )}

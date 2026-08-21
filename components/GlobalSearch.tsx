@@ -29,8 +29,8 @@ export default function GlobalSearch({ className = "" }: { className?: string })
   useEffect(() => {
     const q = query.trim();
     if (q.length < 2) return;
-    setLoading(true);
     const timeout = setTimeout(async () => {
+      setLoading(true);
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
         if (res.ok) {

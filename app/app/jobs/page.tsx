@@ -5,13 +5,15 @@ import { createJob } from "@/app/actions/jobs";
 import { formatDate } from "@/lib/format";
 import ExportCsvButton from "@/components/ExportCsvButton";
 
+const STATUS_OPTIONS = ["active", "completed"] as const;
+
 export default async function JobsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; status?: string }>;
 }) {
   const membership = await requireMembership();
-  const { error } = await searchParams;
+  const { error, status: statusFilter } = await searchParams;
   const supabase = await createClient();
 
   let jobsQuery = supabase
@@ -22,6 +24,9 @@ export default async function JobsPage({
 
   if (membership.role === "teammate") {
     jobsQuery = jobsQuery.eq("assigned_to", membership.userId);
+  }
+  if (statusFilter && (STATUS_OPTIONS as readonly string[]).includes(statusFilter)) {
+    jobsQuery = jobsQuery.eq("status", statusFilter);
   }
 
   const [{ data: jobs }, { data: clients }, { data: members }] = await Promise.all([
@@ -67,10 +72,33 @@ export default async function JobsPage({
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Jobs</h1>
-        <ExportCsvButton filename="jobs.csv" columns={csvColumns} rows={csvRows} />
+        <ExportCsvButton
+          filename={statusFilter ? `jobs-${statusFilter}.csv` : "jobs.csv"}
+          columns={csvColumns}
+          rows={csvRows}
+        />
       </div>
 
       {error && <p className="alert-error">{error}</p>}
+
+      <form className="flex items-center gap-2">
+        <select name="status" defaultValue={statusFilter ?? ""} className="input w-40">
+          <option value="">All statuses</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s} value={s}>
+              {s[0].toUpperCase() + s.slice(1)}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className="btn-secondary">
+          Filter
+        </button>
+        {statusFilter && (
+          <Link href="/app/jobs" className="btn-link">
+            Clear
+          </Link>
+        )}
+      </form>
 
       <details className="group rounded-lg border border-line bg-bg-white p-5">
         <summary className="cursor-pointer text-sm font-semibold text-ink">Add a job</summary>
@@ -135,7 +163,11 @@ export default async function JobsPage({
             {jobs?.length === 0 && (
               <tr>
                 <td colSpan={membership.role === "owner" ? 5 : 4} className="px-4 py-6 text-center text-ink-faint">
-                  {membership.role === "owner" ? "No jobs yet." : "No jobs assigned to you yet."}
+                  {statusFilter
+                    ? `No ${statusFilter} jobs.`
+                    : membership.role === "owner"
+                      ? "No jobs yet."
+                      : "No jobs assigned to you yet."}
                 </td>
               </tr>
             )}
