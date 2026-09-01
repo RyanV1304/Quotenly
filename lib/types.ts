@@ -27,6 +27,7 @@ export interface UserProfile {
   email: string;
   name: string;
   email_verified: boolean;
+  accepted_terms_at: string | null;
   created_at: string;
 }
 

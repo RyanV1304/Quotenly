@@ -6,8 +6,13 @@ import { redirect } from "next/navigation";
 
 export async function completeOnboarding(formData: FormData) {
   const businessName = String(formData.get("businessName") || "").trim();
+  const acceptedTerms = formData.get("acceptedTerms") === "on";
+
   if (!businessName) {
     redirect(`/onboarding?error=${encodeURIComponent("Business name is required.")}`);
+  }
+  if (!acceptedTerms) {
+    redirect(`/onboarding?error=${encodeURIComponent("You must agree to the Terms of Service and Privacy Policy.")}`);
   }
 
   const supabase = await createClient();
@@ -20,6 +25,8 @@ export async function completeOnboarding(formData: FormData) {
   }
 
   const admin = createAdminClient();
+
+  await admin.from("users").update({ accepted_terms_at: new Date().toISOString() }).eq("id", user.id);
 
   const { data: workspace, error: wsError } = await admin
     .from("workspaces")

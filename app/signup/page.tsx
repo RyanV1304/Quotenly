@@ -69,6 +69,19 @@ export default async function SignUpPage({
           Confirm password
           <input name="confirmPassword" type="password" required minLength={8} className="input" />
         </label>
+        <label className="flex items-start gap-2 text-sm text-ink-soft">
+          <input type="checkbox" name="acceptedTerms" required className="mt-0.5 rounded" />
+          <span>
+            I agree to the{" "}
+            <Link href="/terms" target="_blank" className="text-brand hover:underline">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" target="_blank" className="text-brand hover:underline">
+              Privacy Policy
+            </Link>
+          </span>
+        </label>
         <button type="submit" className="btn-primary mt-2">
           Create workspace
         </button>

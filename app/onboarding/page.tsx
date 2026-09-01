@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { completeOnboarding } from "@/app/actions/onboarding";
 import AuthShell from "@/components/AuthShell";
@@ -44,6 +45,19 @@ export default async function OnboardingPage({
         <label className="field-label">
           Business name
           <input name="businessName" required autoFocus className="input" placeholder="Acme Handyman Co." />
+        </label>
+        <label className="flex items-start gap-2 text-sm text-ink-soft">
+          <input type="checkbox" name="acceptedTerms" required className="mt-0.5 rounded" />
+          <span>
+            I agree to the{" "}
+            <Link href="/terms" target="_blank" className="text-brand hover:underline">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" target="_blank" className="text-brand hover:underline">
+              Privacy Policy
+            </Link>
+          </span>
         </label>
         <button type="submit" className="btn-primary mt-1">
           Create workspace

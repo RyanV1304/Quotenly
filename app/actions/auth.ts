@@ -37,6 +37,7 @@ export async function signUp(formData: FormData) {
   const password = String(formData.get("password") || "");
   const confirmPassword = String(formData.get("confirmPassword") || "");
   const businessName = String(formData.get("businessName") || "").trim();
+  const acceptedTerms = formData.get("acceptedTerms") === "on";
 
   const back = (error: string) =>
     redirect(`/signup${qs({ name, email, businessName, error })}`);
@@ -47,6 +48,7 @@ export async function signUp(formData: FormData) {
   if (password !== confirmPassword) back("Passwords don't match.");
   const passwordError = validatePassword(password);
   if (passwordError) back(passwordError);
+  if (!acceptedTerms) back("You must agree to the Terms of Service and Privacy Policy.");
 
   const admin = createAdminClient();
   const { data: created, error: createError } = await admin.auth.admin.createUser({
@@ -88,7 +90,7 @@ export async function signUp(formData: FormData) {
 
   const { data: profile } = await admin
     .from("users")
-    .insert({ id: created.user.id, email, name })
+    .insert({ id: created.user.id, email, name, accepted_terms_at: new Date().toISOString() })
     .select("verification_token")
     .single();
 
