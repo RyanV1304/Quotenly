@@ -135,6 +135,7 @@ export interface Quote {
   tax_rate: number;
   total: number;
   notes: string | null;
+  exclusions: string | null;
   signature_url: string | null;
   share_token: string;
   viewed_at: string | null;

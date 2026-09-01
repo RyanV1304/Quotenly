@@ -16,6 +16,7 @@ export async function createQuote(formData: FormData) {
   const assignedTo = String(formData.get("assigned_to") || "") || null;
   const taxRate = Number(formData.get("tax_rate") || 0);
   const notes = String(formData.get("notes") || "").trim() || null;
+  const exclusions = String(formData.get("exclusions") || "").trim() || null;
   const items = parseLineItems(String(formData.get("items") || "[]"));
 
   if (!clientId) {
@@ -36,6 +37,7 @@ export async function createQuote(formData: FormData) {
       subtotal,
       tax_rate: taxRate,
       notes,
+      exclusions,
       total,
     })
     .select("id")
@@ -87,12 +89,13 @@ export async function updateQuote(quoteId: string, formData: FormData) {
   const assignedTo = String(formData.get("assigned_to") || "") || null;
   const taxRate = Number(formData.get("tax_rate") || 0);
   const notes = String(formData.get("notes") || "").trim() || null;
+  const exclusions = String(formData.get("exclusions") || "").trim() || null;
   const items = parseLineItems(String(formData.get("items") || "[]"));
   const { subtotal, total } = computeTotals(items, taxRate);
 
   await supabase
     .from("quotes")
-    .update({ assigned_to: assignedTo, tax_rate: taxRate, subtotal, total, notes })
+    .update({ assigned_to: assignedTo, tax_rate: taxRate, subtotal, total, notes, exclusions })
     .eq("id", quoteId);
 
   await supabase.from("quote_line_items").delete().eq("quote_id", quoteId);

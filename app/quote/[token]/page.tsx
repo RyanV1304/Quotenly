@@ -90,6 +90,13 @@ export default async function PublicQuotePage({
           </div>
         )}
 
+        {quote.exclusions && (
+          <div className="rounded-lg border border-warning bg-warning-tint p-4 text-sm">
+            <p className="font-semibold text-warning">Not included:</p>
+            <p className="mt-1 whitespace-pre-line text-ink">{quote.exclusions}</p>
+          </div>
+        )}
+
         <div className="flex flex-col items-end gap-1 text-sm">
           <div className="font-mono text-ink-soft">Subtotal: {formatCurrency(quote.subtotal)}</div>
           <div className="font-mono text-lg font-bold text-ink">Total: {formatCurrency(quote.total)}</div>

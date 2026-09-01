@@ -123,6 +123,12 @@ export default async function QuoteDetailPage({
               <p className="mt-1 text-ink">{quote.notes}</p>
             </div>
           )}
+          {quote.exclusions && (
+            <div className="rounded-lg border border-line bg-bg-white p-4 text-sm">
+              <p className="text-ink-faint">Not included</p>
+              <p className="mt-1 text-ink">{quote.exclusions}</p>
+            </div>
+          )}
           {quote.signature_url && (
             <div className="rounded-lg border border-line bg-bg-white p-4 text-sm">
               <p className="text-ink-faint">Client signature</p>
@@ -159,6 +165,19 @@ export default async function QuoteDetailPage({
           <label className="field-label">
             Notes
             <textarea name="notes" defaultValue={quote.notes ?? ""} className="input" />
+          </label>
+
+          <label className="field-label">
+            Exclusions / What&apos;s not included
+            <textarea
+              name="exclusions"
+              defaultValue={quote.exclusions ?? ""}
+              className="input"
+              placeholder="e.g. Permits, drywall repair, paint touch-up"
+            />
+            <span className="text-xs font-normal text-ink-faint">
+              Optional. Shown to the client as &quot;Not included&quot;, separate from your notes above.
+            </span>
           </label>
 
           <button type="submit" className="btn-secondary w-fit">

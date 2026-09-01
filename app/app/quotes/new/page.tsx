@@ -121,6 +121,18 @@ export default async function NewQuotePage({
             <textarea name="notes" className="input" />
           </label>
 
+          <label className="field-label">
+            Exclusions / What&apos;s not included
+            <textarea
+              name="exclusions"
+              className="input"
+              placeholder="e.g. Permits, drywall repair, paint touch-up"
+            />
+            <span className="text-xs font-normal text-ink-faint">
+              Optional. Shown to the client as &quot;Not included&quot;, separate from your notes above.
+            </span>
+          </label>
+
           <button type="submit" className="btn-primary mt-2 w-fit">
             Save quote
           </button>
