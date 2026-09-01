@@ -59,6 +59,9 @@ export default async function QuoteDetailPage({
               Public link
             </a>
             <CopyLinkButton url={shareUrl} />
+            <a href={`/api/quotes/${id}/pdf`} className="btn-link" target="_blank" rel="noreferrer">
+              Download PDF
+            </a>
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
