@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div id="app-shell" className="flex min-h-screen flex-col bg-bg-white text-ink">
       <script
         dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem("quotenly-theme")||"system";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.getElementById("app-shell").setAttribute("data-theme","dark");}catch(e){}})();`,
+          __html: `(function(){try{var t=localStorage.getItem("quotenly-theme")||"light";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.getElementById("app-shell").setAttribute("data-theme","dark");}catch(e){}})();`,
         }}
       />
       <div className="h-1 w-full bg-brand" />

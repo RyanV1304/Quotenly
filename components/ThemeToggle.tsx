@@ -22,7 +22,7 @@ function applyTheme(theme: Theme) {
 
 function getStoredTheme(): Theme {
   if (typeof window === "undefined") return "system";
-  return (localStorage.getItem("quotenly-theme") as Theme | null) ?? "system";
+  return (localStorage.getItem("quotenly-theme") as Theme | null) ?? "light";
 }
 
 export default function ThemeToggle() {
