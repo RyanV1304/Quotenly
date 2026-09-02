@@ -22,7 +22,7 @@ function placeholderFor(pathname: string): string {
   if (pathname.startsWith("/app/clients")) return "Search clients...";
   if (pathname.startsWith("/app/quotes")) return "Search quotes...";
   if (pathname.startsWith("/app/invoices")) return "Search invoices...";
-  return "Search clients, quotes, invoices...";
+  return "Search...";
 }
 
 export default function GlobalSearch({ className = "" }: { className?: string }) {
