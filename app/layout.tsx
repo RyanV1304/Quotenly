@@ -9,7 +9,7 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quotenly.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://krewbill.vercel.app";
 const title = "Krewbill — Quote it. Send it. Get paid.";
 const description =
   "Quoting and invoicing for small trade crews. One flat price, no per-seat billing, no bloat.";
