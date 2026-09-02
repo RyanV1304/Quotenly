@@ -10,7 +10,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quotenly.vercel.app";
-const title = "Quotenly — Quote it. Send it. Get paid.";
+const title = "Krewbill — Quote it. Send it. Get paid.";
 const description =
   "Quoting and invoicing for small trade crews. One flat price, no per-seat billing, no bloat.";
 
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: title,
-    template: "%s | Quotenly",
+    template: "%s | Krewbill",
   },
   description,
   keywords: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Quotenly",
+    siteName: "Krewbill",
     title,
     description,
     locale: "en_US",

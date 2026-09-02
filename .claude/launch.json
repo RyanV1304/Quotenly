@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "quotenly-dev",
+      "name": "krewbill-dev",
       "url": "http://localhost:3000"
     }
   ]

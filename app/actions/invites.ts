@@ -22,8 +22,8 @@ async function sendInviteEmail(email: string, workspaceName: string, inviterEmai
     await getResend().emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: `You've been invited to join ${workspaceName} on Quotenly`,
-      html: `<p>${inviterEmail} invited you to join <strong>${workspaceName}</strong> on Quotenly.</p><p><a href="${url}">Accept your invite</a></p>`,
+      subject: `You've been invited to join ${workspaceName} on Krewbill`,
+      html: `<p>${inviterEmail} invited you to join <strong>${workspaceName}</strong> on Krewbill.</p><p><a href="${url}">Accept your invite</a></p>`,
     });
   } catch {
     // invite row exists regardless; owner can resend if email delivery failed

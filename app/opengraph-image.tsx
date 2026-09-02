@@ -48,7 +48,7 @@ export default function OgImage() {
               />
             </svg>
           </div>
-          <div style={{ color: "#fff", fontSize: 36, fontWeight: 700 }}>Quotenly</div>
+          <div style={{ color: "#fff", fontSize: 36, fontWeight: 700 }}>Krewbill</div>
         </div>
         <div
           style={{

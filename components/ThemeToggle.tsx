@@ -22,7 +22,7 @@ function applyTheme(theme: Theme) {
 
 function getStoredTheme(): Theme {
   if (typeof window === "undefined") return "system";
-  return (localStorage.getItem("quotenly-theme") as Theme | null) ?? "light";
+  return (localStorage.getItem("krewbill-theme") as Theme | null) ?? "light";
 }
 
 export default function ThemeToggle() {
@@ -39,7 +39,7 @@ export default function ThemeToggle() {
 
   function select(next: Theme) {
     setTheme(next);
-    localStorage.setItem("quotenly-theme", next);
+    localStorage.setItem("krewbill-theme", next);
   }
 
   const options: { value: Theme; label: string }[] = [

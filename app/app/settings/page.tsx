@@ -21,7 +21,7 @@ const FEATURE_GUIDE: { title: string; body: string }[] = [
   },
   {
     title: "Invoices",
-    body: "Invoices track payment status: draft, sent, viewed, overdue, or paid. Clients view them at a public link and see your payment instructions — Quotenly doesn't collect payment itself, so mark an invoice \"Paid\" yourself once you've been paid. You can edit a sent invoice's line items later; the client is automatically re-notified and the \"viewed\" status resets.",
+    body: "Invoices track payment status: draft, sent, viewed, overdue, or paid. Clients view them at a public link and see your payment instructions — Krewbill doesn't collect payment itself, so mark an invoice \"Paid\" yourself once you've been paid. You can edit a sent invoice's line items later; the client is automatically re-notified and the \"viewed\" status resets.",
   },
   {
     title: "Copy link",
@@ -49,7 +49,7 @@ const FEATURE_GUIDE: { title: string; body: string }[] = [
   },
   {
     title: "Review requests",
-    body: "Add your Google Business (or any) review link and turn on review requests, and Quotenly will automatically email the client a few days after you mark an invoice paid, asking them to leave a review.",
+    body: "Add your Google Business (or any) review link and turn on review requests, and Krewbill will automatically email the client a few days after you mark an invoice paid, asking them to leave a review.",
   },
   {
     title: "Client notes",
@@ -295,7 +295,7 @@ export default async function SettingsPage({
 
       <section className="rounded-lg border border-line bg-bg-white p-5">
         <h2 className="text-sm font-semibold text-ink">Feature guide</h2>
-        <p className="mt-1 text-sm text-ink-soft">Stuck on something? A quick rundown of what each part of Quotenly does.</p>
+        <p className="mt-1 text-sm text-ink-soft">Stuck on something? A quick rundown of what each part of Krewbill does.</p>
         <div className="mt-4 flex flex-col divide-y divide-line">
           {FEATURE_GUIDE.map((item) => (
             <details key={item.title} className="group py-2.5 first:pt-0 last:pb-0">

@@ -4,7 +4,7 @@ import MarketingFooter from "@/components/marketing/MarketingFooter";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How Quotenly collects, uses, and protects your data.",
+  description: "How Krewbill collects, uses, and protects your data.",
 };
 
 export default function PrivacyPage() {
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="font-display text-lg font-bold text-ink">1. What this covers</h2>
             <p className="mt-2">
-              This policy explains what information Quotenly (&quot;we&quot;, &quot;us&quot;) collects when you use
+              This policy explains what information Krewbill (&quot;we&quot;, &quot;us&quot;) collects when you use
               our quoting and invoicing service, how we use it, and the choices you have. It applies to workspace
               owners and teammates who create an account, and to the clients who view a quote or invoice through a
               link we send them.
@@ -38,7 +38,7 @@ export default function PrivacyPage() {
             </ul>
             <p className="mt-2">
               If you upload a business logo, we store that file. We do not collect payment card information —
-              Quotenly does not process payments.
+              Krewbill does not process payments.
             </p>
           </section>
 
@@ -93,12 +93,8 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="font-display text-lg font-bold text-ink">8. Contact</h2>
-            <p className="mt-2">
-              Questions about this policy or your data? Reach out to us at{" "}
-              <a href="mailto:support@quotenly.com" className="text-brand hover:underline">
-                support@quotenly.com
-              </a>
-              .
+            <p className="mt-2 italic text-ink-faint">
+              A support contact email will be added here once our domain is verified.
             </p>
           </section>
         </div>

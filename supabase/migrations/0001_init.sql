@@ -1,4 +1,4 @@
--- Quotenly initial schema
+-- Krewbill initial schema
 create extension if not exists "pgcrypto";
 
 create type member_role as enum ('owner', 'teammate');

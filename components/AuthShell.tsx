@@ -28,7 +28,7 @@ export default function AuthShell({
 
         <div className="relative flex h-full flex-col justify-between p-10">
           <Link href="/" className="font-display text-lg font-bold tracking-tight text-white">
-            Quotenly
+            Krewbill
           </Link>
           <div>
             <p className="font-display max-w-sm text-2xl font-bold leading-tight tracking-[-0.02em] text-white">
@@ -46,7 +46,7 @@ export default function AuthShell({
           href="/"
           className="font-display absolute left-6 top-6 text-base font-bold tracking-tight text-ink hover:text-brand lg:hidden"
         >
-          Quotenly
+          Krewbill
         </Link>
 
         <div className="w-full max-w-sm">

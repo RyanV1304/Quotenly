@@ -6,7 +6,7 @@ import AuthShell from "@/components/AuthShell";
 
 export const metadata: Metadata = {
   title: "Log in",
-  description: "Log in to Quotenly to get back to your quotes and invoices.",
+  description: "Log in to Krewbill to get back to your quotes and invoices.",
 };
 
 export default async function SignInPage({

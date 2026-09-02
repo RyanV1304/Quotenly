@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div id="app-shell" className="flex min-h-screen flex-col bg-bg-white text-ink">
       <script
         dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem("quotenly-theme")||"light";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.getElementById("app-shell").setAttribute("data-theme","dark");}catch(e){}})();`,
+          __html: `(function(){try{var t=localStorage.getItem("krewbill-theme")||"light";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.getElementById("app-shell").setAttribute("data-theme","dark");}catch(e){}})();`,
         }}
       />
       <div className="h-1 w-full bg-brand" />
@@ -26,7 +26,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
           <div className="flex items-center gap-8">
             <Link href="/app/dashboard" className="font-display text-base font-bold tracking-tight text-ink">
-              Quotenly
+              Krewbill
             </Link>
             <nav className="hidden gap-6 text-sm font-medium md:flex">
               {navItems.map((item) => (

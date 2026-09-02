@@ -4,4 +4,4 @@ export function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Quotenly <onboarding@resend.dev>";
+export const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Krewbill <onboarding@resend.dev>";

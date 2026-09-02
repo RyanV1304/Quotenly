@@ -44,7 +44,7 @@ function Nav() {
     <header className="absolute inset-x-0 top-0 z-20">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <Link href="/" className="font-display text-lg font-bold tracking-tight text-white">
-          Quotenly
+          Krewbill
         </Link>
         <nav className="hidden items-center gap-8 text-sm font-medium text-white/75 sm:flex">
           <a href="#product" className="transition-colors hover:text-white">
@@ -115,7 +115,7 @@ function Hero() {
             Quote it. Send it. Get paid. Nothing else to learn.
           </h1>
           <p className="mx-auto mt-6 max-w-[52ch] text-lg leading-relaxed text-white/70">
-            Quotenly is quoting and invoicing built for small trade crews &mdash; one flat price, no
+            Krewbill is quoting and invoicing built for small trade crews &mdash; one flat price, no
             per-seat billing, no bloat.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -344,7 +344,7 @@ function Wedge() {
         </h2>
         <p className="mx-auto mt-5 max-w-[55ch] leading-relaxed text-ink-soft">
           Per-seat pricing means every teammate you add makes your software bill bigger, too.
-          Quotenly is one flat price for your whole crew &mdash; hire your fifth person or your
+          Krewbill is one flat price for your whole crew &mdash; hire your fifth person or your
           fifteenth, your bill doesn&apos;t move.
         </p>
         <div className="mx-auto mt-10 grid max-w-lg gap-3 sm:grid-cols-2">
@@ -354,7 +354,7 @@ function Wedge() {
             <p className="mt-1 text-sm text-ink-soft">Bill grows every time you hire.</p>
           </div>
           <div className="rounded-lg border border-brand bg-brand-tint p-5 text-left">
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand-dark">Quotenly</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-dark">Krewbill</p>
             <p className="font-display mt-2 text-2xl font-bold text-brand">One flat price</p>
             <p className="mt-1 text-sm text-ink-soft">Unlimited teammates, always.</p>
           </div>
@@ -462,19 +462,19 @@ function UseCases() {
 function Faq() {
   const faqs = [
     {
-      q: "Is Quotenly really free?",
+      q: "Is Krewbill really free?",
       a: "Yes, fully free with no feature caps, no usage limits, and no payment collection required during our launch period. No credit card needed to start.",
     },
     {
       q: "How many teammates can I invite?",
-      a: "As many as you need. Quotenly doesn't charge per seat &mdash; invite your entire crew at no extra cost.",
+      a: "As many as you need. Krewbill doesn't charge per seat &mdash; invite your entire crew at no extra cost.",
     },
     {
       q: "Do my clients need to create an account?",
       a: "No. Clients open a link to view and approve a quote or view an invoice &mdash; no sign-up required on their end.",
     },
     {
-      q: "Can I take payments through Quotenly?",
+      q: "Can I take payments through Krewbill?",
       a: "Not yet. Invoices show your payment instructions and track status manually. Online payment collection is on the roadmap.",
     },
     {
@@ -530,7 +530,7 @@ function Footer() {
     <footer className="border-t border-line bg-bg-white px-6 py-14">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 sm:flex-row sm:justify-between">
         <div>
-          <span className="font-display text-lg font-bold tracking-tight text-ink">Quotenly</span>
+          <span className="font-display text-lg font-bold tracking-tight text-ink">Krewbill</span>
           <p className="mt-3 max-w-xs text-sm text-ink-soft">
             Quoting and invoicing for small trade crews. Free during our launch period.
           </p>
@@ -569,7 +569,7 @@ function Footer() {
         </div>
       </div>
       <div className="mx-auto mt-10 max-w-6xl border-t border-line pt-6 text-center text-xs text-ink-faint">
-        &copy; {new Date().getFullYear()} Quotenly. All rights reserved.
+        &copy; {new Date().getFullYear()} Krewbill. All rights reserved.
       </div>
     </footer>
   );

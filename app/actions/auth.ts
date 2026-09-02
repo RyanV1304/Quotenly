@@ -23,8 +23,8 @@ async function sendVerificationEmail(email: string, name: string, token: string)
     await getResend().emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: "Verify your email for Quotenly",
-      html: `<p>Hi ${name || ""},</p><p>Confirm your email address to finish setting up Quotenly.</p><p><a href="${url}">Verify my email</a></p>`,
+      subject: "Verify your email for Krewbill",
+      html: `<p>Hi ${name || ""},</p><p>Confirm your email address to finish setting up Krewbill.</p><p><a href="${url}">Verify my email</a></p>`,
     });
   } catch {
     // non-blocking; user can resend from the in-app banner

@@ -134,7 +134,7 @@ export default async function InvitePage({
   return (
     <AuthShell
       eyebrow="You're invited"
-      title={`Join ${workspaceName ?? "your team"} on Quotenly`}
+      title={`Join ${workspaceName ?? "your team"} on Krewbill`}
       subtitle={
         isExistingAccountFlow
           ? `Log in as ${invite.email} to accept.`
