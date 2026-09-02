@@ -1,5 +1,15 @@
 import type { LineItemType } from "@/lib/types";
 
+const LINE_ITEM_TYPE_LABELS: Record<LineItemType, string> = {
+  labor: "Labor",
+  materials: "Materials",
+  flat_fee: "Flat fee",
+};
+
+export function lineItemTypeLabel(type: LineItemType): string {
+  return LINE_ITEM_TYPE_LABELS[type] ?? type;
+}
+
 export interface LineItemInput {
   description: string;
   type: LineItemType;

@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import type { Quote, LineItem, WorkspaceBranding, Client } from "@/lib/types";
+import { lineItemTypeLabel } from "@/lib/calc";
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 11, fontFamily: "Helvetica" },
@@ -74,7 +75,7 @@ export default function QuotePdf({
           {lineItems.map((li) => (
             <View key={li.id} style={styles.tableRow}>
               <Text style={styles.colDesc}>{li.description}</Text>
-              <Text style={{ ...styles.colType, textTransform: "capitalize" }}>{li.type}</Text>
+              <Text style={styles.colType}>{lineItemTypeLabel(li.type)}</Text>
               <Text style={styles.colQty}>{li.quantity}</Text>
               <Text style={styles.colRate}>${li.rate.toFixed(2)}</Text>
               <Text style={styles.colAmount}>${li.amount.toFixed(2)}</Text>

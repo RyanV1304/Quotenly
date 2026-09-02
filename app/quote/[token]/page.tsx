@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { approveQuote, declineQuote, markQuoteViewed } from "@/app/actions/public";
 import { formatCurrency } from "@/lib/format";
+import { lineItemTypeLabel } from "@/lib/calc";
 import StatusBadge from "@/components/StatusBadge";
 import SignaturePad from "@/components/SignaturePad";
 import type { LineItem } from "@/lib/types";
@@ -73,7 +74,7 @@ export default async function PublicQuotePage({
               {(lineItems as LineItem[] | null)?.map((li) => (
                 <tr key={li.id} className="bg-white">
                   <td className="px-4 py-2.5 text-ink">{li.description}</td>
-                  <td className="px-4 py-2.5 capitalize text-ink-soft">{li.type}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{lineItemTypeLabel(li.type)}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
                   <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
                   <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>

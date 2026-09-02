@@ -4,6 +4,7 @@ import { sendInvite, resendInvite, cancelInvite, removeTeammate } from "@/app/ac
 import { redirect } from "next/navigation";
 import { formatDate } from "@/lib/format";
 import Link from "next/link";
+import CopyLinkButton from "@/components/CopyLinkButton";
 
 export default async function TeamPage({
   searchParams,
@@ -75,7 +76,8 @@ export default async function TeamPage({
                     <td className="px-4 py-2.5 text-ink">{inv.email}</td>
                     <td className="px-4 py-2.5 text-ink-faint">Sent {formatDate(inv.created_at)}</td>
                     <td className="px-4 py-2.5 text-right">
-                      <form action={resendInvite.bind(null, inv.id)} className="inline">
+                      <CopyLinkButton url={`${process.env.NEXT_PUBLIC_APP_URL}/invite/${inv.token}`} />
+                      <form action={resendInvite.bind(null, inv.id)} className="ml-3 inline">
                         <button type="submit" className="btn-link mr-3">
                           Resend
                         </button>
