@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface SearchResult {
   id: string;
@@ -18,12 +18,20 @@ interface SearchResponse {
 
 const EMPTY: SearchResponse = { clients: [], quotes: [], invoices: [] };
 
+function placeholderFor(pathname: string): string {
+  if (pathname.startsWith("/app/clients")) return "Search clients...";
+  if (pathname.startsWith("/app/quotes")) return "Search quotes...";
+  if (pathname.startsWith("/app/invoices")) return "Search invoices...";
+  return "Search clients, quotes, invoices...";
+}
+
 export default function GlobalSearch({ className = "" }: { className?: string }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResponse>(EMPTY);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,7 +78,7 @@ export default function GlobalSearch({ className = "" }: { className?: string })
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => query.trim().length >= 2 && setOpen(true)}
-        placeholder="Search clients, quotes, invoices..."
+        placeholder={placeholderFor(pathname)}
         className="input h-9 w-full text-sm"
         aria-label="Search"
       />
