@@ -3,7 +3,16 @@ import type { MetadataRoute } from "next";
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://krewbill.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/login", "/signup", "/vs-jobber", "/vs-housecall-pro", "/privacy", "/terms"];
+  const routes = [
+    "",
+    "/login",
+    "/signup",
+    "/vs-jobber",
+    "/vs-housecall-pro",
+    "/best-invoicing-software-for-trades",
+    "/privacy",
+    "/terms",
+  ];
 
   return routes.map((route) => ({
     url: `${siteUrl}${route}`,
