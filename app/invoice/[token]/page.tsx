@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { markInvoiceViewed } from "@/app/actions/public";
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
+import PoweredByBadge from "@/components/PoweredByBadge";
 import type { LineItem } from "@/lib/types";
 
 export default async function PublicInvoicePage({ params }: { params: Promise<{ token: string }> }) {
@@ -97,6 +98,8 @@ export default async function PublicInvoicePage({ params }: { params: Promise<{ 
             </>
           )}
         </div>
+
+        <PoweredByBadge />
       </div>
     </div>
   );

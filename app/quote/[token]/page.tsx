@@ -5,6 +5,7 @@ import { formatCurrency } from "@/lib/format";
 import { lineItemTypeLabel } from "@/lib/calc";
 import StatusBadge from "@/components/StatusBadge";
 import SignaturePad from "@/components/SignaturePad";
+import PoweredByBadge from "@/components/PoweredByBadge";
 import type { LineItem } from "@/lib/types";
 
 export default async function PublicQuotePage({
@@ -136,6 +137,8 @@ export default async function PublicQuotePage({
             <p className="mt-3 text-ink-soft">You&apos;ve declined this quote.</p>
           )}
         </div>
+
+        <PoweredByBadge />
       </div>
     </div>
   );
