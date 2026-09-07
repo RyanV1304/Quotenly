@@ -56,6 +56,34 @@ export async function updateClientRecord(clientId: string, formData: FormData) {
   redirect(`/app/clients/${clientId}`);
 }
 
+export async function deleteClientRecord(clientId: string) {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/app/clients?error=" + encodeURIComponent("Only the workspace owner can delete clients."));
+  }
+  const supabase = await createClient();
+
+  const [{ count: quoteCount }, { count: invoiceCount }, { count: jobCount }] = await Promise.all([
+    supabase.from("quotes").select("id", { count: "exact", head: true }).eq("client_id", clientId),
+    supabase.from("invoices").select("id", { count: "exact", head: true }).eq("client_id", clientId),
+    supabase.from("jobs").select("id", { count: "exact", head: true }).eq("client_id", clientId),
+  ]);
+
+  if ((quoteCount ?? 0) > 0 || (invoiceCount ?? 0) > 0 || (jobCount ?? 0) > 0) {
+    redirect(
+      `/app/clients/${clientId}?error=${encodeURIComponent(
+        "This client has quotes, invoices, or jobs on record. Delete those first before deleting the client."
+      )}`
+    );
+  }
+
+  await supabase.from("client_notes").delete().eq("client_id", clientId);
+  await supabase.from("clients").delete().eq("id", clientId).eq("workspace_id", membership.workspaceId);
+
+  revalidatePath("/app/clients");
+  redirect("/app/clients");
+}
+
 export async function addClientNote(clientId: string, formData: FormData) {
   const membership = await requireMembership();
   const supabase = await createClient();

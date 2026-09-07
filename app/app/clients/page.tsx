@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
-import { createClientRecord } from "@/app/actions/clients";
+import { createClientRecord, deleteClientRecord } from "@/app/actions/clients";
+import DeleteButton from "@/components/DeleteButton";
 
 export default async function ClientsPage({
   searchParams,
@@ -60,26 +61,35 @@ export default async function ClientsPage({
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>
+              {membership.role === "owner" && <th className="w-8 px-2 py-2.5"></th>}
               <th className="px-4 py-2.5 font-semibold">Name</th>
               <th className="px-4 py-2.5 font-semibold">Contact</th>
               <th className="px-4 py-2.5 font-semibold">Job address</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-line">
-            {clients?.map((c) => (
-              <tr key={c.id} className="bg-bg-white">
-                <td className="px-4 py-2.5">
-                  <Link href={`/app/clients/${c.id}`} className="font-medium text-brand hover:underline">
-                    {c.name}
-                  </Link>
-                </td>
-                <td className="px-4 py-2.5 text-ink-soft">{c.contact_email || c.contact_phone || "-"}</td>
-                <td className="px-4 py-2.5 text-ink-soft">{c.job_address || "-"}</td>
-              </tr>
-            ))}
+            {clients?.map((c) => {
+              const deleteAction = deleteClientRecord.bind(null, c.id);
+              return (
+                <tr key={c.id} className="bg-bg-white">
+                  {membership.role === "owner" && (
+                    <td className="px-2 py-2.5">
+                      <DeleteButton action={deleteAction} itemLabel={c.name} />
+                    </td>
+                  )}
+                  <td className="px-4 py-2.5">
+                    <Link href={`/app/clients/${c.id}`} className="font-medium text-brand hover:underline">
+                      {c.name}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-2.5 text-ink-soft">{c.contact_email || c.contact_phone || "-"}</td>
+                  <td className="px-4 py-2.5 text-ink-soft">{c.job_address || "-"}</td>
+                </tr>
+              );
+            })}
             {clients?.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={membership.role === "owner" ? 4 : 3} className="px-4 py-6 text-center text-ink-faint">
                   No clients yet.
                 </td>
               </tr>
