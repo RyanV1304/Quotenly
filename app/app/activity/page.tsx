@@ -14,6 +14,8 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
   invoice_marked_paid: "marked an invoice as paid",
   teammate_invited: "invited a teammate",
   teammate_removed: "removed a teammate",
+  quote_deleted: "deleted a quote",
+  invoice_deleted: "deleted an invoice",
 };
 
 const ACTION_LINK: Partial<Record<ActivityAction, (id: string) => string>> = {

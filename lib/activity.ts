@@ -8,7 +8,9 @@ export type ActivityAction =
   | "invoice_created"
   | "invoice_marked_paid"
   | "teammate_invited"
-  | "teammate_removed";
+  | "teammate_removed"
+  | "quote_deleted"
+  | "invoice_deleted";
 
 export async function logActivity(
   workspaceId: string,

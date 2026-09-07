@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
-import { convertToInvoice } from "@/app/actions/quotes";
+import { convertToInvoice, deleteQuote } from "@/app/actions/quotes";
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
+import DeleteButton from "@/components/DeleteButton";
 
 export default async function QuotesPage() {
   const membership = await requireMembership();
@@ -33,6 +34,7 @@ export default async function QuotesPage() {
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>
+              {membership.role === "owner" && <th className="w-8 px-2 py-2.5"></th>}
               <th className="px-4 py-2.5 font-semibold">Client</th>
               <th className="px-4 py-2.5 font-semibold">Status</th>
               <th className="px-4 py-2.5 font-semibold">Total</th>
@@ -44,8 +46,14 @@ export default async function QuotesPage() {
             {quotes?.map((q) => {
               const client = Array.isArray(q.clients) ? q.clients[0] : q.clients;
               const convertAction = convertToInvoice.bind(null, q.id);
+              const deleteAction = deleteQuote.bind(null, q.id);
               return (
                 <tr key={q.id} className="bg-bg-white">
+                  {membership.role === "owner" && (
+                    <td className="px-2 py-2.5">
+                      <DeleteButton action={deleteAction} itemLabel={`quote for ${client?.name ?? "this client"}`} />
+                    </td>
+                  )}
                   <td className="px-4 py-2.5">
                     <Link href={`/app/quotes/${q.id}`} className="font-medium text-brand hover:underline">
                       {client?.name ?? "Unknown client"}
@@ -74,7 +82,7 @@ export default async function QuotesPage() {
             })}
             {quotes?.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={membership.role === "owner" ? 6 : 5} className="px-4 py-6 text-center text-ink-faint">
                   {membership.role === "owner" ? "No quotes yet." : "No quotes assigned to you yet."}
                 </td>
               </tr>

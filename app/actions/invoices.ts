@@ -195,3 +195,19 @@ export async function markInvoicePaid(invoiceId: string, formData: FormData) {
 
   revalidatePath(`/app/invoices/${invoiceId}`);
 }
+
+export async function deleteInvoice(invoiceId: string) {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/app/invoices?error=" + encodeURIComponent("Only the workspace owner can delete invoices."));
+  }
+  const supabase = await createClient();
+
+  await supabase.from("jobs").update({ invoice_id: null }).eq("invoice_id", invoiceId);
+  await supabase.from("invoices").delete().eq("id", invoiceId).eq("workspace_id", membership.workspaceId);
+
+  await logActivity(membership.workspaceId, membership.userId, "invoice_deleted", invoiceId);
+
+  revalidatePath("/app/invoices");
+  redirect("/app/invoices");
+}

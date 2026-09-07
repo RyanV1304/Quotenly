@@ -4,6 +4,8 @@ import { requireMembership } from "@/lib/workspace";
 import { formatCurrency, formatDate } from "@/lib/format";
 import StatusBadge from "@/components/StatusBadge";
 import ExportCsvButton from "@/components/ExportCsvButton";
+import DeleteButton from "@/components/DeleteButton";
+import { deleteInvoice } from "@/app/actions/invoices";
 
 const STATUS_OPTIONS = ["draft", "sent", "viewed", "overdue", "paid"] as const;
 
@@ -87,6 +89,7 @@ export default async function InvoicesPage({
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>
+              {membership.role === "owner" && <th className="w-8 px-2 py-2.5"></th>}
               <th className="px-4 py-2.5 font-semibold">#</th>
               <th className="px-4 py-2.5 font-semibold">Client</th>
               <th className="px-4 py-2.5 font-semibold">Status</th>
@@ -97,8 +100,17 @@ export default async function InvoicesPage({
           <tbody className="divide-y divide-line">
             {invoices?.map((inv) => {
               const client = Array.isArray(inv.clients) ? inv.clients[0] : inv.clients;
+              const deleteAction = deleteInvoice.bind(null, inv.id);
               return (
                 <tr key={inv.id} className="bg-bg-white">
+                  {membership.role === "owner" && (
+                    <td className="px-2 py-2.5">
+                      <DeleteButton
+                        action={deleteAction}
+                        itemLabel={inv.invoice_number ? `invoice INV-${inv.invoice_number}` : "this invoice"}
+                      />
+                    </td>
+                  )}
                   <td className="font-mono px-4 py-2.5 text-ink-faint">
                     {inv.invoice_number ? `INV-${inv.invoice_number}` : "—"}
                   </td>
@@ -117,7 +129,7 @@ export default async function InvoicesPage({
             })}
             {invoices?.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={membership.role === "owner" ? 6 : 5} className="px-4 py-6 text-center text-ink-faint">
                   {statusFilter
                     ? `No ${statusFilter} invoices.`
                     : membership.role === "owner"

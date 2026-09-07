@@ -202,6 +202,22 @@ export async function duplicateQuote(quoteId: string) {
   redirect(`/app/quotes/${newQuote!.id}`);
 }
 
+export async function deleteQuote(quoteId: string) {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/app/quotes?error=" + encodeURIComponent("Only the workspace owner can delete quotes."));
+  }
+  const supabase = await createClient();
+
+  await supabase.from("jobs").update({ quote_id: null }).eq("quote_id", quoteId);
+  await supabase.from("quotes").delete().eq("id", quoteId).eq("workspace_id", membership.workspaceId);
+
+  await logActivity(membership.workspaceId, membership.userId, "quote_deleted", quoteId);
+
+  revalidatePath("/app/quotes");
+  redirect("/app/quotes");
+}
+
 export async function convertToInvoice(quoteId: string) {
   const membership = await requireMembership();
   const supabase = await createClient();
