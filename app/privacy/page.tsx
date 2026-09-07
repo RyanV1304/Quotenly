@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-16">
         <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Legal</p>
         <h1 className="font-display mt-2 text-3xl font-bold tracking-[-0.02em] text-ink">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-ink-faint">Last updated: August 2026</p>
+        <p className="mt-2 text-sm text-ink-faint">Last updated: September 7, 2026</p>
 
         <div className="mt-10 flex flex-col gap-8 text-sm leading-relaxed text-ink-soft">
           <section>
@@ -93,8 +93,12 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="font-display text-lg font-bold text-ink">8. Contact</h2>
-            <p className="mt-2 italic text-ink-faint">
-              A support contact email will be added here once our domain is verified.
+            <p className="mt-2">
+              Questions about this policy, or want to delete your workspace or export your data? Contact us at{" "}
+              <a href="mailto:hello@krewbill.com" className="text-brand hover:underline">
+                hello@krewbill.com
+              </a>
+              .
             </p>
           </section>
         </div>
