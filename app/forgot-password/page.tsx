@@ -21,7 +21,8 @@ export default async function ForgotPasswordPage({
     >
       {sent ? (
         <p className="text-sm text-ink-soft">
-          If an account exists for this email, we&apos;ve sent a reset link.
+          If an account exists for this email, we&apos;ve sent a reset link. Don&apos;t see it? Check your spam
+          folder.
         </p>
       ) : (
         <form action={requestPasswordReset} className="flex flex-col gap-3.5">

@@ -120,7 +120,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       {!membership.emailVerified && (
         <div className="border-b border-line bg-warning-tint px-6 py-2 text-center text-sm text-warning">
-          Please verify your email.{" "}
+          Please verify your email (check your spam folder if you don&apos;t see it).{" "}
           <form action={resendVerificationEmail} className="inline">
             <button type="submit" className="font-semibold underline underline-offset-2">
               Resend verification link

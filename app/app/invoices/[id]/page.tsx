@@ -106,6 +106,12 @@ export default async function InvoiceDetailPage({
 
       {error && <p className="alert-error">{error}</p>}
 
+      {invoice.status === "sent" && (
+        <p className="text-xs text-ink-faint">
+          Sent to your client. If they can&apos;t find it, ask them to check their spam folder.
+        </p>
+      )}
+
       {invoice.status === "paid" && (
         <div className="alert-success">
           Paid {invoice.paid_at ? formatDate(invoice.paid_at) : ""}

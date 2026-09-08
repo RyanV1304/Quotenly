@@ -96,6 +96,12 @@ export default async function QuoteDetailPage({
 
       {error && <p className="alert-error">{error}</p>}
 
+      {quote.status === "sent" && (
+        <p className="text-xs text-ink-faint">
+          Sent to your client. If they can&apos;t find it, ask them to check their spam folder.
+        </p>
+      )}
+
       {readOnly ? (
         <>
           <div className="overflow-x-auto rounded-lg border border-line">

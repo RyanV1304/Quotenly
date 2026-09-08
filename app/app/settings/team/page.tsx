@@ -68,6 +68,9 @@ export default async function TeamPage({
       {pendingInvites && pendingInvites.length > 0 && (
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Pending invites</h2>
+          <p className="mt-1 text-xs text-ink-faint">
+            If a teammate doesn&apos;t see their invite email, ask them to check spam.
+          </p>
           <div className="mt-2 overflow-x-auto rounded-lg border border-line">
             <table className="w-full text-left text-sm">
               <tbody className="divide-y divide-line">
