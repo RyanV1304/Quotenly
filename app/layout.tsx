@@ -48,10 +48,29 @@ export const metadata: Metadata = {
   },
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Krewbill",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: siteUrl,
+  description,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         {children}
         <Analytics />
       </body>
