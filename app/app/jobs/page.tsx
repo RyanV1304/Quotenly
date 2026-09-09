@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireMembership } from "@/lib/workspace";
-import { createJob } from "@/app/actions/jobs";
+import { createJob, deleteJob } from "@/app/actions/jobs";
 import { formatDate } from "@/lib/format";
 import ExportCsvButton from "@/components/ExportCsvButton";
+import DeleteButton from "@/components/DeleteButton";
 
 const STATUS_OPTIONS = ["active", "completed"] as const;
 
@@ -132,6 +133,7 @@ export default async function JobsPage({
         <table className="w-full text-left text-sm">
           <thead className="bg-bg-white text-xs uppercase tracking-wide text-ink-faint">
             <tr>
+              {membership.role === "owner" && <th className="w-8 px-2 py-2.5"></th>}
               <th className="px-4 py-2.5 font-semibold">Job</th>
               <th className="px-4 py-2.5 font-semibold">Client</th>
               <th className="px-4 py-2.5 font-semibold">Status</th>
@@ -142,8 +144,14 @@ export default async function JobsPage({
           <tbody className="divide-y divide-line">
             {jobs?.map((j) => {
               const client = Array.isArray(j.clients) ? j.clients[0] : j.clients;
+              const deleteAction = deleteJob.bind(null, j.id);
               return (
                 <tr key={j.id} className="bg-bg-white">
+                  {membership.role === "owner" && (
+                    <td className="px-2 py-2.5">
+                      <DeleteButton action={deleteAction} itemLabel={j.title} />
+                    </td>
+                  )}
                   <td className="px-4 py-2.5">
                     <Link href={`/app/jobs/${j.id}`} className="font-medium text-brand hover:underline">
                       {j.title}
@@ -162,7 +170,7 @@ export default async function JobsPage({
             })}
             {jobs?.length === 0 && (
               <tr>
-                <td colSpan={membership.role === "owner" ? 5 : 4} className="px-4 py-6 text-center text-ink-faint">
+                <td colSpan={membership.role === "owner" ? 6 : 4} className="px-4 py-6 text-center text-ink-faint">
                   {statusFilter
                     ? `No ${statusFilter} jobs.`
                     : membership.role === "owner"

@@ -41,6 +41,28 @@ export async function createJob(formData: FormData) {
   redirect(`/app/jobs/${data!.id}`);
 }
 
+export async function deleteJob(jobId: string) {
+  const membership = await requireMembership();
+  if (membership.role !== "owner") {
+    redirect("/app/jobs?error=" + encodeURIComponent("Only the workspace owner can delete jobs."));
+  }
+  const supabase = await createClient();
+  const admin = createAdminClient();
+
+  const { data: photos } = await supabase.from("job_photos").select("url").eq("job_id", jobId);
+  for (const photo of photos ?? []) {
+    const path = photo.url.split("/job-photos/")[1];
+    if (path) await admin.storage.from("job-photos").remove([path]);
+  }
+
+  await supabase.from("job_photos").delete().eq("job_id", jobId);
+  await supabase.from("job_expenses").delete().eq("job_id", jobId);
+  await supabase.from("jobs").delete().eq("id", jobId).eq("workspace_id", membership.workspaceId);
+
+  revalidatePath("/app/jobs");
+  redirect("/app/jobs");
+}
+
 export async function updateJobStatus(jobId: string, formData: FormData) {
   await requireMembership();
   const supabase = await createClient();
