@@ -535,7 +535,7 @@ function Footer() {
             Quoting and invoicing for small trade crews. Free during our launch period.
           </p>
         </div>
-        <div className="flex gap-16 text-sm">
+        <div className="flex flex-wrap gap-16 text-sm">
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-ink">Product</span>
             <a href="#product" className="text-ink-soft hover:text-ink">
@@ -547,6 +547,51 @@ function Footer() {
             <a href="#faq" className="text-ink-soft hover:text-ink">
               FAQ
             </a>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold text-ink">By trade</span>
+            <Link href="/krewbill-for-electricians" className="text-ink-soft hover:text-ink">
+              Electricians
+            </Link>
+            <Link href="/krewbill-for-plumbers" className="text-ink-soft hover:text-ink">
+              Plumbers
+            </Link>
+            <Link href="/krewbill-for-hvac-contractors" className="text-ink-soft hover:text-ink">
+              HVAC contractors
+            </Link>
+            <Link href="/krewbill-for-handymen" className="text-ink-soft hover:text-ink">
+              Handymen
+            </Link>
+            <Link href="/krewbill-for-landscapers" className="text-ink-soft hover:text-ink">
+              Landscapers
+            </Link>
+            <Link href="/krewbill-for-roofers" className="text-ink-soft hover:text-ink">
+              Roofers
+            </Link>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold text-ink">Compare</span>
+            <Link href="/vs-jobber" className="text-ink-soft hover:text-ink">
+              vs. Jobber
+            </Link>
+            <Link href="/vs-housecall-pro" className="text-ink-soft hover:text-ink">
+              vs. Housecall Pro
+            </Link>
+            <Link href="/jobber-alternative-for-electricians" className="text-ink-soft hover:text-ink">
+              Jobber alt. for electricians
+            </Link>
+            <Link href="/jobber-alternative-for-plumbers" className="text-ink-soft hover:text-ink">
+              Jobber alt. for plumbers
+            </Link>
+            <Link href="/housecall-pro-alternative-for-hvac" className="text-ink-soft hover:text-ink">
+              Housecall Pro alt. for HVAC
+            </Link>
+            <Link href="/jobber-alternative-for-handymen" className="text-ink-soft hover:text-ink">
+              Jobber alt. for handymen
+            </Link>
+            <Link href="/best-invoicing-software-for-trades" className="text-ink-soft hover:text-ink">
+              Buyer&apos;s guide
+            </Link>
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-ink">Account</span>
