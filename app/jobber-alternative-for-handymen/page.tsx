@@ -14,7 +14,7 @@ export default function JobberAlternativeHandymenPage() {
       headline="A Jobber alternative built for handymen"
       subhead="If you just need to quote a punch list or a bigger project, get client approval, and invoice — without paying Jobber's per-user fee for scheduling and dispatch you probably don't need solo — Krewbill is worth a look."
       rows={[
-        { feature: "Pricing model", krewbill: "Free during launch, flat price later", competitor: "Per-user, tiered plans" },
+        { feature: "Pricing model", krewbill: "Free during launch, never per-seat", competitor: "Per-user, tiered plans" },
         { feature: "Quotes & online approval", krewbill: "Included", competitor: "Included" },
         { feature: "Invoicing & payment tracking", krewbill: "Included", competitor: "Included" },
         { feature: "Scheduling & dispatch board", krewbill: "Not included, on purpose", competitor: "Included" },
@@ -26,12 +26,12 @@ export default function JobberAlternativeHandymenPage() {
       pricingExampleTitle="What a solo handyman plus one helper actually pays"
       pricingExampleBody={`On Jobber's Grow plan ($149/mo with annual billing, 1 user included), each additional teammate is $29/mo. Even a small 2-person operation — you plus one helper — comes out to $149 + $29 = $178/mo, before any add-ons.
 
-Krewbill is free during launch. When we introduce pricing, it'll be one flat price whether you're solo, just added a helper, or grow to a full crew later — the price you start with is the price you keep.`}
+Krewbill is free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — whether you're solo, just added a helper, or grow to a full crew later.`}
       pricingAsOf="September 2026"
       faqs={[
         {
           q: "Is Krewbill really free?",
-          a: "Yes — fully free during our launch period, no feature caps, no per-seat cost, no credit card required to start. We'll introduce a paid plan eventually, but it'll be one flat price, and current users get advance notice before anything changes.",
+          a: "Yes — free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and current users get advance notice before anything changes.",
         },
         {
           q: "Is Krewbill overkill if I'm working solo?",

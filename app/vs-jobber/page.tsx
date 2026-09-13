@@ -14,7 +14,7 @@ export default function VsJobberPage() {
       headline="Krewbill vs. Jobber, honestly."
       subhead="Jobber is a full field-service platform: scheduling, dispatch, routing, and per-user pricing. Krewbill is just quoting and invoicing, priced flat for your whole crew."
       rows={[
-        { feature: "Pricing model", krewbill: "Free during launch, flat price later", competitor: "Per-user, tiered plans" },
+        { feature: "Pricing model", krewbill: "Free during launch, never per-seat", competitor: "Per-user, tiered plans" },
         { feature: "Quotes & online approval", krewbill: "Included", competitor: "Included" },
         { feature: "Invoicing & payment tracking", krewbill: "Included", competitor: "Included" },
         { feature: "Scheduling & dispatch board", krewbill: "Not included, on purpose", competitor: "Included" },
@@ -26,12 +26,12 @@ export default function VsJobberPage() {
       pricingExampleTitle="What a 5-person crew actually pays"
       pricingExampleBody={`On Jobber's Grow plan ($149/mo with annual billing, 1 user included), each additional teammate is $29/mo. A 5-person crew comes out to $149 + 4 × $29 = $265/mo — and that's before add-ons like the Marketing Suite ($99/mo) or Receptionist ($29/mo). Grow to 10 people and you're at $149 + 9 × $29 = $410/mo, just in per-seat fees.
 
-Krewbill is free during launch. When we introduce pricing, it'll be one flat price for your whole crew — a 3-person crew and a 15-person crew pay the same.`}
+Krewbill is free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — so a 3-person crew and a 15-person crew pay the same.`}
       pricingAsOf="September 2026"
       faqs={[
         {
           q: "Is Krewbill really free?",
-          a: "Yes — fully free during our launch period, no feature caps, no per-seat cost, no credit card required to start. We'll introduce a paid plan eventually, but it'll be one flat price, and current users get advance notice before anything changes.",
+          a: "Yes — free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and current users get advance notice before anything changes.",
         },
         {
           q: "What happens to my price as my team grows?",

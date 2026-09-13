@@ -14,7 +14,7 @@ export default function HousecallProAlternativeHvacPage() {
       headline="A Housecall Pro alternative built for HVAC contractors"
       subhead="If your HVAC business just needs to quote installs and repairs, get client approval, and invoice — without paying Housecall Pro's per-seat fee once your crew grows past a handful of techs — Krewbill is worth a look."
       rows={[
-        { feature: "Pricing model", krewbill: "Free during launch, flat price later", competitor: "Per-user, tiered plans" },
+        { feature: "Pricing model", krewbill: "Free during launch, never per-seat", competitor: "Per-user, tiered plans" },
         { feature: "Quotes & online approval", krewbill: "Included", competitor: "Included" },
         { feature: "Invoicing & payment tracking", krewbill: "Included", competitor: "Included" },
         { feature: "Dispatch board", krewbill: "Not included, on purpose", competitor: "Included" },
@@ -26,12 +26,12 @@ export default function HousecallProAlternativeHvacPage() {
       pricingExampleTitle="What an 8-tech HVAC crew actually pays"
       pricingExampleBody={`Housecall Pro's Essentials plan is $149/mo (annual billing) and covers up to 5 users. An 8-person crew — you plus 7 techs — needs 3 extra seats at $100/mo each: $149 + 3 × $100 = $449/mo. Need the top-tier Max plan for GPS tracking and advanced reporting, and the base jumps to $299/mo before extra seats at $75/mo each.
 
-Krewbill is free during launch. When we introduce pricing, it'll be one flat price for your whole crew — no per-seat cliff to plan around as you add techs for a busy season.`}
+Krewbill is free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — no per-seat cliff to plan around as you add techs for a busy season.`}
       pricingAsOf="September 2026"
       faqs={[
         {
           q: "Is Krewbill really free?",
-          a: "Yes — fully free during our launch period, no feature caps, no per-seat cost, no credit card required to start. We'll introduce a paid plan eventually, but it'll be one flat price, and current users get advance notice before anything changes.",
+          a: "Yes — free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and current users get advance notice before anything changes.",
         },
         {
           q: "Can Krewbill handle a full system install quote, not just a repair?",

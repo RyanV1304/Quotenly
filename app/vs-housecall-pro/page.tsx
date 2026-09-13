@@ -14,7 +14,7 @@ export default function VsHousecallProPage() {
       headline="Krewbill vs. Housecall Pro, honestly."
       subhead="Housecall Pro bundles scheduling, dispatch, and marketing tools into a per-user platform. Krewbill focuses on one thing — quotes and invoices — at one flat price."
       rows={[
-        { feature: "Pricing model", krewbill: "Free during launch, flat price later", competitor: "Per-user, tiered plans" },
+        { feature: "Pricing model", krewbill: "Free during launch, never per-seat", competitor: "Per-user, tiered plans" },
         { feature: "Quotes & online approval", krewbill: "Included", competitor: "Included" },
         { feature: "Invoicing & payment tracking", krewbill: "Included", competitor: "Included" },
         { feature: "Dispatch board", krewbill: "Not included, on purpose", competitor: "Included" },
@@ -26,12 +26,12 @@ export default function VsHousecallProPage() {
       pricingExampleTitle="What it costs as your crew grows"
       pricingExampleBody={`Housecall Pro's Essentials plan is $149/mo (annual billing) and covers up to 5 users — reasonable at exactly 5 people. But grow past that and extra seats are $100/mo each: an 8-person crew is $149 + 3 × $100 = $449/mo. Need the top-tier Max plan (GPS tracking, advanced reporting) and the base jumps to $299/mo before extra seats at $75/mo each.
 
-Krewbill is free during launch. When we introduce pricing, it'll be one flat price for your whole crew, whether that's 5 people or 15 — no per-seat cliff to plan around as you hire.`}
+Krewbill is free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — whether that's 5 people or 15.`}
       pricingAsOf="September 2026"
       faqs={[
         {
           q: "Is Krewbill really free?",
-          a: "Yes — fully free during our launch period, no feature caps, no per-seat cost, no credit card required to start. We'll introduce a paid plan eventually, but it'll be one flat price, and current users get advance notice before anything changes.",
+          a: "Yes — free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and current users get advance notice before anything changes.",
         },
         {
           q: "What happens to my price as my team grows?",

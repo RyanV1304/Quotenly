@@ -14,7 +14,7 @@ export default function JobberAlternativePlumbersPage() {
       headline="A Jobber alternative built for plumbers"
       subhead="If your plumbing business just needs to quote emergency and scheduled jobs, get client approval, and invoice — without paying Jobber's per-user fee for scheduling and dispatch you may not use — Krewbill is worth a look."
       rows={[
-        { feature: "Pricing model", krewbill: "Free during launch, flat price later", competitor: "Per-user, tiered plans" },
+        { feature: "Pricing model", krewbill: "Free during launch, never per-seat", competitor: "Per-user, tiered plans" },
         { feature: "Quotes & online approval", krewbill: "Included", competitor: "Included" },
         { feature: "Invoicing & payment tracking", krewbill: "Included", competitor: "Included" },
         { feature: "Scheduling & dispatch board", krewbill: "Not included, on purpose", competitor: "Included" },
@@ -26,12 +26,12 @@ export default function JobberAlternativePlumbersPage() {
       pricingExampleTitle="What a 6-person plumbing crew actually pays"
       pricingExampleBody={`On Jobber's Grow plan ($149/mo with annual billing, 1 user included), each additional teammate is $29/mo. A 6-person crew — you plus 5 plumbers or apprentices — comes out to $149 + 5 × $29 = $294/mo, before add-ons like the Marketing Suite or Receptionist.
 
-Krewbill is free during launch. When we introduce pricing, it'll be one flat price for your whole crew — whether that's a 6-person shop or a 16-person one.`}
+Krewbill is free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — whether that's a 6-person shop or a 16-person one.`}
       pricingAsOf="September 2026"
       faqs={[
         {
           q: "Is Krewbill really free?",
-          a: "Yes — fully free during our launch period, no feature caps, no per-seat cost, no credit card required to start. We'll introduce a paid plan eventually, but it'll be one flat price, and current users get advance notice before anything changes.",
+          a: "Yes — free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and current users get advance notice before anything changes.",
         },
         {
           q: "Can I send a quote fast enough for an emergency call?",

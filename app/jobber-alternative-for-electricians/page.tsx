@@ -14,7 +14,7 @@ export default function JobberAlternativeElectriciansPage() {
       headline="A Jobber alternative built for electricians"
       subhead="If your electrical business just needs to quote panel upgrades and service calls, get client approval, and invoice — without paying Jobber's per-user fee for scheduling and dispatch you may not use — Krewbill is worth a look."
       rows={[
-        { feature: "Pricing model", krewbill: "Free during launch, flat price later", competitor: "Per-user, tiered plans" },
+        { feature: "Pricing model", krewbill: "Free during launch, never per-seat", competitor: "Per-user, tiered plans" },
         { feature: "Quotes & online approval", krewbill: "Included", competitor: "Included" },
         { feature: "Invoicing & payment tracking", krewbill: "Included", competitor: "Included" },
         { feature: "Scheduling & dispatch board", krewbill: "Not included, on purpose", competitor: "Included" },
@@ -26,12 +26,12 @@ export default function JobberAlternativeElectriciansPage() {
       pricingExampleTitle="What a 4-person electrical crew actually pays"
       pricingExampleBody={`On Jobber's Grow plan ($149/mo with annual billing, 1 user included), each additional teammate is $29/mo. A 4-person crew — you plus 3 electricians or apprentices — comes out to $149 + 3 × $29 = $236/mo, before add-ons like the Marketing Suite or Receptionist.
 
-Krewbill is free during launch. When we introduce pricing, it'll be one flat price for your whole crew — whether that's a 4-person shop or a 12-person one.`}
+Krewbill is free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — whether that's a 4-person shop or a 12-person one.`}
       pricingAsOf="September 2026"
       faqs={[
         {
           q: "Is Krewbill really free?",
-          a: "Yes — fully free during our launch period, no feature caps, no per-seat cost, no credit card required to start. We'll introduce a paid plan eventually, but it'll be one flat price, and current users get advance notice before anything changes.",
+          a: "Yes — free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and current users get advance notice before anything changes.",
         },
         {
           q: "Can Krewbill handle a panel upgrade quote, not just a simple repair?",

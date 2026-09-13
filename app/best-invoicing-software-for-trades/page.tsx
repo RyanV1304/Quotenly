@@ -52,7 +52,7 @@ const FAQS = [
   },
   {
     q: "Is Krewbill free forever?",
-    a: "It's free during our current launch period, with no feature caps and no per-seat cost. We plan to introduce a paid plan eventually — one flat price, not per seat — and existing users will get advance notice before anything changes.",
+    a: "Free during our launch period, no credit card required. When we do introduce pricing, it will be one flat rate for your whole team — never per user — and existing users will get advance notice before anything changes.",
   },
 ];
 
