@@ -107,6 +107,30 @@ export default async function DashboardPage({
   const totalActualCost = (periodExpenses ?? []).reduce((sum, e) => sum + e.amount, 0);
   const totalProfit = totalQuoted - totalActualCost;
 
+  const { data: periodPaidInvoices } = await supabase
+    .from("invoices")
+    .select("client_id, total, clients(name)")
+    .eq("workspace_id", membership.workspaceId)
+    .eq("status", "paid")
+    .gte("created_at", periodStart.toISOString());
+
+  const revenueByClient = new Map<string, { name: string; revenue: number }>();
+  for (const inv of periodPaidInvoices ?? []) {
+    if (!inv.client_id) continue;
+    const client = Array.isArray(inv.clients) ? inv.clients[0] : inv.clients;
+    const existing = revenueByClient.get(inv.client_id);
+    if (existing) {
+      existing.revenue += inv.total;
+    } else {
+      revenueByClient.set(inv.client_id, { name: client?.name ?? "Unknown client", revenue: inv.total });
+    }
+  }
+  const topClients = Array.from(revenueByClient.entries())
+    .map(([clientId, v]) => ({ clientId, ...v }))
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 5);
+  const maxClientRevenue = topClients[0]?.revenue ?? 0;
+
   return (
     <div className="flex flex-col gap-10">
       <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Dashboard</h1>
@@ -158,6 +182,51 @@ export default async function DashboardPage({
           </div>
         </div>
         <p className="mt-2 text-xs text-ink-faint">Based on jobs created in this period, via the Jobs page.</p>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-lg font-bold text-ink">Revenue by client</h2>
+          <div className="flex gap-1 rounded-lg border border-line bg-bg-white p-1 text-sm">
+            <Link
+              href="/app/dashboard?period=month"
+              className={`rounded-md px-3 py-1 font-medium ${period === "month" ? "bg-brand text-white" : "text-ink-soft"}`}
+            >
+              This month
+            </Link>
+            <Link
+              href="/app/dashboard?period=year"
+              className={`rounded-md px-3 py-1 font-medium ${period === "year" ? "bg-brand text-white" : "text-ink-soft"}`}
+            >
+              This year
+            </Link>
+          </div>
+        </div>
+        {topClients.length === 0 ? (
+          <p className="mt-3 rounded-lg border border-line bg-bg-white p-4 text-sm text-ink-faint">
+            No paid invoices {period === "year" ? "this year" : "this month"} yet.
+          </p>
+        ) : (
+          <div className="mt-3 flex flex-col gap-3 rounded-lg border border-line bg-bg-white p-5">
+            {topClients.map((c) => {
+              const widthPct = maxClientRevenue > 0 ? Math.max((c.revenue / maxClientRevenue) * 100, 4) : 0;
+              return (
+                <div key={c.clientId}>
+                  <div className="flex items-center justify-between text-sm">
+                    <Link href={`/app/clients/${c.clientId}`} className="font-medium text-brand hover:underline">
+                      {c.name}
+                    </Link>
+                    <span className="font-mono text-ink">{formatCurrency(c.revenue)}</span>
+                  </div>
+                  <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-brand-tint">
+                    <div className="h-full rounded-full bg-brand" style={{ width: `${widthPct}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <p className="mt-2 text-xs text-ink-faint">Based on paid invoices in this period.</p>
       </div>
 
       <div>
