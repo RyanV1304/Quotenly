@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { completeOnboarding } from "@/app/actions/onboarding";
 import AuthShell from "@/components/AuthShell";
+import { SIGNUP_SOURCES } from "@/lib/types";
 
 export default async function OnboardingPage({
   searchParams,
@@ -45,6 +46,19 @@ export default async function OnboardingPage({
         <label className="field-label">
           Business name
           <input name="businessName" required autoFocus className="input" placeholder="Acme Handyman Co." />
+        </label>
+        <label className="field-label">
+          How did you hear about us?
+          <select name="signupSource" required defaultValue="" className="input">
+            <option value="" disabled>
+              Select one
+            </option>
+            {SIGNUP_SOURCES.map((source) => (
+              <option key={source} value={source}>
+                {source}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="flex items-start gap-2 text-sm text-ink-soft">
           <input type="checkbox" name="acceptedTerms" required className="mt-0.5 rounded" />

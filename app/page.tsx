@@ -547,6 +547,9 @@ function Footer() {
             <a href="#faq" className="text-ink-soft hover:text-ink">
               FAQ
             </a>
+            <Link href="/quote-calculator" className="text-ink-soft hover:text-ink">
+              Quote Calculator
+            </Link>
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-ink">By trade</span>

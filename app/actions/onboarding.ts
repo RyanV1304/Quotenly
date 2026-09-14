@@ -6,10 +6,14 @@ import { redirect } from "next/navigation";
 
 export async function completeOnboarding(formData: FormData) {
   const businessName = String(formData.get("businessName") || "").trim();
+  const signupSource = String(formData.get("signupSource") || "").trim() || null;
   const acceptedTerms = formData.get("acceptedTerms") === "on";
 
   if (!businessName) {
     redirect(`/onboarding?error=${encodeURIComponent("Business name is required.")}`);
+  }
+  if (!signupSource) {
+    redirect(`/onboarding?error=${encodeURIComponent("Please let us know how you heard about us.")}`);
   }
   if (!acceptedTerms) {
     redirect(`/onboarding?error=${encodeURIComponent("You must agree to the Terms of Service and Privacy Policy.")}`);
@@ -30,7 +34,7 @@ export async function completeOnboarding(formData: FormData) {
 
   const { data: workspace, error: wsError } = await admin
     .from("workspaces")
-    .insert({ name: businessName, owner_id: user.id })
+    .insert({ name: businessName, owner_id: user.id, signup_source: signupSource })
     .select()
     .single();
 

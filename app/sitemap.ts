@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/vs-jobber",
     "/vs-housecall-pro",
     "/best-invoicing-software-for-trades",
+    "/quote-calculator",
     "/krewbill-for-electricians",
     "/krewbill-for-plumbers",
     "/krewbill-for-hvac-contractors",

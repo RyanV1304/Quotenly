@@ -4,6 +4,7 @@ import { signUp } from "@/app/actions/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import AuthShell from "@/components/AuthShell";
 import PasswordStrengthField from "@/components/PasswordStrengthField";
+import { SIGNUP_SOURCES } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Create your workspace",
@@ -68,6 +69,19 @@ export default async function SignUpPage({
         <label className="field-label">
           Confirm password
           <input name="confirmPassword" type="password" required minLength={8} className="input" />
+        </label>
+        <label className="field-label">
+          How did you hear about us?
+          <select name="signupSource" required defaultValue="" className="input">
+            <option value="" disabled>
+              Select one
+            </option>
+            {SIGNUP_SOURCES.map((source) => (
+              <option key={source} value={source}>
+                {source}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="flex items-start gap-2 text-sm text-ink-soft">
           <input type="checkbox" name="acceptedTerms" required className="mt-0.5 rounded" />

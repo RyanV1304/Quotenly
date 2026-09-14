@@ -9,6 +9,8 @@ const BY_TRADE = [
   { href: "/krewbill-for-roofers", label: "Roofers" },
 ];
 
+const FREE_TOOLS = [{ href: "/quote-calculator", label: "Quote Calculator" }];
+
 const COMPARE = [
   { href: "/vs-jobber", label: "Krewbill vs. Jobber" },
   { href: "/vs-housecall-pro", label: "Krewbill vs. Housecall Pro" },
@@ -22,7 +24,7 @@ const COMPARE = [
 export default function MarketingFooter() {
   return (
     <footer className="border-t border-line bg-bg-white px-4 py-12 text-sm text-ink-faint">
-      <div className="mx-auto grid max-w-4xl gap-8 text-left sm:grid-cols-2">
+      <div className="mx-auto grid max-w-4xl gap-8 text-left sm:grid-cols-3">
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">By trade</h2>
           <ul className="mt-3 flex flex-col gap-2">
@@ -39,6 +41,18 @@ export default function MarketingFooter() {
           <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Compare</h2>
           <ul className="mt-3 flex flex-col gap-2">
             {COMPARE.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="hover:text-ink-soft">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Free tools</h2>
+          <ul className="mt-3 flex flex-col gap-2">
+            {FREE_TOOLS.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-ink-soft">
                   {item.label}

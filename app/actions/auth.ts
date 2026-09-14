@@ -37,6 +37,7 @@ export async function signUp(formData: FormData) {
   const password = String(formData.get("password") || "");
   const confirmPassword = String(formData.get("confirmPassword") || "");
   const businessName = String(formData.get("businessName") || "").trim();
+  const signupSource = String(formData.get("signupSource") || "").trim() || null;
   const acceptedTerms = formData.get("acceptedTerms") === "on";
 
   const back = (error: string) =>
@@ -49,6 +50,7 @@ export async function signUp(formData: FormData) {
   const passwordError = validatePassword(password);
   if (passwordError) back(passwordError);
   if (!acceptedTerms) back("You must agree to the Terms of Service and Privacy Policy.");
+  if (!signupSource) back("Please let us know how you heard about us.");
 
   const admin = createAdminClient();
   const { data: created, error: createError } = await admin.auth.admin.createUser({
@@ -68,7 +70,7 @@ export async function signUp(formData: FormData) {
 
   const { data: workspace, error: wsError } = await admin
     .from("workspaces")
-    .insert({ name: businessName, owner_id: created.user.id })
+    .insert({ name: businessName, owner_id: created.user.id, signup_source: signupSource })
     .select()
     .single();
 

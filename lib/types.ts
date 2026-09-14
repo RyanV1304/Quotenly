@@ -1,3 +1,16 @@
+export const SIGNUP_SOURCES = [
+  "Google Search",
+  "Facebook Group",
+  "Reddit",
+  "LinkedIn",
+  "X/Twitter",
+  "Indie Hackers",
+  "YouTube",
+  "Referral from a friend/colleague",
+  "Cold email",
+  "Other",
+] as const;
+
 export type MemberRole = "owner" | "teammate";
 export type QuoteStatus = "draft" | "sent" | "approved" | "declined";
 export type InvoiceStatus = "draft" | "sent" | "viewed" | "paid" | "overdue";
@@ -8,6 +21,7 @@ export interface Workspace {
   id: string;
   name: string;
   owner_id: string;
+  signup_source: string | null;
   created_at: string;
 }
 
