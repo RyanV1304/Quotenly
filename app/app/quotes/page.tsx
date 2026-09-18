@@ -62,7 +62,7 @@ export default async function QuotesPage() {
                   <td className="px-4 py-2.5">
                     <StatusBadge status={q.status} />
                   </td>
-                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(q.total)}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(q.total, membership.currency)}</td>
                   <td className="px-4 py-2.5 text-ink-faint">{formatDate(q.created_at)}</td>
                   <td className="px-4 py-2.5 text-right">
                     {invoicedQuoteIds.has(q.id) ? (

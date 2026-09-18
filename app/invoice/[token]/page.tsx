@@ -74,8 +74,8 @@ export default async function PublicInvoicePage({ params }: { params: Promise<{ 
                 <tr key={li.id} className="bg-white">
                   <td className="px-4 py-2.5 text-ink">{li.description}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
-                  <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
-                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate, branding?.currency)}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount, branding?.currency)}</td>
                 </tr>
               ))}
             </tbody>
@@ -83,8 +83,8 @@ export default async function PublicInvoicePage({ params }: { params: Promise<{ 
         </div>
 
         <div className="flex flex-col items-end gap-1 text-sm">
-          <div className="font-mono text-ink-soft">Subtotal: {formatCurrency(invoice.subtotal)}</div>
-          <div className="font-mono text-lg font-bold text-ink">Total: {formatCurrency(invoice.total)}</div>
+          <div className="font-mono text-ink-soft">Subtotal: {formatCurrency(invoice.subtotal, branding?.currency)}</div>
+          <div className="font-mono text-lg font-bold text-ink">Total: {formatCurrency(invoice.total, branding?.currency)}</div>
         </div>
 
         <div className="rounded-lg border border-line bg-white p-5">

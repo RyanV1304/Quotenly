@@ -151,6 +151,7 @@ export default async function InvoiceDetailPage({
           </p>
           <LineItemsEditor
             templates={templates ?? []}
+            currency={membership.currency}
             initialTaxRate={invoice.tax_rate}
             initialItems={(lineItems ?? []).map((li) => ({
               description: li.description,
@@ -185,15 +186,15 @@ export default async function InvoiceDetailPage({
                   <tr key={li.id} className="bg-bg-white">
                     <td className="px-4 py-2.5 text-ink">{li.description}</td>
                     <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
-                    <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
-                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate, membership.currency)}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount, membership.currency)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <p className="font-mono text-right text-base font-semibold text-ink">Total: {formatCurrency(invoice.total)}</p>
+          <p className="font-mono text-right text-base font-semibold text-ink">Total: {formatCurrency(invoice.total, membership.currency)}</p>
 
           <form action={updateAction} className="flex flex-col gap-4">
             <label className="field-label">

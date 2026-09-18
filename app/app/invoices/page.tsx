@@ -122,7 +122,7 @@ export default async function InvoicesPage({
                   <td className="px-4 py-2.5">
                     <StatusBadge status={inv.status} />
                   </td>
-                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(inv.total)}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(inv.total, membership.currency)}</td>
                   <td className="px-4 py-2.5 text-ink-faint">{formatDate(inv.due_date)}</td>
                 </tr>
               );

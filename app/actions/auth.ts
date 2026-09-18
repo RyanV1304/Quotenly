@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { validatePassword } from "@/lib/validation";
 import { getResend, FROM_EMAIL } from "@/lib/resend";
+import { getCurrencyForCountry } from "@/lib/countries";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
@@ -38,6 +39,8 @@ export async function signUp(formData: FormData) {
   const confirmPassword = String(formData.get("confirmPassword") || "");
   const businessName = String(formData.get("businessName") || "").trim();
   const signupSource = String(formData.get("signupSource") || "").trim() || null;
+  const country = String(formData.get("country") || "").trim();
+  const stateRegion = String(formData.get("stateRegion") || "").trim() || null;
   const acceptedTerms = formData.get("acceptedTerms") === "on";
 
   const back = (error: string) =>
@@ -51,6 +54,8 @@ export async function signUp(formData: FormData) {
   if (passwordError) back(passwordError);
   if (!acceptedTerms) back("You must agree to the Terms of Service and Privacy Policy.");
   if (!signupSource) back("Please let us know how you heard about us.");
+  if (!country) back("Please select your country.");
+  if (country === "US" && !stateRegion) back("State is required for US businesses.");
 
   const admin = createAdminClient();
   const { data: created, error: createError } = await admin.auth.admin.createUser({
@@ -70,7 +75,13 @@ export async function signUp(formData: FormData) {
 
   const { data: workspace, error: wsError } = await admin
     .from("workspaces")
-    .insert({ name: businessName, owner_id: created.user.id, signup_source: signupSource })
+    .insert({
+      name: businessName,
+      owner_id: created.user.id,
+      signup_source: signupSource,
+      country,
+      state_region: stateRegion,
+    })
     .select()
     .single();
 
@@ -88,6 +99,7 @@ export async function signUp(formData: FormData) {
     workspace_id: workspace!.id,
     business_name: businessName,
     email,
+    currency: getCurrencyForCountry(country),
   });
 
   const { data: profile } = await admin

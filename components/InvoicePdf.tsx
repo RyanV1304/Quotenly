@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import type { Invoice, LineItem, WorkspaceBranding, Client } from "@/lib/types";
+import { formatCurrency } from "@/lib/format";
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 11, fontFamily: "Helvetica" },
@@ -34,6 +35,7 @@ export default function InvoicePdf({
   client: Pick<Client, "name" | "job_address">;
   branding: WorkspaceBranding | null;
 }) {
+  const currency = branding?.currency ?? "USD";
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -75,8 +77,8 @@ export default function InvoicePdf({
             <View key={li.id} style={styles.tableRow}>
               <Text style={styles.colDesc}>{li.description}</Text>
               <Text style={styles.colQty}>{li.quantity}</Text>
-              <Text style={styles.colRate}>${li.rate.toFixed(2)}</Text>
-              <Text style={styles.colAmount}>${li.amount.toFixed(2)}</Text>
+              <Text style={styles.colRate}>{formatCurrency(li.rate, currency)}</Text>
+              <Text style={styles.colAmount}>{formatCurrency(li.amount, currency)}</Text>
             </View>
           ))}
         </View>
@@ -84,9 +86,9 @@ export default function InvoicePdf({
         <View style={styles.totals}>
           <View style={styles.totalLine}>
             <Text style={styles.totalLabel}>Subtotal</Text>
-            <Text>${invoice.subtotal.toFixed(2)}</Text>
+            <Text>{formatCurrency(invoice.subtotal, currency)}</Text>
           </View>
-          <Text style={styles.grandTotal}>Total: ${invoice.total.toFixed(2)}</Text>
+          <Text style={styles.grandTotal}>Total: {formatCurrency(invoice.total, currency)}</Text>
         </View>
 
         {invoice.payment_instructions && (

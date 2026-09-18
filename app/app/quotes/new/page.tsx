@@ -113,6 +113,7 @@ export default async function NewQuotePage({
 
           <LineItemsEditor
             templates={templates ?? []}
+            currency={membership.currency}
             initialTaxRate={(branding?.default_tax_percent ?? 0) / 100}
           />
 

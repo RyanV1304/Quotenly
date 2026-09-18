@@ -4,6 +4,7 @@ import { signUp } from "@/app/actions/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import AuthShell from "@/components/AuthShell";
 import PasswordStrengthField from "@/components/PasswordStrengthField";
+import CountryStateFields from "@/components/CountryStateFields";
 import { SIGNUP_SOURCES } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -62,6 +63,7 @@ export default async function SignUpPage({
           Email
           <input name="email" type="email" required defaultValue={email ?? ""} className="input" />
         </label>
+        <CountryStateFields />
         <label className="field-label">
           Password
           <PasswordStrengthField name="password" />

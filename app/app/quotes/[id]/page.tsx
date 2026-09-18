@@ -119,8 +119,8 @@ export default async function QuoteDetailPage({
                   <tr key={li.id} className="bg-bg-white">
                     <td className="px-4 py-2.5 text-ink">{li.description}</td>
                     <td className="px-4 py-2.5 text-ink-soft">{li.quantity}</td>
-                    <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate)}</td>
-                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount)}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink-soft">{formatCurrency(li.rate, membership.currency)}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(li.amount, membership.currency)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -162,6 +162,7 @@ export default async function QuoteDetailPage({
 
           <LineItemsEditor
             templates={templates ?? []}
+            currency={membership.currency}
             initialTaxRate={quote.tax_rate}
             initialItems={(lineItems ?? []).map((li) => ({
               description: li.description,
@@ -195,7 +196,7 @@ export default async function QuoteDetailPage({
         </form>
       )}
 
-      <p className="font-mono text-right text-base font-semibold text-ink">Total: {formatCurrency(quote.total)}</p>
+      <p className="font-mono text-right text-base font-semibold text-ink">Total: {formatCurrency(quote.total, membership.currency)}</p>
     </div>
   );
 }

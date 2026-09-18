@@ -1,6 +1,7 @@
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import type { Quote, LineItem, WorkspaceBranding, Client } from "@/lib/types";
 import { lineItemTypeLabel } from "@/lib/calc";
+import { formatCurrency } from "@/lib/format";
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 11, fontFamily: "Helvetica" },
@@ -40,6 +41,7 @@ export default function QuotePdf({
   client: Pick<Client, "name" | "job_address">;
   branding: WorkspaceBranding | null;
 }) {
+  const currency = branding?.currency ?? "USD";
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -77,8 +79,8 @@ export default function QuotePdf({
               <Text style={styles.colDesc}>{li.description}</Text>
               <Text style={styles.colType}>{lineItemTypeLabel(li.type)}</Text>
               <Text style={styles.colQty}>{li.quantity}</Text>
-              <Text style={styles.colRate}>${li.rate.toFixed(2)}</Text>
-              <Text style={styles.colAmount}>${li.amount.toFixed(2)}</Text>
+              <Text style={styles.colRate}>{formatCurrency(li.rate, currency)}</Text>
+              <Text style={styles.colAmount}>{formatCurrency(li.amount, currency)}</Text>
             </View>
           ))}
         </View>
@@ -86,9 +88,9 @@ export default function QuotePdf({
         <View style={styles.totals}>
           <View style={styles.totalLine}>
             <Text style={styles.totalLabel}>Subtotal</Text>
-            <Text>${quote.subtotal.toFixed(2)}</Text>
+            <Text>{formatCurrency(quote.subtotal, currency)}</Text>
           </View>
-          <Text style={styles.grandTotal}>Total: ${quote.total.toFixed(2)}</Text>
+          <Text style={styles.grandTotal}>Total: {formatCurrency(quote.total, currency)}</Text>
         </View>
 
         {quote.notes && (

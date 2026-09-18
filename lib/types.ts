@@ -22,6 +22,8 @@ export interface Workspace {
   name: string;
   owner_id: string;
   signup_source: string | null;
+  country: string | null;
+  state_region: string | null;
   created_at: string;
 }
 
@@ -70,6 +72,7 @@ export interface WorkspaceBranding {
   review_link: string | null;
   review_requests_enabled: boolean;
   overdue_digest_enabled: boolean;
+  currency: string;
 }
 
 export interface Client {

@@ -35,8 +35,8 @@ export default async function DashboardPage({
       <div className="flex flex-col gap-10">
         <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Your jobs</h1>
         {ownershipBanner}
-        <JobSection title="Quotes" rows={quotes ?? []} kind="quotes" />
-        <JobSection title="Invoices" rows={invoices ?? []} kind="invoices" />
+        <JobSection title="Quotes" rows={quotes ?? []} kind="quotes" currency={membership.currency} />
+        <JobSection title="Invoices" rows={invoices ?? []} kind="invoices" currency={membership.currency} />
       </div>
     );
   }
@@ -139,11 +139,11 @@ export default async function DashboardPage({
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-lg border border-line bg-bg-white p-5">
           <p className="text-sm text-ink-soft">Total outstanding</p>
-          <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalOutstanding)}</p>
+          <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalOutstanding, membership.currency)}</p>
         </div>
         <div className="rounded-lg border border-line bg-bg-white p-5">
           <p className="text-sm text-ink-soft">Paid this month</p>
-          <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalPaidThisMonth)}</p>
+          <p className="font-mono mt-1.5 text-2xl font-bold text-ink">{formatCurrency(totalPaidThisMonth, membership.currency)}</p>
         </div>
       </div>
 
@@ -168,16 +168,16 @@ export default async function DashboardPage({
         <div className="mt-3 grid grid-cols-3 gap-4">
           <div className="rounded-lg border border-line bg-bg-white p-4">
             <p className="text-xs text-ink-faint">Total quoted</p>
-            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(totalQuoted)}</p>
+            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(totalQuoted, membership.currency)}</p>
           </div>
           <div className="rounded-lg border border-line bg-bg-white p-4">
             <p className="text-xs text-ink-faint">Actual costs</p>
-            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(totalActualCost)}</p>
+            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(totalActualCost, membership.currency)}</p>
           </div>
           <div className="rounded-lg border border-line bg-bg-white p-4">
             <p className="text-xs text-ink-faint">Profit</p>
             <p className={`font-mono mt-1 text-lg font-bold ${totalProfit < 0 ? "text-danger" : "text-success"}`}>
-              {formatCurrency(totalProfit)}
+              {formatCurrency(totalProfit, membership.currency)}
             </p>
           </div>
         </div>
@@ -216,7 +216,7 @@ export default async function DashboardPage({
                     <Link href={`/app/clients/${c.clientId}`} className="font-medium text-brand hover:underline">
                       {c.name}
                     </Link>
-                    <span className="font-mono text-ink">{formatCurrency(c.revenue)}</span>
+                    <span className="font-mono text-ink">{formatCurrency(c.revenue, membership.currency)}</span>
                   </div>
                   <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-brand-tint">
                     <div className="h-full rounded-full bg-brand" style={{ width: `${widthPct}%` }} />
@@ -247,7 +247,7 @@ export default async function DashboardPage({
                   <td className="px-4 py-2.5 text-ink">{b.name}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{b.quoteCount}</td>
                   <td className="px-4 py-2.5 text-ink-soft">{b.invoiceCount}</td>
-                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(b.invoiceTotal)}</td>
+                  <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(b.invoiceTotal, membership.currency)}</td>
                 </tr>
               ))}
             </tbody>
@@ -262,10 +262,12 @@ function JobSection({
   title,
   rows,
   kind,
+  currency,
 }: {
   title: string;
   rows: { id: string; status: string; total: number; created_at: string; clients: { name: string } | { name: string }[] | null }[];
   kind: "quotes" | "invoices";
+  currency: string;
 }) {
   return (
     <div>
@@ -288,7 +290,7 @@ function JobSection({
                     <td className="px-4 py-2.5">
                       <StatusBadge status={r.status} />
                     </td>
-                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(r.total)}</td>
+                    <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(r.total, currency)}</td>
                     <td className="px-4 py-2.5 text-ink-faint">{formatDate(r.created_at)}</td>
                   </tr>
                 );

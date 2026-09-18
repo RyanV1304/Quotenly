@@ -24,6 +24,7 @@ export async function updateWorkspaceSettings(formData: FormData) {
   const address = String(formData.get("address") || "").trim();
   const phone = String(formData.get("phone") || "").trim();
   const businessEmail = String(formData.get("businessEmail") || "").trim();
+  const currency = String(formData.get("currency") || "USD").trim();
   const defaultTaxPercent = Number(formData.get("defaultTaxPercent") || 0);
   const paymentInstructions = String(formData.get("paymentInstructions") || "").trim();
   const invoiceNumberStart = Number(formData.get("invoiceNumberStart") || 1001);
@@ -66,6 +67,7 @@ export async function updateWorkspaceSettings(formData: FormData) {
     address: address || null,
     phone: phone || null,
     email: businessEmail || null,
+    currency: currency || "USD",
     default_tax_percent: defaultTaxPercent,
     payment_instructions: paymentInstructions || null,
     review_link: reviewLink || null,

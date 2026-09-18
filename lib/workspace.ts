@@ -9,6 +9,7 @@ export interface CurrentMembership {
   emailVerified: boolean;
   workspaceId: string;
   workspaceName: string;
+  currency: string;
   role: MemberRole;
 }
 
@@ -25,7 +26,7 @@ export async function requireMembership(): Promise<CurrentMembership> {
   const [{ data: member }, { data: profile }] = await Promise.all([
     supabase
       .from("workspace_members")
-      .select("workspace_id, role, workspaces(name)")
+      .select("workspace_id, role, workspaces(name, workspace_branding(currency))")
       .eq("user_id", user.id)
       .not("joined_at", "is", null)
       .single(),
@@ -37,6 +38,8 @@ export async function requireMembership(): Promise<CurrentMembership> {
   }
 
   const workspace = Array.isArray(member.workspaces) ? member.workspaces[0] : member.workspaces;
+  const brandingRow = workspace?.workspace_branding;
+  const branding = Array.isArray(brandingRow) ? brandingRow[0] : brandingRow;
 
   return {
     userId: user.id,
@@ -45,6 +48,7 @@ export async function requireMembership(): Promise<CurrentMembership> {
     emailVerified: profile?.email_verified ?? true,
     workspaceId: member.workspace_id,
     workspaceName: workspace?.name ?? "Workspace",
+    currency: branding?.currency ?? "USD",
     role: member.role,
   };
 }

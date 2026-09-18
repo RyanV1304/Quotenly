@@ -128,12 +128,12 @@ export default async function ClientDetailPage({
             New quote
           </Link>
         </div>
-        <JobTable rows={quotes ?? []} kind="quotes" />
+        <JobTable rows={quotes ?? []} kind="quotes" currency={membership.currency} />
       </div>
 
       <div>
         <h2 className="font-display text-lg font-bold text-ink">Invoices</h2>
-        <JobTable rows={invoices ?? []} kind="invoices" />
+        <JobTable rows={invoices ?? []} kind="invoices" currency={membership.currency} />
       </div>
     </div>
   );
@@ -142,9 +142,11 @@ export default async function ClientDetailPage({
 function JobTable({
   rows,
   kind,
+  currency,
 }: {
   rows: { id: string; status: string; total: number; created_at: string }[];
   kind: "quotes" | "invoices";
+  currency: string;
 }) {
   if (rows.length === 0) {
     return <p className="mt-3 text-sm text-ink-faint">None yet.</p>;
@@ -163,7 +165,7 @@ function JobTable({
               <td className="px-4 py-2.5">
                 <StatusBadge status={r.status} />
               </td>
-              <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(r.total)}</td>
+              <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(r.total, currency)}</td>
               <td className="px-4 py-2.5 text-ink-faint">{formatDate(r.created_at)}</td>
             </tr>
           ))}

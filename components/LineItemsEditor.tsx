@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { LineItemType } from "@/lib/types";
 import { saveLineItemAsTemplate } from "@/app/actions/templates";
+import { formatCurrency } from "@/lib/format";
 
 interface Row {
   description: string;
@@ -22,10 +23,12 @@ export default function LineItemsEditor({
   initialItems,
   initialTaxRate,
   templates,
+  currency = "USD",
 }: {
   initialItems?: Row[];
   initialTaxRate?: number;
   templates: TemplateOption[];
+  currency?: string;
 }) {
   const [rows, setRows] = useState<Row[]>(
     initialItems && initialItems.length > 0
@@ -161,8 +164,8 @@ export default function LineItemsEditor({
       </div>
 
       <div className="mt-2 flex flex-col items-end gap-1 text-sm">
-        <div className="font-mono text-ink-soft">Subtotal: {subtotal.toFixed(2)}</div>
-        <div className="font-mono text-base font-semibold text-ink">Total: {total.toFixed(2)}</div>
+        <div className="font-mono text-ink-soft">Subtotal: {formatCurrency(subtotal, currency)}</div>
+        <div className="font-mono text-base font-semibold text-ink">Total: {formatCurrency(total, currency)}</div>
       </div>
     </div>
   );

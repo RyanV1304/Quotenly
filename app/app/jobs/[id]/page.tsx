@@ -77,16 +77,16 @@ export default async function JobDetailPage({
         <div className="grid grid-cols-3 gap-4">
           <div className="rounded-lg border border-line bg-bg-white p-4">
             <p className="text-xs text-ink-faint">Quoted</p>
-            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(quotedTotal)}</p>
+            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(quotedTotal, membership.currency)}</p>
           </div>
           <div className="rounded-lg border border-line bg-bg-white p-4">
             <p className="text-xs text-ink-faint">Actual cost</p>
-            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(actualTotal)}</p>
+            <p className="font-mono mt-1 text-lg font-bold text-ink">{formatCurrency(actualTotal, membership.currency)}</p>
           </div>
           <div className="rounded-lg border border-line bg-bg-white p-4">
             <p className="text-xs text-ink-faint">Profit</p>
             <p className={`font-mono mt-1 text-lg font-bold ${profit < 0 ? "text-danger" : "text-success"}`}>
-              {formatCurrency(profit)}
+              {formatCurrency(profit, membership.currency)}
             </p>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default async function JobDetailPage({
       <div className="flex flex-wrap items-center gap-3 text-sm">
         {quote ? (
           <Link href={`/app/quotes/${quote.id}`} className="btn-link">
-            View linked quote ({formatCurrency(quote.total)}, {quote.status})
+            View linked quote ({formatCurrency(quote.total, membership.currency)}, {quote.status})
           </Link>
         ) : (
           <span className="text-ink-faint">
@@ -104,7 +104,7 @@ export default async function JobDetailPage({
         )}
         {invoice && (
           <Link href={`/app/invoices/${invoice.id}`} className="btn-link">
-            View linked invoice ({formatCurrency(invoice.total)}, {invoice.status})
+            View linked invoice ({formatCurrency(invoice.total, membership.currency)}, {invoice.status})
           </Link>
         )}
       </div>
@@ -165,7 +165,7 @@ export default async function JobDetailPage({
                   return (
                     <tr key={e.id} className="bg-bg-white">
                       <td className="px-4 py-2.5 text-ink">{e.description}</td>
-                      <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(e.amount)}</td>
+                      <td className="font-mono px-4 py-2.5 text-ink">{formatCurrency(e.amount, membership.currency)}</td>
                       <td className="px-4 py-2.5 text-ink-faint">{formatDate(e.date)}</td>
                       <td className="px-4 py-2.5 text-right">
                         <form action={deleteAction}>

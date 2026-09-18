@@ -5,6 +5,7 @@ import { updateWorkspaceSettings, transferOwnership } from "@/app/actions/settin
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import FileUploadSquare from "@/components/FileUploadSquare";
+import { CURRENCY_CODES } from "@/lib/countries";
 
 const FEATURE_GUIDE: { title: string; body: string }[] = [
   {
@@ -157,6 +158,20 @@ export default async function SettingsPage({
           <div className="my-1 h-px bg-line" />
 
           <h3 className="text-sm font-semibold text-ink">Quote &amp; invoice defaults</h3>
+
+          <label className="field-label">
+            Currency
+            <select name="currency" defaultValue={branding?.currency ?? "USD"} className="input w-40">
+              {CURRENCY_CODES.map((code) => (
+                <option key={code} value={code}>
+                  {code}
+                </option>
+              ))}
+            </select>
+            <span className="text-xs font-normal text-ink-faint">
+              Only changes the currency symbol shown on your quotes and invoices &mdash; amounts are not converted.
+            </span>
+          </label>
 
           <label className="field-label">
             Default tax %

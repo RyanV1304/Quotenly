@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { completeOnboarding } from "@/app/actions/onboarding";
 import AuthShell from "@/components/AuthShell";
+import CountryStateFields from "@/components/CountryStateFields";
 import { SIGNUP_SOURCES } from "@/lib/types";
 
 export default async function OnboardingPage({
@@ -47,6 +48,7 @@ export default async function OnboardingPage({
           Business name
           <input name="businessName" required autoFocus className="input" placeholder="Acme Handyman Co." />
         </label>
+        <CountryStateFields />
         <label className="field-label">
           How did you hear about us?
           <select name="signupSource" required defaultValue="" className="input">
